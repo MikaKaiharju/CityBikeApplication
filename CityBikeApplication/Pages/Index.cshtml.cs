@@ -5,21 +5,37 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace CityBikeApplication.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-
-        public IndexModel(ILogger<IndexModel> logger)
+        public class Journey
         {
-            _logger = logger;
+            public string id;
+            public string departureTime;
+            public string returnTime;
+            public string departureStationId;
+            public string departureStationName;
+            public string returnStationId;
+            public string returnStationName;
+            public int coveredDistance; // in kilometres
+            public int duration; // in minutes
         }
+
+        public class Station
+        {
+            public string id;
+            public string stationName;
+        }
+
+        List<Journey> journeys = new List<Journey>();
+        List<Station> stations = new List<Station>();
 
         public void OnGet()
         {
-
+            
         }
     }
 }

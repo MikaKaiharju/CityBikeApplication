@@ -9,8 +9,13 @@ namespace CityBikeApplication.Pages
 {
     public class StationListModel : PageModel
     {
+
+        
         public void OnGet()
         {
+
+
+
         }
     }
 }
