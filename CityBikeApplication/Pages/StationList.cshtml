@@ -1,4 +1,65 @@
 ﻿@page
 @model CityBikeApplication.Pages.StationListModel
 @{
+    ViewData["Title"] = "Station List";
 }
+
+<h1>@ViewData["Title"]</h1>
+<p></p>
+
+<style>
+
+    table {
+        font-family: Arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+</style>
+
+<div>
+
+    <table border="1">
+        <tr>
+            <th>Nimi</th>
+            <th>Osoite</th>
+            <th>Kaupunki</th>
+            <th>Operaattori</th>
+            <th>Kapasiteetti</th>
+            <th>Edit</th>
+            <th>Delete</th>
+            <th>Show on Map</th>
+        </tr>
+
+        @if (DataHandler.Instance.ready)
+        {
+            foreach (Station station in DataHandler.Instance.stations)
+            {
+    <tr>
+        <td>@Html.DisplayFor(modelItem => station.nimi)</td>
+        <td>@Html.DisplayFor(modelItem => station.osoite)</td>
+        <td>@Html.DisplayFor(modelItem => station.kaupunki)</td>
+        <td>@Html.DisplayFor(modelItem => station.operaattori)</td>
+        <td>@Html.DisplayFor(modelItem => station.kapasiteetti)</td>
+        <td>
+            <a class="btn btn-primary btn-sm" href="EditStation?id=@station.id">Edit</a>
+        </td>
+        <td>
+            <a class="btn btn-danger btn-sm" href="DeleteStation?id=@station.id">Delete</a>
+        </td>
+        <td>
+            <a class="btn btn-info btn-sm" href=@station.GetLocation()>Map</a>
+        </td>
+    </tr>
+            }
+        }
+
+    </table>
+
+
+</div>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,5 +20,14 @@ namespace CityBikeApplication
         public string kapasiteetti;
         public double x;
         public double y;
+
+        public string GetLocation()
+        {
+            var latitude = ("" + y).Replace(",", ".");
+            var longitude = ("" + x).Replace(",", ".");
+
+            return "https://www.google.com/maps/search/?api=1&query=" + latitude + "," + longitude;
+        }
+
     }
 }

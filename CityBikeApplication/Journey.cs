@@ -7,6 +7,7 @@ namespace CityBikeApplication
 {
     public class Journey
     {
+        public string id;
         public string departureTime;
         public string returnTime;
         public string departureStationId;

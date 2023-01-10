@@ -15,7 +15,7 @@ namespace CityBikeApplication
         public bool ready = false;
 
         // import data sets only once
-        public DataHandler()
+        private DataHandler()
         {
             ImportDataSets();
         }
@@ -30,7 +30,7 @@ namespace CityBikeApplication
         }
 
         // for debugging limit amount of lines to be read per data set
-        int limit = 50000;
+        int limit = 500;
 
         // imported data
         public List<Journey> journeys = new List<Journey>();
@@ -52,7 +52,7 @@ namespace CityBikeApplication
         // if data is on local hard drive
         string path4 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\Helsingin_ja_Espoon_kaupunkipyB6rA4asemat_avoin.csv";
 
-        public async void ImportDataSets()
+        private async void ImportDataSets()
         {
             // create timestamp to calculate how long import took
             UpdateProgress("Import started");
@@ -87,17 +87,17 @@ namespace CityBikeApplication
             ready = true;
         }
 
-        public Task<List<Journey>> GetJourneyListAsync(string path)
+        private Task<List<Journey>> GetJourneyListAsync(string path)
         {
             return Task.Run(() => ImportJourneyData(path));
         }
-        public Task<List<Station>> GetStationListAsync(string path)
+        private Task<List<Station>> GetStationListAsync(string path)
         {
             return Task.Run(() => ImportStationData(path));
         }
 
 
-        public List<Journey> ImportJourneyData(string path)
+        private List<Journey> ImportJourneyData(string path)
         {
             //  import journey data
             List<Journey> importedJourneys = new List<Journey>();
@@ -144,6 +144,7 @@ namespace CityBikeApplication
                     // since we got this far line of data should be validated
                     // create new journey class class and populate it
                     Journey journey = new Journey();
+                    journey.id = Guid.NewGuid().ToString();
                     journey.departureTime = values[0];
                     journey.returnTime = values[1];
                     journey.departureStationId = values[2];
@@ -161,7 +162,7 @@ namespace CityBikeApplication
             return importedJourneys;
         }
 
-        public List<Station> ImportStationData(string path)
+        private List<Station> ImportStationData(string path)
         {
             List<Station> importedStations = new List<Station>();
 
@@ -226,7 +227,7 @@ namespace CityBikeApplication
         }
 
 
-        public void UpdateProgress(string s)
+        private void UpdateProgress(string s)
         {
             System.Diagnostics.Debug.WriteLine(s);
         }

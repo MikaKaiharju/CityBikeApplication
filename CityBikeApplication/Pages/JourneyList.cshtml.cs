@@ -41,6 +41,7 @@ namespace CityBikeApplication.Pages
                             while (reader.Read())
                             {
                                 Journey journey = new Journey();
+                                journey.id = reader.GetString(0);
                                 journey.departureTime = reader.GetString(1);
                                 journey.departureStationId = reader.GetString(2);
                                 journey.departureStationName = reader.GetString(3);

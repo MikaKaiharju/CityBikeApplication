@@ -1,4 +1,65 @@
 ﻿@page
 @model CityBikeApplication.Pages.JourneyListModel
 @{
+    ViewData["Title"] = "Journey List";
 }
+
+<h1>@ViewData["Title"]</h1>
+
+<a class=" btn btn-primary btn-sm" href="/CreateNewJourney">Create New Journey</a>
+<p></p>
+
+<style>
+
+    table {
+        font-family: Arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+</style>
+
+<div>
+
+    <table border="1">
+        <tr>
+            <th>Departure Time</th>
+            <th>Return Time</th>
+            <th>Departure Station</th>
+            <th>Return Station</th>
+            <th>Covered Distance (km)</th>
+            <th>Journey Duration (min)</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+
+        @if (DataHandler.Instance.ready)
+        {
+            foreach (Journey journey in DataHandler.Instance.journeys)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => journey.departureTime)</td>
+                    <td>@Html.DisplayFor(modelItem => journey.returnTime)</td>
+                    <td>@Html.DisplayFor(modelItem => journey.departureStationName)</td>
+                    <td>@Html.DisplayFor(modelItem => journey.returnStationName)</td>
+                    <td>@Html.DisplayFor(modelItem => journey.coveredDistance)</td>
+                    <td>@Html.DisplayFor(modelItem => journey.duration)</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="Edit?id=@journey.id">Edit</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger btn-sm" href="Delete?id=@journey.id">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+
+
+</div>
