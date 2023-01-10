@@ -12,25 +12,7 @@ namespace CityBikeApplication.Pages
 {
     public class IndexModel : PageModel
     {
-        public class Journey
-        {
-            public string departureTime;
-            public string returnTime;
-            public string departureStationId;
-            public string departureStationName;
-            public string returnStationId;
-            public string returnStationName;
-            public int coveredDistance; // in kilometres
-            public int duration; // in minutes
-        }
-
-        public class Station
-        {
-            public string id;
-            public string stationName;
-        }
-
-
+        
         List<Journey> journeys = new List<Journey>();
         List<Station> stations = new List<Station>();
 

@@ -20,11 +20,11 @@ namespace CityBikeApplication.Pages
 
         }
 
-        public List<IndexModel.Journey> GetJourneys()
+        public List<Journey> GetJourneys()
         {
             // read journeys from database
 
-            List<IndexModel.Journey> journeys = new List<IndexModel.Journey>();            
+            List<Journey> journeys = new List<Journey>();            
 
             try
             {
@@ -40,7 +40,7 @@ namespace CityBikeApplication.Pages
                         {
                             while (reader.Read())
                             {
-                                IndexModel.Journey journey = new IndexModel.Journey();
+                                Journey journey = new Journey();
                                 journey.departureTime = reader.GetString(1);
                                 journey.departureStationId = reader.GetString(2);
                                 journey.departureStationName = reader.GetString(3);
