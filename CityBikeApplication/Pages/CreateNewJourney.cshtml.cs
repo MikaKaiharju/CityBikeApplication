@@ -7,17 +7,14 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CityBikeApplication.Pages
 {
-    public class StationListModel : PageModel
+    public class CreateNewJourneyModel : PageModel
     {
+        
+        public string errorMessage = "";
 
         public void OnGet()
         {
 
-        }
-
-        public void OnPostDelete(string id)
-        {
-            DataHandler.Instance.DeleteStation(id);
         }
     }
 }

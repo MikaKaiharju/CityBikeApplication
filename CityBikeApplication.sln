@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.33130.400
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CityBikeApplication", "CityBikeApplication\CityBikeApplication.csproj", "{26F4DD6E-E9E7-4543-B02E-81940EE438AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CityBikeApplication", "CityBikeApplication\CityBikeApplication.csproj", "{26F4DD6E-E9E7-4543-B02E-81940EE438AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

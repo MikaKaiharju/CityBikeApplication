@@ -197,9 +197,9 @@ namespace CityBikeApplication
 
                     // parse coordinate strings to double (skip if can't be read for some reason)
                     double x;
-                    try { x = double.Parse(values[11], CultureInfo.InvariantCulture); } catch (Exception e) { UpdateProgress("values[11]=" + values[11] + "e1=" + e.ToString()); continue; }
+                    try { x = double.Parse(values[11], CultureInfo.InvariantCulture); } catch (Exception e) { continue; }
                     double y;
-                    try { y = double.Parse(values[12], CultureInfo.InvariantCulture); } catch (Exception e) { UpdateProgress("values[12]=" + values[12] + "e2=" + e.ToString()); continue; }
+                    try { y = double.Parse(values[12], CultureInfo.InvariantCulture); } catch (Exception e) { continue; }
 
                     // since we got this far line of data should be validated
                     // create new station class class and populate it
@@ -224,6 +224,34 @@ namespace CityBikeApplication
 
             return importedStations;
 
+        }
+
+        public Station GetStation(string id)
+        {
+            foreach(Station station in stations)
+            {
+                if (station.id.Equals(id))
+                {
+                    return station;
+                }
+            }
+            UpdateProgress("Didn't find station, id=" + id);
+            return null;
+        }
+
+        public void ReplaceStation(Station newStation)
+        {
+            Station oldStation = GetStation(newStation.id);
+            int index = stations.IndexOf(oldStation);
+            stations.RemoveAt(index);
+            stations.Insert(index, newStation);
+        }
+
+        public void DeleteStation(string id)
+        {
+            UpdateProgress("stations.count=" + stations.Count);
+            stations.Remove(GetStation(id));
+            UpdateProgress("stations.count=" + stations.Count);
         }
 
 

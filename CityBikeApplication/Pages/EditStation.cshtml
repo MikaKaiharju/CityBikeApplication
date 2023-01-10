@@ -1,0 +1,97 @@
+﻿@page
+@model CityBikeApplication.Pages.EditStationModel
+@{
+    ViewData["Title"] = "Edit Station";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p></p>
+
+
+@if (Model.errorMessage.Length > 0)
+{
+    <div class="alert alert-warning" role="alert">
+        <strong>@Model.errorMessage</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">Close</button>
+    </div>
+}
+
+<form method="POST">
+    <input type="hidden" name="id" value="@Model.oldStation.id" />
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Nimi</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="nimi" value="@Model.oldStation.nimi" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Namn</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="namn" value="@Model.oldStation.namn" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Name</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="name" value="@Model.oldStation.name" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Osoite</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="osoite" value="@Model.oldStation.osoite" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Address</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="address" value="@Model.oldStation.address" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Kaupunki</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="kaupunki" value="@Model.oldStation.kaupunki" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Stad</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="stad" value="@Model.oldStation.stad" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Operaattori</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="operaattori" value="@Model.oldStation.operaattori" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Kapasiteetti</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="kapasiteetti" value="@Model.oldStation.kapasiteetti" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Latitude</label>
+        <div class="col-sm-4">
+            <input type="number" class="form-control" name="y" value="@Model.oldStation.y" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Longitude</label>
+        <div class="col-sm-4">
+            <input type="number" class="form-control" name="x" value="@Model.oldStation.x" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-2 d-grid">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        <div class="col-sm-2 d-grid">
+            <a class="btn btn-outline-primary" href="/StationList" role="button">Cancel</a>
+        </div>
+    </div>
+
+</form>

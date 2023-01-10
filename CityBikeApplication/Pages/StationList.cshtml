@@ -40,22 +40,27 @@
         {
             foreach (Station station in DataHandler.Instance.stations)
             {
-    <tr>
-        <td>@Html.DisplayFor(modelItem => station.nimi)</td>
-        <td>@Html.DisplayFor(modelItem => station.osoite)</td>
-        <td>@Html.DisplayFor(modelItem => station.kaupunki)</td>
-        <td>@Html.DisplayFor(modelItem => station.operaattori)</td>
-        <td>@Html.DisplayFor(modelItem => station.kapasiteetti)</td>
-        <td>
-            <a class="btn btn-primary btn-sm" href="EditStation?id=@station.id">Edit</a>
-        </td>
-        <td>
-            <a class="btn btn-danger btn-sm" href="DeleteStation?id=@station.id">Delete</a>
-        </td>
-        <td>
-            <a class="btn btn-info btn-sm" href=@station.GetLocation()>Map</a>
-        </td>
-    </tr>
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => station.nimi)</td>
+                    <td>@Html.DisplayFor(modelItem => station.osoite)</td>
+                    <td>@Html.DisplayFor(modelItem => station.kaupunki)</td>
+                    <td>@Html.DisplayFor(modelItem => station.operaattori)</td>
+                    <td>@Html.DisplayFor(modelItem => station.kapasiteetti)</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="EditStation?id=@station.id">Edit</a>
+                    </td>
+                    <td>
+                        <form asp-page-handler="delete" method="post">
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                            <input type="hidden" name="id" value="@station.id" />
+                        </form>
+
+                        
+                    </td>
+                    <td>
+                        <a class="btn btn-info btn-sm" href=@station.GetLocation()>Map</a>
+                    </td>
+                </tr>
             }
         }
 
