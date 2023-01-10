@@ -18,8 +18,8 @@ namespace CityBikeApplication
         public string stad;
         public string operaattori;
         public string kapasiteetti;
-        public double x;
-        public double y;
+        public string x;
+        public string y;
 
         public string GetLocation()
         {
@@ -28,6 +28,7 @@ namespace CityBikeApplication
 
             return "https://www.google.com/maps/search/?api=1&query=" + latitude + "," + longitude;
         }
+
 
     }
 }

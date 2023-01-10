@@ -214,8 +214,8 @@ namespace CityBikeApplication
                     station.stad = values[8];
                     station.operaattori = values[9];
                     station.kapasiteetti = values[10];
-                    station.x = x;
-                    station.y = y;
+                    station.x = ("" + x).Replace(",", ".");
+                    station.y = ("" + y).Replace(",", ".");
 
                     // add station to station list
                     importedStations.Add(station);

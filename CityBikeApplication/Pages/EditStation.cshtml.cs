@@ -37,24 +37,45 @@ namespace CityBikeApplication.Pages
             string xString = Request.Form["x"];
             string yString = Request.Form["y"];
 
-            if(xString.Length > 0 && yString.Length > 0)
+            xString = xString.Replace(".", ",");
+            yString = yString.Replace(".", ",");
+
+            if (xString.Length > 0)
             {
                 try
                 {
-                    newStation.x = double.Parse(xString, CultureInfo.InvariantCulture); // longitude
-                    newStation.y = double.Parse(yString, CultureInfo.InvariantCulture); // latitude
+                    newStation.x = ("" + double.Parse(xString)).Replace(",", "."); // longitude
                 }
                 catch (Exception e)
                 {
-                    errorMessage = "Something wrong with the coordinates";
+                    errorMessage = "Something wrong with the longitude";
                     return;
                 }
+            }
+            else
+            {
+                newStation.x = "";
+            }
+            if(yString.Length > 0)
+            {
+                try
+                {
+                    newStation.y = ("" + double.Parse(yString)).Replace(",", "."); // latitude
+                }
+                catch(Exception e)
+                {
+                    errorMessage = "Something wrong with the latitude";
+                    return;
+                }
+            }
+            else
+            {
+                newStation.y = "";
             }
 
             oldStation = newStation;
             DataHandler.Instance.ReplaceStation(newStation);
             
-
             Response.Redirect("StationList");
 
         }
