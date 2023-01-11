@@ -20,6 +20,16 @@ namespace CityBikeApplication.Pages
 
         }
 
+        public void OnPostSortJourneys(string sortJourneyString)
+        {
+            DataHandler.Instance.SortJourneys(sortJourneyString);
+        }
+
+        public void OnPostDelete(string id)
+        {
+            DataHandler.Instance.DeleteJourney(id);
+        }
+
         public List<Journey> GetJourneys()
         {
             // read journeys from database

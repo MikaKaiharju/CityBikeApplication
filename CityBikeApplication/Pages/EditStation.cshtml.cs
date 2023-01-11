@@ -37,6 +37,7 @@ namespace CityBikeApplication.Pages
             string xString = Request.Form["x"];
             string yString = Request.Form["y"];
 
+            // this makes it possible to user use dot instead of comma
             xString = xString.Replace(".", ",");
             yString = yString.Replace(".", ",");
 
@@ -44,6 +45,7 @@ namespace CityBikeApplication.Pages
             {
                 try
                 {
+                    // double is stored in comma form
                     newStation.x = ("" + double.Parse(xString)).Replace(",", "."); // longitude
                 }
                 catch (Exception e)
@@ -60,6 +62,7 @@ namespace CityBikeApplication.Pages
             {
                 try
                 {
+                    // double is stored in comma form
                     newStation.y = ("" + double.Parse(yString)).Replace(",", "."); // latitude
                 }
                 catch(Exception e)

@@ -28,12 +28,42 @@
 
     <table border="1">
         <tr>
-            <th>Departure Time</th>
-            <th>Return Time</th>
-            <th>Departure Station</th>
-            <th>Return Station</th>
-            <th>Covered Distance (km)</th>
-            <th>Journey Duration (min)</th>
+            <th>
+                <form asp-page-handler="sortJourneys" method="post">
+                    <button class="btn btn-danger btn-sm">Departure Time</button>
+                    <input type="hidden" name="sortJourneyString" value="departureTime_desc" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortJourneys" method="post">
+                    <button class="btn btn-danger btn-sm">Return Time</button>
+                    <input type="hidden" name="sortJourneyString" value="returnTime_desc" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortJourneys" method="post">
+                    <button class="btn btn-danger btn-sm">Departure Station</button>
+                    <input type="hidden" name="sortJourneyString" value="departureStation_desc" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortJourneys" method="post">
+                    <button class="btn btn-danger btn-sm">Return Station</button>
+                    <input type="hidden" name="sortJourneyString" value="returnStation_desc" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortJourneys" method="post">
+                    <button class="btn btn-danger btn-sm">Covered Distance (km)</button>
+                    <input type="hidden" name="sortJourneyString" value="coveredDistance_desc" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortJourneys" method="post">
+                    <button class="btn btn-danger btn-sm">Journey Duration</button>
+                    <input type="hidden" name="sortJourneyString" value="duration_desc" />
+                </form>
+            </th>
             <th>Edit</th>
             <th>Delete</th>
         </tr>
@@ -53,7 +83,16 @@
                         <a class="btn btn-primary btn-sm" href="EditJourney?id=@journey.id">Edit</a>
                     </td>
                     <td>
-                        <a class="btn btn-danger btn-sm" href="DeleteJourney?id=@journey.id">Delete</a>
+                        <form asp-page-handler="delete" method="post">
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                            <input type="hidden" name="id" value="@journey.id" />
+                        </form>
+                    </td>
+                    <td>
+                        <form asp-page-handler="sortJourneys" method="post">
+                            <button class="btn btn-danger btn-sm">Sort</button>
+                            <input type="hidden" name="id" value="departureTime_desc" />
+                        </form>
                     </td>
                 </tr>
             }

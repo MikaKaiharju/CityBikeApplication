@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.IO;
 using System.Globalization;
+using System.Linq;
 
 namespace CityBikeApplication
 {
@@ -13,6 +14,9 @@ namespace CityBikeApplication
 
         // see if datahandler has completed all tasks
         public bool ready = false;
+
+        // store sort order to invert order
+        string currentSortOrder = "";
 
         // import data sets only once
         private DataHandler()
@@ -195,7 +199,7 @@ namespace CityBikeApplication
                     // 11 == x
                     // 12 == y
 
-                    // parse coordinate strings to double (skip if can't be read for some reason)
+                    // parse coordinate strings to double (double using comma as decimal point) (skip if can't be read for some reason)
                     double x;
                     try { x = double.Parse(values[11], CultureInfo.InvariantCulture); } catch (Exception e) { continue; }
                     double y;
@@ -239,6 +243,18 @@ namespace CityBikeApplication
             return null;
         }
 
+        public Journey GetJourney(string id)
+        {
+            foreach(Journey journey in journeys)
+            {
+                if (journey.id.Equals(id))
+                {
+                    return journey;
+                }
+            }
+            return null;
+        }
+
         public void ReplaceStation(Station newStation)
         {
             Station oldStation = GetStation(newStation.id);
@@ -249,9 +265,83 @@ namespace CityBikeApplication
 
         public void DeleteStation(string id)
         {
-            UpdateProgress("stations.count=" + stations.Count);
             stations.Remove(GetStation(id));
-            UpdateProgress("stations.count=" + stations.Count);
+        }
+
+        public void DeleteJourney(string id)
+        {
+            journeys.Remove(GetJourney(id));
+        }
+
+        public void SortJourneys(string sortJourneyString)
+        {
+            // use of IQueryable to ease sorting
+            IQueryable<Journey> sortedJourneys = from j in journeys.AsQueryable<Journey>() select j;
+
+            // check if we want ascending or descending order by checking if string contains _desc
+            bool ascending = !sortJourneyString.Contains("_desc");
+
+            // remove _desc from string if it has it
+            string sortOrder = sortJourneyString.Replace("_desc", "");
+
+            // if header is pressed twice sorting inverts
+            ascending = currentSortOrder.Equals(sortOrder) ? !ascending : ascending;
+
+            // store latest sortOrder
+            currentSortOrder = sortOrder;
+
+            switch (sortOrder, ascending)
+            {
+                case ("departureTime", true):
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.departureTime);
+                    break;
+                case ("departureTime", false):
+                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.departureTime);
+                    break;
+                case ("returnTime", true):
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.returnTime);
+                    break;
+                case ("returnTime", false):
+                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.returnTime);
+                    break;
+                case ("departureStation", true):
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.departureStationName);
+                    break;
+                case ("departureStation", false):
+                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.departureStationName);
+                    break;
+                case ("returnStation", true):
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.returnStationName);
+                    break;
+                case ("returnStation", false):
+                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.returnStationName);
+                    break;
+                case ("coveredDistance", true):
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.coveredDistance);
+                    break;
+                case ("coveredDistance", false):
+                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.coveredDistance);
+                    break;
+                case ("duration", true):
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.duration);
+                    break;
+                case ("duration", false):
+                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.duration);
+                    break;
+                default:
+                    // as default sort by first column
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.departureTime);
+                    break;
+            }
+
+            // convert IQueryable back to list
+            journeys = sortedJourneys.ToList<Journey>();
+        }
+
+
+        public void SortStations(string sortStationString)
+        {
+
         }
 
 
