@@ -10,14 +10,29 @@ namespace CityBikeApplication.Pages
 {
     public class JourneyListModel : PageModel
     {
-        // connection string to be used in sql database queries
-        string connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=CityBikeDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
 
+        // index used in paging
+        public int currentPageIndex = 0;
+
+        // how many journeys are shown per page
+        public int journeysPerPage = 20;
+
+       
         public void OnGet()
         {
             
+        }
 
+        public int GetPagesCount()
+        {
+            int count = (int)Math.Ceiling((double)DataHandler.Instance.journeys.Count / (double)journeysPerPage);
+            return count;
+        }
 
+        public void OnPostChangePage(int index)
+        {
+            currentPageIndex = index;
+            GetJourneys();
         }
 
         public void OnPostSortJourneys(string sortJourneyString)
@@ -25,56 +40,34 @@ namespace CityBikeApplication.Pages
             DataHandler.Instance.SortJourneys(sortJourneyString);
         }
 
-        public void OnPostDelete(string id)
+        public void OnPostDelete(string id, int index)
         {
             DataHandler.Instance.DeleteJourney(id);
+            // if journeys count is divisible with journeysPerPage last page is blank
+            if (DataHandler.Instance.journeys.Count % journeysPerPage == 0 && index == GetPagesCount()) 
+            {
+                index--;
+            }
+            // set showing page to index
+            OnPostChangePage(index);
         }
 
         public List<Journey> GetJourneys()
         {
-            // read journeys from database
+            // show only a certain amount of journeys per page
+            int startIndex = currentPageIndex * journeysPerPage;
 
-            List<Journey> journeys = new List<Journey>();            
-
-            try
+            // need to know how many journeys can be shown 
+            int leftOver = DataHandler.Instance.journeys.Count - startIndex + 1;
+            if(leftOver > journeysPerPage)
             {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-
-                    connection.Open();
-
-                    string commandString = "SELECT * FROM journeys";
-                    using (SqlCommand command = new SqlCommand(commandString, connection))
-                    {
-                        using (SqlDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                Journey journey = new Journey();
-                                journey.id = reader.GetString(0);
-                                journey.departureTime = reader.GetString(1);
-                                journey.departureStationId = reader.GetString(2);
-                                journey.departureStationName = reader.GetString(3);
-                                journey.returnStationId = reader.GetString(4);
-                                journey.returnStationName = reader.GetString(5);
-                                journey.coveredDistance = reader.GetInt32(6);
-                                journey.duration = reader.GetInt32(7);
-                                journeys.Add(journey);
-                            }
-                        }
-
-                    }
-
-                    connection.Close();
-
-                }
+                return DataHandler.Instance.journeys.GetRange(startIndex, journeysPerPage);
             }
-            catch (Exception e)
+            else
             {
-                Console.WriteLine("error in reading: " + e);
+                return DataHandler.Instance.journeys.GetRange(startIndex, leftOver - 1);
             }
-
-            return journeys;
+            
         }
 
     }

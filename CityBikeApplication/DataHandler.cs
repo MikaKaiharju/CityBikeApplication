@@ -273,19 +273,15 @@ namespace CityBikeApplication
             journeys.Remove(GetJourney(id));
         }
 
-        public void SortJourneys(string sortJourneyString)
+        bool ascending = true;
+
+        public void SortJourneys(string sortOrder)
         {
             // use of IQueryable to ease sorting
             IQueryable<Journey> sortedJourneys = from j in journeys.AsQueryable<Journey>() select j;
 
-            // check if we want ascending or descending order by checking if string contains _desc
-            bool ascending = !sortJourneyString.Contains("_desc");
-
-            // remove _desc from string if it has it
-            string sortOrder = sortJourneyString.Replace("_desc", "");
-
             // if header is pressed twice sorting inverts
-            ascending = currentSortOrder.Equals(sortOrder) ? !ascending : ascending;
+            ascending = currentSortOrder.Equals(sortOrder) ? !ascending : true;
 
             // store latest sortOrder
             currentSortOrder = sortOrder;

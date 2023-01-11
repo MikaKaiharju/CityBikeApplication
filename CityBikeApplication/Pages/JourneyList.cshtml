@@ -31,37 +31,37 @@
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Departure Time</button>
-                    <input type="hidden" name="sortJourneyString" value="departureTime_desc" />
+                    <input type="hidden" name="sortJourneyString" value="departureTime" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Return Time</button>
-                    <input type="hidden" name="sortJourneyString" value="returnTime_desc" />
+                    <input type="hidden" name="sortJourneyString" value="returnTime" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Departure Station</button>
-                    <input type="hidden" name="sortJourneyString" value="departureStation_desc" />
+                    <input type="hidden" name="sortJourneyString" value="departureStation" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Return Station</button>
-                    <input type="hidden" name="sortJourneyString" value="returnStation_desc" />
+                    <input type="hidden" name="sortJourneyString" value="returnStation" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Covered Distance (km)</button>
-                    <input type="hidden" name="sortJourneyString" value="coveredDistance_desc" />
+                    <input type="hidden" name="sortJourneyString" value="coveredDistance" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Journey Duration</button>
-                    <input type="hidden" name="sortJourneyString" value="duration_desc" />
+                    <input type="hidden" name="sortJourneyString" value="duration" />
                 </form>
             </th>
             <th>Edit</th>
@@ -70,7 +70,7 @@
 
         @if (DataHandler.Instance.ready)
         {
-            foreach (Journey journey in DataHandler.Instance.journeys)
+            foreach (Journey journey in Model.GetJourneys())
             {
                 <tr>
                     <td>@Html.DisplayFor(modelItem => journey.departureTime)</td>
@@ -86,19 +86,39 @@
                         <form asp-page-handler="delete" method="post">
                             <button class="btn btn-danger btn-sm">Delete</button>
                             <input type="hidden" name="id" value="@journey.id" />
-                        </form>
-                    </td>
-                    <td>
-                        <form asp-page-handler="sortJourneys" method="post">
-                            <button class="btn btn-danger btn-sm">Sort</button>
-                            <input type="hidden" name="id" value="departureTime_desc" />
+                            <input type="hidden" name="index" value="@Model.currentPageIndex" />
                         </form>
                     </td>
                 </tr>
             }
         }
 
+
+
     </table>
 
+    <div class="row mb-3">
 
+        @if (DataHandler.Instance.ready)
+        {
+            int currentIndex = Model.currentPageIndex;
+            for (int index = 0; index < Model.GetPagesCount(); index++)
+            {
+                <form asp-page-handler="ChangePage" method="post">
+
+                    @if (index == currentIndex)
+                    {
+                        <button class="btn btn-info btn-sm">@index</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-danger btn-sm">@index</button>
+                    }
+                    <input type="hidden" name="index" value="@index" />
+                </form>
+            }
+
+        }
+
+    </div>
 </div>
