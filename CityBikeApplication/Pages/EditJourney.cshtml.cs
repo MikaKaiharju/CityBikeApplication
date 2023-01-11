@@ -17,7 +17,7 @@ namespace CityBikeApplication.Pages
 
         public void OnGet()
         {
-            oldJourney = DataHandler.Instance.GetJourney(Request.Query["id"]);
+            GetOldJourney();
         }
 
         public void GetOldJourney()

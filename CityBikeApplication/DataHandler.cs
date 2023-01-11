@@ -17,6 +17,8 @@ namespace CityBikeApplication
 
         // store sort order to invert order
         string currentSortOrder = "";
+        // is current sort order ascending
+        bool ascending = true;
 
         // import data sets only once
         private DataHandler()
@@ -270,15 +272,28 @@ namespace CityBikeApplication
             journeys.Remove(GetJourney(id));
         }
 
-        bool ascending = true;
+        public void CreateNewJourney(Journey newJourney)
+        {
+            journeys.Add(newJourney);
+            SortJourneys(currentSortOrder, false);
+        }
 
         public void SortJourneys(string sortOrder)
+        {
+            // use normal inversion rules (pressing twice inverts order)
+            SortJourneys(sortOrder, true);
+        }
+
+        public void SortJourneys(string sortOrder, bool useInversion)
         {
             // use of IQueryable to ease sorting
             IQueryable<Journey> sortedJourneys = from j in journeys.AsQueryable<Journey>() select j;
 
-            // if header is pressed twice sorting inverts
-            ascending = currentSortOrder.Equals(sortOrder) ? !ascending : true;
+            if (useInversion)
+            {
+                // if header is pressed twice sorting inverts
+                ascending = currentSortOrder.Equals(sortOrder) ? !ascending : true;
+            }
 
             // store latest sortOrder
             currentSortOrder = sortOrder;

@@ -10,4 +10,80 @@
 
 
 
+@if (Model.errorMessage.Length > 0)
+{
+    <div class="alert alert-warning" role="alert">
+        <strong>@Model.errorMessage</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">Close</button>
+    </div>
+}
+
+@if (Model.oldJourney == null)
+{
+    Model.GetOldJourney();
+}
+
+<form method="POST">
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Departure Time</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="departureTime" value="@Model.oldJourney.GetUnderstandableDepartureTime()" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Return Time</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="returnTime" value="@Model.oldJourney.GetUnderstandableReturnTime()" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Departure Station Id</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="departureStationId" value="@Model.oldJourney.departureStationId" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Departure Station</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="departureStationName" value="@Model.oldJourney.departureStationName" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Return Station Id</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="returnStationId" value="@Model.oldJourney.returnStationId" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Return Station</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="returnStationName" value="@Model.oldJourney.returnStationName" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Covered Distance (km)</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="coveredDistance" value="@Model.oldJourney.coveredDistance" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Duration (min)</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="duration" value="@Model.oldJourney.duration" />
+        </div>
+    </div>
+
+    <p></p>
+
+    <div class="row mb-3">
+        <div class="col-sm-2 d-grid">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        <div class="col-sm-2 d-grid">
+            <a class="btn btn-outline-primary" href="/JourneyList" role="button">Cancel</a>
+        </div>
+    </div>
+
+</form>
+
 

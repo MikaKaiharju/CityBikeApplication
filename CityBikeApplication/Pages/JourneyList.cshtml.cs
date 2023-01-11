@@ -41,6 +41,7 @@ namespace CityBikeApplication.Pages
             DataHandler.Instance.SortJourneys(sortJourneyString);
         }
 
+
         public void OnPostDelete(string id, int index)
         {
             DataHandler.Instance.DeleteJourney(id);

@@ -9,8 +9,8 @@ namespace CityBikeApplication
     public class Journey
     {
         public string id;
-        public string departureTime;
-        public string returnTime;
+        public string departureTime = "";
+        public string returnTime = "";
         public string departureStationId;
         public string departureStationName;
         public string returnStationId;
@@ -33,6 +33,12 @@ namespace CityBikeApplication
             // 2021-05-31T23:57:25
             // ->
             // 23.57\n31.05.2021
+
+            if (timeString.Equals(""))
+            {
+                DateTime dateTime1 = DateTime.Now;
+                return dateTime1.ToString("HH.mm.ss dd.MM.yyyy");
+            }
 
             timeString = timeString.Replace("T", " ").Replace(".",":");
 
