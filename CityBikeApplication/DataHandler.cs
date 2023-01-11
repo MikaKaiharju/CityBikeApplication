@@ -58,10 +58,6 @@ namespace CityBikeApplication
 
         private async void ImportDataSets()
         {
-            // create timestamp to calculate how long import took
-            UpdateProgress("Import started");
-            DateTime dt1 = DateTime.Now;
-
             // create async tasks for reading data
             List<Task> tasks = new List<Task>();
             tasks.Add(GetJourneyListAsync(path1));
@@ -81,12 +77,6 @@ namespace CityBikeApplication
                     stations.AddRange(((Task<List<Station>>)task).Result);
                 }
             }
-
-            // calculation of how long import took
-            DateTime dt2 = DateTime.Now;
-            TimeSpan ts = dt2.Subtract(dt1);
-            UpdateProgress("Import finished in " + (int)ts.TotalSeconds + " seconds with journey count of " + journeys.Count +
-                " and station count of " + stations.Count);
 
             ready = true;
         }
@@ -239,7 +229,6 @@ namespace CityBikeApplication
                     return station;
                 }
             }
-            UpdateProgress("Didn't find station, id=" + id);
             return null;
         }
 
@@ -261,6 +250,14 @@ namespace CityBikeApplication
             int index = stations.IndexOf(oldStation);
             stations.RemoveAt(index);
             stations.Insert(index, newStation);
+        }
+
+        public void ReplaceJourney(Journey newJourney)
+        {
+            Journey oldJourney = GetJourney(newJourney.id);
+            int index = journeys.IndexOf(oldJourney);
+            journeys.RemoveAt(index);
+            journeys.Insert(index, newJourney);
         }
 
         public void DeleteStation(string id)
@@ -340,11 +337,11 @@ namespace CityBikeApplication
 
         }
 
-
         private void UpdateProgress(string s)
         {
             System.Diagnostics.Debug.WriteLine(s);
         }
+
 
     }
 

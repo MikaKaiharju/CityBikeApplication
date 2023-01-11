@@ -16,25 +16,12 @@ namespace CityBikeApplication.Pages
 
         public void OnGet()
         {
-            DataHandler dataHandler = DataHandler.Instance;
-
-            if (dataHandler.ready)
-            {
-                UpdateProgress("Datahandler on ready");
-            }
-            else
-            {
-                UpdateProgress("Datahandler ei oo ready");
-            }
+            
 
         }
 
 
 
-        public void UpdateProgress(string s)
-        {
-            System.Diagnostics.Debug.WriteLine(s);
-        }
 
     }
 }

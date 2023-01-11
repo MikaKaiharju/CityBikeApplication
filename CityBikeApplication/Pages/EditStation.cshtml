@@ -16,6 +16,11 @@
     </div>
 }
 
+@if (Model.oldStation == null)
+{
+    Model.GetOldStation();
+}
+
 <form method="POST">
     <input type="hidden" name="id" value="@Model.oldStation.id" />
     <div class="row mb-3">

@@ -20,6 +20,11 @@ namespace CityBikeApplication.Pages
             oldStation = DataHandler.Instance.GetStation(Request.Query["id"]);
         }
 
+        public void GetOldStation()
+        {
+            oldStation = DataHandler.Instance.GetStation(Request.Query["id"]);
+        }
+
         public void OnPost()
         {
             Station newStation = new Station();

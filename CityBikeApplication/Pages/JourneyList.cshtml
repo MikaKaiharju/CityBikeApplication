@@ -73,8 +73,8 @@
             foreach (Journey journey in Model.GetJourneys())
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => journey.departureTime)</td>
-                    <td>@Html.DisplayFor(modelItem => journey.returnTime)</td>
+                    <td>@journey.GetUnderstandableDepartureTime()</td>
+                    <td>@journey.GetUnderstandableReturnTime()</td>
                     <td>@Html.DisplayFor(modelItem => journey.departureStationName)</td>
                     <td>@Html.DisplayFor(modelItem => journey.returnStationName)</td>
                     <td>@Html.DisplayFor(modelItem => journey.coveredDistance)</td>
