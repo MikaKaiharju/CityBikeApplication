@@ -94,8 +94,6 @@ namespace CityBikeApplication.Pages
                 return;
             }
 
-            
-            
             try
             {
                 int coveredDistance = int.Parse(coveredDistanceString);
