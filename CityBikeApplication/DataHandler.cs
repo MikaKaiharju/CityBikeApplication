@@ -73,6 +73,7 @@ namespace CityBikeApplication
             tasks.Add(GetJourneyListAsync(path3));
             tasks.Add(GetStationListAsync(path4));
 
+
             await Task.WhenAll(tasks);
             foreach (Task task in tasks)
             {
