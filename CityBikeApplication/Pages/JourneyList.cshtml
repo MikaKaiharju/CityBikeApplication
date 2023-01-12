@@ -6,7 +6,30 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<a class=" btn btn-primary btn-sm" href="/CreateNewJourney">Create New Journey</a>
+<div class="row">
+    <div class="col-sm-3">
+        <a class="btn btn-primary btn-sm" href="/CreateNewJourney">Create New Journey</a>
+    </div>
+    <form method="post" asp-page-handler="ChangeJourneysPerPage">
+        Count of elements per page
+        <select name="selection">
+            @foreach (int Value in Model.Choices)
+            {
+                if (Value == Model.journeysPerPage)
+                {
+                    <option value="@Value" selected="selected">@Value</option>
+                }
+                else
+                {
+                    <option value="@Value">@Value</option>
+                }
+
+            }
+        </select>
+        <input type="submit" value="Change" />
+    </form>
+</div>
+
 <p></p>
 
 <style>
@@ -19,7 +42,7 @@
 
     td, th {
         border: 1px solid #dddddd;
-        text-align: left;
+        text-align: center;
         padding: 8px;
     }
 </style>
@@ -74,28 +97,28 @@
             {
                 string[] understandableDepartureTime = journey.GetUnderstandableDepartureTime().Split(" ");
                 string[] understandableReturnTime = journey.GetUnderstandableReturnTime().Split(" ");
-    <tr>
-        <td>@understandableDepartureTime[0]<br />@understandableDepartureTime[1]</td>
-        <td>@understandableReturnTime[0]<br />@understandableReturnTime[1]</td>
-        <td>
-            <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.departureStationId">@Html.DisplayFor(modelItem => journey.departureStationName)</a>
-        </td>
-        <td>
-            <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.returnStationId">@Html.DisplayFor(modelItem => journey.returnStationName)</a>
-        </td>
-        <td>@Html.DisplayFor(modelItem => journey.coveredDistance)</td>
-        <td>@Html.DisplayFor(modelItem => journey.duration)</td>
-        <td>
-            <a class="btn btn-primary btn-sm" href="EditJourney?id=@journey.id">Edit</a>
-        </td>
-        <td>
-            <form asp-page-handler="delete" method="post">
-                <button class="btn btn-danger btn-sm">Delete</button>
-                <input type="hidden" name="id" value="@journey.id" />
-                <input type="hidden" name="index" value="@Model.currentPageIndex" />
-            </form>
-        </td>
-    </tr>
+                <tr>
+                    <td>@understandableDepartureTime[0]<br />@understandableDepartureTime[1]</td>
+                    <td>@understandableReturnTime[0]<br />@understandableReturnTime[1]</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.departureStationId">@Html.DisplayFor(modelItem => journey.departureStationName)</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.returnStationId">@Html.DisplayFor(modelItem => journey.returnStationName)</a>
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => journey.coveredDistance)</td>
+                    <td>@Html.DisplayFor(modelItem => journey.duration)</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="EditJourney?id=@journey.id">Edit</a>
+                    </td>
+                    <td>
+                        <form asp-page-handler="delete" method="post">
+                            <button class="btn btn-danger btn-sm">Delete</button>
+                            <input type="hidden" name="id" value="@journey.id" />
+                            <input type="hidden" name="index" value="@Model.currentPageIndex" />
+                        </form>
+                    </td>
+                </tr>
             }
         }
 
@@ -123,6 +146,7 @@
                         <button class="btn btn-danger btn-sm">@index</button>
                     }
                     <input type="hidden" name="index" value="@index" />
+                    <input type="hidden" name="perPage" value="@Model.journeysPerPage" />
                 </form>
             }
 

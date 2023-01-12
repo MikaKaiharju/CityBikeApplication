@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Data.SqlClient;
 using System.Globalization;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CityBikeApplication.Pages
 {
@@ -18,10 +19,19 @@ namespace CityBikeApplication.Pages
         // how many journeys are shown per page
         public int journeysPerPage = 20;
 
-       
+        // user can select how many journeys are shown per page
+        public int[] Choices = new int[] { 10, 20, 50, 100 };
+
         public void OnGet()
         {
-            
+
+        }
+
+        public void OnPostChangeJourneysPerPage(int selection)
+        {
+            // how many journeys are shown per page was changed
+            currentPageIndex = 0;
+            journeysPerPage = selection;
         }
 
         public int GetPagesCount()
@@ -30,9 +40,10 @@ namespace CityBikeApplication.Pages
             return count;
         }
 
-        public void OnPostChangePage(int index)
+        public void OnPostChangePage(int index, int perPage)
         {
             currentPageIndex = index;
+            journeysPerPage = perPage;
             GetJourneys();
         }
 
@@ -51,7 +62,7 @@ namespace CityBikeApplication.Pages
                 index--;
             }
             // set showing page to index
-            OnPostChangePage(index);
+            OnPostChangePage(index, journeysPerPage);
         }
 
         public List<Journey> GetJourneys()
@@ -70,6 +81,11 @@ namespace CityBikeApplication.Pages
                 return DataHandler.Instance.journeys.GetRange(startIndex, leftOver - 1);
             }
             
+        }
+
+        private void p(string s)
+        {
+            System.Diagnostics.Debug.WriteLine(s);
         }
 
     }
