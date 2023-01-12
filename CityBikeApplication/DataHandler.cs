@@ -191,7 +191,7 @@ namespace CityBikeApplication
                     // 11 == x
                     // 12 == y
 
-                    // parse coordinate strings to double (double using comma as decimal point) (skip if can't be read for some reason)
+                    // parse coordinate strings to double (skip if can't be read for some reason)
                     double x;
                     try { x = double.Parse(values[11], CultureInfo.InvariantCulture); } catch (Exception e) { continue; }
                     double y;
@@ -210,7 +210,7 @@ namespace CityBikeApplication
                     station.stad = values[8];
                     station.operaattori = values[9];
                     station.kapasiteetti = values[10];
-                    station.x = ("" + x).Replace(",", ".");
+                    station.x = ("" + x).Replace(",", "."); // store in dot form
                     station.y = ("" + y).Replace(",", ".");
 
                     // add station to station list
@@ -352,7 +352,7 @@ namespace CityBikeApplication
 
         }
 
-        private void UpdateProgress(string s)
+        private void p(string s)
         {
             System.Diagnostics.Debug.WriteLine(s);
         }

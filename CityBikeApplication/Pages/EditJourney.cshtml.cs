@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -10,9 +11,10 @@ namespace CityBikeApplication.Pages
 {
     public class EditJourneyModel : PageModel
     {
+        // if data couldn't be validated show user what went wrong
+        public List<string> errorMessages = new List<string>();
 
-        public string errorMessage = "";
-
+        // store what data user gave
         public Journey oldJourney;
 
         public void OnGet()
@@ -27,47 +29,72 @@ namespace CityBikeApplication.Pages
 
         public void OnPost()
         {
+            // remove previous errorMessages
+            errorMessages.Clear();
+            
             Journey newJourney = new Journey();
             newJourney.id = Request.Form["id"];
 
-            string departureTime = Request.Form["departureTime"];
+            string departureTime = Sanitize(Request.Form["departureTime"]);
+            string returnTime = Sanitize(Request.Form["returnTime"]);
+            newJourney.departureStationId = Sanitize(Request.Form["departureStationId"]);
+            newJourney.departureStationName = Sanitize(Request.Form["departureStationName"]);
+            newJourney.returnStationId = Sanitize(Request.Form["returnStationId"]);
+            newJourney.returnStationName = Sanitize(Request.Form["returnStationName"]);
+            string coveredDistanceString = Sanitize(Request.Form["coveredDistance"]);
+            string durationString = Sanitize(Request.Form["duration"]);
+
             try
             {
                 DateTime dateTime = DateTime.ParseExact(departureTime, "HH.mm.ss dd.MM.yyyy", CultureInfo.InvariantCulture);
-                departureTime = dateTime.ToString("yyyy-MM-dd") + "T" + dateTime.ToString("HH:mm:ss");
-                newJourney.departureTime = departureTime;
+                int comparison = DateTime.Compare(DateTime.Now, dateTime);
+
+                if (comparison < 0)
+                {
+                    newJourney.departureTime = departureTime;
+                    errorMessages.Add("Given departure time is in the future");
+                }
+                else
+                {
+                    departureTime = dateTime.ToString("yyyy-MM-dd") + "T" + dateTime.ToString("HH:mm:ss");
+                    newJourney.departureTime = departureTime;
+                }
             }
             catch(Exception e)
             {
-                errorMessage = "Departure Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"";
+                newJourney.departureTime = departureTime;
+                errorMessages.Add("Departure Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"");
                 return;
             }
 
-            string returnTime = Request.Form["returnTime"];
             try
             {
                 DateTime dateTime = DateTime.ParseExact(returnTime, "HH.mm.ss dd.MM.yyyy", CultureInfo.InvariantCulture);
-                returnTime = dateTime.ToString("yyyy-MM-dd") + "T" + dateTime.ToString("HH:mm:ss");
-                newJourney.returnTime = returnTime;
+                int comparison = DateTime.Compare(DateTime.Now, dateTime);
+                if (comparison < 0)
+                {
+                    newJourney.returnTime = returnTime;
+                    errorMessages.Add("Given return time is in the future");
+                }
+                else
+                {
+                    returnTime = dateTime.ToString("yyyy-MM-dd") + "T" + dateTime.ToString("HH:mm:ss");
+                    newJourney.returnTime = returnTime;
+                }
             }
             catch (Exception e)
             {
-                errorMessage = "Return Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"";
+                newJourney.returnTime = returnTime;
+                errorMessages.Add("Return Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"");
                 return;
             }
-
-            newJourney.departureStationId = Request.Form["departureStationId"];
-            newJourney.departureStationName = Request.Form["departureStationName"];
-            newJourney.returnStationId = Request.Form["returnStationId"];
-            newJourney.returnStationName = Request.Form["returnStationName"];
-
-            string coveredDistanceString = Request.Form["coveredDistance"];
+            
             try
             {
                 int coveredDistance = int.Parse(coveredDistanceString);
                 if(coveredDistance < 0)
                 {
-                    errorMessage = "Covered Distance needs to integer that is >= 0";
+                    errorMessages.Add("Covered Distance needs to be integer that is >= 0");
                     return;
                 }
                 else
@@ -77,17 +104,16 @@ namespace CityBikeApplication.Pages
             }
             catch(Exception e)
             {
-                errorMessage = "Covered Distance needs to integer that is >= 0";
+                errorMessages.Add("Covered Distance needs to be integer that is >= 0");
                 return;
             }
 
-            string durationString = Request.Form["duration"];
             try
             {
                 int duration = int.Parse(durationString);
                 if (duration < 0)
                 {
-                    errorMessage = "Duration needs to integer that is >= 0";
+                    errorMessages.Add("Duration needs to be integer that is >= 0");
                     return;
                 }
                 else
@@ -97,15 +123,24 @@ namespace CityBikeApplication.Pages
             }
             catch (Exception e)
             {
-                errorMessage = "Duration needs to integer that is >= 0";
+                errorMessages.Add("Duration needs to be integer that is >= 0");
                 return;
             }
 
+            // if there were errors remember what data was given
             oldJourney = newJourney;
-            DataHandler.Instance.ReplaceJourney(newJourney);
 
-            Response.Redirect("JourneyList");
+            if (errorMessages.Count == 0)
+            {
+                DataHandler.Instance.ReplaceJourney(newJourney);
+                Response.Redirect("JourneyList");
+            }
+        }
 
+        private string Sanitize(string str)
+        {
+            // remove special characters
+            return Regex.Replace(str, "[^a-öA-Ö0-9_.,]", "", RegexOptions.Compiled);
         }
 
         private void p(string s)

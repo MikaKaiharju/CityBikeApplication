@@ -72,9 +72,11 @@
         {
             foreach (Journey journey in Model.GetJourneys())
             {
+                string[] understandableDepartureTime = journey.GetUnderstandableDepartureTime().Split(" ");
+                string[] understandableReturnTime = journey.GetUnderstandableReturnTime().Split(" ");
                 <tr>
-                    <td>@journey.GetUnderstandableDepartureTime()</td>
-                    <td>@journey.GetUnderstandableReturnTime()</td>
+                    <td>@understandableDepartureTime[0]<br/>@understandableDepartureTime[1]</td>
+                    <td>@understandableReturnTime[0]<br />@understandableReturnTime[1]</td>
                     <td>@Html.DisplayFor(modelItem => journey.departureStationName)</td>
                     <td>@Html.DisplayFor(modelItem => journey.returnStationName)</td>
                     <td>@Html.DisplayFor(modelItem => journey.coveredDistance)</td>

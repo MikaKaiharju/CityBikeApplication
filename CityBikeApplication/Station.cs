@@ -23,9 +23,8 @@ namespace CityBikeApplication
 
         public string GetLocation()
         {
-            // x and y are stored with comma but url query needs dots
-            var latitude = ("" + y).Replace(",", ".");
-            var longitude = ("" + x).Replace(",", ".");
+            string latitude = y;
+            string longitude = x;
 
             return "https://www.google.com/maps/search/?api=1&query=" + latitude + "," + longitude;
         }

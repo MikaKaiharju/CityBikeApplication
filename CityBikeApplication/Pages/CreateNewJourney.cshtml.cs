@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,7 +12,8 @@ namespace CityBikeApplication.Pages
     public class CreateNewJourneyModel : PageModel
     {
         
-        public string errorMessage = "";
+        // if data couldn't be validated show user what went wrong
+        public List<string> errorMessages = new List<string>();
 
         // store what data user gave
         public Journey oldJourney;
@@ -28,11 +30,20 @@ namespace CityBikeApplication.Pages
 
         public void OnPost()
         {
-            errorMessage = "";
+            // clear any previous error messages
+            errorMessages.Clear();
             
             Journey newJourney = new Journey();
 
-            string departureTime = Request.Form["departureTime"];
+            string departureTime = Sanitize(Request.Form["departureTime"]);
+            string returnTime = Sanitize(Request.Form["returnTime"]);
+            newJourney.departureStationId = Sanitize(Request.Form["departureStationId"]);
+            newJourney.departureStationName = Sanitize(Request.Form["departureStationName"]);
+            newJourney.returnStationId = Sanitize(Request.Form["returnStationId"]);
+            newJourney.returnStationName = Sanitize(Request.Form["returnStationName"]);
+            string coveredDistanceString = Sanitize(Request.Form["coveredDistance"]);
+            string durationString = Sanitize(Request.Form["duration"]);
+
             try
             {
                 DateTime dateTime = DateTime.ParseExact(departureTime, "HH.mm.ss dd.MM.yyyy", CultureInfo.InvariantCulture);
@@ -40,7 +51,7 @@ namespace CityBikeApplication.Pages
 
                 if(comparison < 0)
                 {
-                    errorMessage = "Given date is in the future";
+                    errorMessages.Add("Given departure time is in the future");
                 }
                 else
                 {
@@ -50,17 +61,16 @@ namespace CityBikeApplication.Pages
             }
             catch (Exception e)
             {
-                errorMessage = "Departure Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"";
+                errorMessages.Add("Departure Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"");
             }
 
-            string returnTime = Request.Form["returnTime"];
             try
             {
                 DateTime dateTime = DateTime.ParseExact(returnTime, "HH.mm.ss dd.MM.yyyy", CultureInfo.InvariantCulture);
                 int comparison = DateTime.Compare(DateTime.Now, dateTime);
                 if(comparison < 0)
                 {
-                    errorMessage = "Given date is in the future";
+                    errorMessages.Add("Given return time is in the future");
                 }
                 else
                 {
@@ -70,21 +80,15 @@ namespace CityBikeApplication.Pages
             }
             catch (Exception e)
             {
-                errorMessage = "Return Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"";
+                errorMessages.Add("Return Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"");
             }
 
-            newJourney.departureStationId = Request.Form["departureStationId"];
-            newJourney.departureStationName = Request.Form["departureStationName"];
-            newJourney.returnStationId = Request.Form["returnStationId"];
-            newJourney.returnStationName = Request.Form["returnStationName"];
-
-            string coveredDistanceString = Request.Form["coveredDistance"];
             try
             {
                 int coveredDistance = int.Parse(coveredDistanceString);
                 if (coveredDistance < 0)
                 {
-                    errorMessage = "Covered Distance needs to integer that is >= 0";
+                    errorMessages.Add("Covered Distance needs to be integer that is >= 0");
                 }
                 else
                 {
@@ -93,16 +97,15 @@ namespace CityBikeApplication.Pages
             }
             catch (Exception e)
             {
-                errorMessage = "Covered Distance needs to integer that is >= 0";
+                errorMessages.Add("Covered Distance needs to be integer  that is >= 0");
             }
 
-            string durationString = Request.Form["duration"];
             try
             {
                 int duration = int.Parse(durationString);
                 if (duration < 0)
                 {
-                    errorMessage = "Duration needs to integer that is >= 0";
+                    errorMessages.Add("Duration needs to be integer that is >= 0");
                 }
                 else
                 {
@@ -111,22 +114,26 @@ namespace CityBikeApplication.Pages
             }
             catch (Exception e)
             {
-                errorMessage = "Duration needs to integer that is >= 0";
+                errorMessages.Add("Duration needs to be integer that is >= 0");
             }
 
+            // if there were errors remember what data was given
             oldJourney = newJourney;
 
             // if there wasn't problems with validation
-            if (errorMessage.Equals(""))
+            if (errorMessages.Count == 0)
             {
                 newJourney.id = Guid.NewGuid().ToString();
                 DataHandler.Instance.CreateNewJourney(newJourney);
 
                 Response.Redirect("JourneyList");
             }
+        }
 
-            
-
+        private string Sanitize(string str)
+        {
+            // remove special characters
+            return Regex.Replace(str, "[^a-öA-Ö0-9_.,]", "", RegexOptions.Compiled);
         }
 
     }

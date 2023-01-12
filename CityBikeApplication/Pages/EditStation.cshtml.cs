@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,13 +12,13 @@ namespace CityBikeApplication.Pages
     public class EditStationModel : PageModel
     {
 
-        public string errorMessage = "";
+        public List<string> errorMessages = new List<string>();
 
         public Station oldStation;
 
         public void OnGet()
         {
-            oldStation = DataHandler.Instance.GetStation(Request.Query["id"]);
+            GetOldStation();
         }
 
         public void GetOldStation()
@@ -27,22 +28,41 @@ namespace CityBikeApplication.Pages
 
         public void OnPost()
         {
+            // remove previous errorMessages
+            errorMessages.Clear();
+
             Station newStation = new Station();
-            newStation.id = Request.Form["id"];
-            newStation.nimi = Request.Form["nimi"];
-            newStation.namn = Request.Form["namn"];
-            newStation.name = Request.Form["name"];
-            newStation.osoite = Request.Form["osoite"];
-            newStation.address = Request.Form["address"];
-            newStation.kaupunki = Request.Form["kaupunki"];
-            newStation.stad = Request.Form["stad"];
-            newStation.operaattori = Request.Form["operaattori"];
-            newStation.kapasiteetti = Request.Form["kapasiteetti"];
+            newStation.id = Sanitize(Request.Form["id"]);
+            newStation.nimi = Sanitize(Request.Form["nimi"]);
+            newStation.namn = Sanitize(Request.Form["namn"]);
+            newStation.name = Sanitize(Request.Form["name"]);
+            newStation.osoite = Sanitize(Request.Form["osoite"]);
+            newStation.address = Sanitize(Request.Form["address"]);
+            newStation.kaupunki = Sanitize(Request.Form["kaupunki"]);
+            newStation.stad = Sanitize(Request.Form["stad"]);
+            newStation.operaattori = Sanitize(Request.Form["operaattori"]);
+            string kapasiteettiString = Sanitize(Request.Form["kapasiteetti"]);
+            string xString = Sanitize(Request.Form["x"]);
+            string yString = Sanitize(Request.Form["y"]);
 
-            string xString = Request.Form["x"];
-            string yString = Request.Form["y"];
+            if(kapasiteettiString.Length > 0)
+            {
+                try
+                {
+                    newStation.kapasiteetti = "" + int.Parse(kapasiteettiString);
+                }
+                catch(Exception e)
+                {
+                    newStation.kapasiteetti = kapasiteettiString;
+                    errorMessages.Add("Capacity needs to be integer that is >= 0");
+                }
+            }
+            else
+            {
+                newStation.kapasiteetti = "";
+            }
 
-            // this makes it possible to user use dot instead of comma
+            // double parse needs number to be in comma form
             xString = xString.Replace(".", ",");
             yString = yString.Replace(".", ",");
 
@@ -50,12 +70,12 @@ namespace CityBikeApplication.Pages
             {
                 try
                 {
-                    // double is stored in comma form
-                    newStation.x = ("" + double.Parse(xString)).Replace(",", "."); // longitude
+                    // store in dot form
+                    newStation.x = ("" + double.Parse(xString)).Replace(",","."); // longitude
                 }
                 catch (Exception e)
                 {
-                    errorMessage = "Something wrong with the longitude";
+                    errorMessages.Add("Longitude must be a decimal number with either . or , as a separator");
                     return;
                 }
             }
@@ -67,12 +87,12 @@ namespace CityBikeApplication.Pages
             {
                 try
                 {
-                    // double is stored in comma form
+                    // store in dot form
                     newStation.y = ("" + double.Parse(yString)).Replace(",", "."); // latitude
                 }
                 catch(Exception e)
                 {
-                    errorMessage = "Something wrong with the latitude";
+                    errorMessages.Add("Latitude must be a decimal number with either . or , as a separator");
                     return;
                 }
             }
@@ -81,11 +101,20 @@ namespace CityBikeApplication.Pages
                 newStation.y = "";
             }
 
+            // if there were errors remember what data was given
             oldStation = newStation;
-            DataHandler.Instance.ReplaceStation(newStation);
-            
-            Response.Redirect("StationList");
 
+            if(errorMessages.Count == 0)
+            {
+                DataHandler.Instance.ReplaceStation(newStation);
+                Response.Redirect("StationList");
+            }
+        }
+
+        private string Sanitize(string str)
+        {
+            // remove special characters
+            return Regex.Replace(str, "[^a-öA-Ö0-9_ .,()]", "", RegexOptions.Compiled);
         }
     }
 }
