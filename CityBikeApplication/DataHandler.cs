@@ -16,9 +16,14 @@ namespace CityBikeApplication
         public bool ready = false;
 
         // store sort order to invert order
-        string currentSortOrder = "";
+        string currentJourneySortOrder = "";
         // is current sort order ascending
-        bool ascending = true;
+        bool ascendingJourneyOrder = true;
+
+        // store sort order to invert order
+        string currentStationSortOrder = "";
+        // is current sort order ascending
+        bool ascendingStationOrder = true;
 
         // import data sets only once
         private DataHandler()
@@ -197,6 +202,9 @@ namespace CityBikeApplication
                     double y;
                     try { y = double.Parse(values[12], CultureInfo.InvariantCulture); } catch (Exception e) { continue; }
 
+                    int kapasiteetti;
+                    try { kapasiteetti = int.Parse(values[10]); } catch(Exception e) { continue; }
+
                     // since we got this far line of data should be validated
                     // create new station class class and populate it
                     Station station = new Station();
@@ -209,7 +217,7 @@ namespace CityBikeApplication
                     station.kaupunki = values[7];
                     station.stad = values[8];
                     station.operaattori = values[9];
-                    station.kapasiteetti = values[10];
+                    station.kapasiteetti = kapasiteetti;
                     station.x = ("" + x).Replace(",", "."); // store in dot form
                     station.y = ("" + y).Replace(",", ".");
 
@@ -275,7 +283,74 @@ namespace CityBikeApplication
         public void CreateNewJourney(Journey newJourney)
         {
             journeys.Add(newJourney);
-            SortJourneys(currentSortOrder, false);
+            SortJourneys(currentJourneySortOrder, false);
+        }
+
+        public void SortStations(string sortOrder)
+        {
+            // use normal inversion rules (pressing twice inverts order)
+            SortStations(sortOrder, true);
+        }
+
+        public void SortStations(string sortOrder, bool useInversion)
+        {
+            // use of IQueryable to ease sorting
+            IQueryable<Station> sortedStations = from s in stations.AsQueryable<Station>() select s;
+
+            if (useInversion)
+            {
+                // if header is pressed twice sorting inverts
+                ascendingStationOrder = currentStationSortOrder.Equals(sortOrder) ? !ascendingStationOrder : true;
+            }
+
+            // store latest sortOrder
+            currentStationSortOrder = sortOrder;
+
+            switch(sortOrder, ascendingStationOrder)
+            {
+                case ("id", true):
+                    sortedStations = sortedStations.OrderBy(s => s.id);
+                    break;
+                case ("id", false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.id);
+                    break;
+                case ("name", true):
+                    sortedStations = sortedStations.OrderBy(s => s.name);
+                    break;
+                case ("name", false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.name);
+                    break;
+                case ("osoite", true):
+                    sortedStations = sortedStations.OrderBy(s => s.osoite);
+                    break;
+                case ("osoite", false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.osoite);
+                    break;
+                case ("kaupunki", true):
+                    sortedStations = sortedStations.OrderBy(s => s.kaupunki);
+                    break;
+                case ("kaupunki", false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.kaupunki);
+                    break;
+                case ("operaattori", true):
+                    sortedStations = sortedStations.OrderBy(s => s.operaattori);
+                    break;
+                case ("operaattori", false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.operaattori);
+                    break;
+                case ("kapasiteetti", true):
+                    sortedStations = sortedStations.OrderBy(s => s.kapasiteetti);
+                    break;
+                case ("kapasiteetti", false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.kapasiteetti);
+                    break;
+                default:
+                    sortedStations = sortedStations.OrderBy(s => s.id);
+                    break;
+            }
+
+            // convert IQueryable back to list
+            stations = sortedStations.ToList<Station>();
         }
 
         public void SortJourneys(string sortOrder)
@@ -292,13 +367,13 @@ namespace CityBikeApplication
             if (useInversion)
             {
                 // if header is pressed twice sorting inverts
-                ascending = currentSortOrder.Equals(sortOrder) ? !ascending : true;
+                ascendingJourneyOrder = currentJourneySortOrder.Equals(sortOrder) ? !ascendingJourneyOrder : true;
             }
 
             // store latest sortOrder
-            currentSortOrder = sortOrder;
+            currentJourneySortOrder = sortOrder;
 
-            switch (sortOrder, ascending)
+            switch (sortOrder, ascendingJourneyOrder)
             {
                 case ("departureTime", true):
                     sortedJourneys = sortedJourneys.OrderBy(j => j.departureTime);
@@ -344,12 +419,6 @@ namespace CityBikeApplication
 
             // convert IQueryable back to list
             journeys = sortedJourneys.ToList<Journey>();
-        }
-
-
-        public void SortStations(string sortStationString)
-        {
-
         }
 
         private void p(string s)

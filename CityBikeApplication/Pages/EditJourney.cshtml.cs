@@ -44,19 +44,19 @@ namespace CityBikeApplication.Pages
             string coveredDistanceString = Sanitize(Request.Form["coveredDistance"]);
             string durationString = Sanitize(Request.Form["duration"]);
 
+            DateTime departureDateTime = DateTime.MinValue;
             try
             {
-                DateTime dateTime = DateTime.ParseExact(departureTime, "HH.mm.ss dd.MM.yyyy", CultureInfo.InvariantCulture);
-                int comparison = DateTime.Compare(DateTime.Now, dateTime);
+                departureDateTime = DateTime.ParseExact(departureTime, "HH.mm.ss dd.MM.yyyy", CultureInfo.InvariantCulture);
+                int comparison = DateTime.Compare(DateTime.Now, departureDateTime);
 
                 if (comparison < 0)
                 {
-                    newJourney.departureTime = departureTime;
                     errorMessages.Add("Given departure time is in the future");
                 }
                 else
                 {
-                    departureTime = dateTime.ToString("yyyy-MM-dd") + "T" + dateTime.ToString("HH:mm:ss");
+                    departureTime = departureDateTime.ToString("yyyy-MM-dd") + "T" + departureDateTime.ToString("HH:mm:ss");
                     newJourney.departureTime = departureTime;
                 }
             }
@@ -73,13 +73,18 @@ namespace CityBikeApplication.Pages
                 int comparison = DateTime.Compare(DateTime.Now, dateTime);
                 if (comparison < 0)
                 {
-                    newJourney.returnTime = returnTime;
                     errorMessages.Add("Given return time is in the future");
                 }
                 else
                 {
                     returnTime = dateTime.ToString("yyyy-MM-dd") + "T" + dateTime.ToString("HH:mm:ss");
                     newJourney.returnTime = returnTime;
+
+                    // check if return time is earlier than departure time
+                    if(departureDateTime != DateTime.MinValue && DateTime.Compare(dateTime, departureDateTime) < 0)
+                    {
+                        errorMessages.Add("Return time is earlier than departure time");
+                    }
                 }
             }
             catch (Exception e)
@@ -88,6 +93,8 @@ namespace CityBikeApplication.Pages
                 errorMessages.Add("Return Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"");
                 return;
             }
+
+            
             
             try
             {
@@ -140,7 +147,7 @@ namespace CityBikeApplication.Pages
         private string Sanitize(string str)
         {
             // remove special characters
-            return Regex.Replace(str, "[^a-öA-Ö0-9_.,]", "", RegexOptions.Compiled);
+            return Regex.Replace(str, "[^a-öA-Ö0-9_ .,()]", "", RegexOptions.Compiled);
         }
 
         private void p(string s)

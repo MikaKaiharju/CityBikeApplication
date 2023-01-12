@@ -17,7 +17,7 @@ namespace CityBikeApplication
         public string kaupunki;
         public string stad;
         public string operaattori;
-        public string kapasiteetti;
+        public int kapasiteetti;
         public string x;
         public string y;
 

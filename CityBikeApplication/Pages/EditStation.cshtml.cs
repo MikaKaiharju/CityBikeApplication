@@ -49,17 +49,22 @@ namespace CityBikeApplication.Pages
             {
                 try
                 {
-                    newStation.kapasiteetti = "" + int.Parse(kapasiteettiString);
+                    int kapasiteetti = int.Parse(kapasiteettiString);
+
+                    if(kapasiteetti < 0)
+                    {
+                        newStation.kapasiteetti = kapasiteetti;
+                        errorMessages.Add("Capacity needs to be >= 0");
+                    }
+                    else
+                    {
+                        newStation.kapasiteetti = kapasiteetti;
+                    }
                 }
                 catch(Exception e)
                 {
-                    newStation.kapasiteetti = kapasiteettiString;
                     errorMessages.Add("Capacity needs to be integer that is >= 0");
                 }
-            }
-            else
-            {
-                newStation.kapasiteetti = "";
             }
 
             // double parse needs number to be in comma form

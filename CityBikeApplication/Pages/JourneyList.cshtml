@@ -74,24 +74,28 @@
             {
                 string[] understandableDepartureTime = journey.GetUnderstandableDepartureTime().Split(" ");
                 string[] understandableReturnTime = journey.GetUnderstandableReturnTime().Split(" ");
-                <tr>
-                    <td>@understandableDepartureTime[0]<br/>@understandableDepartureTime[1]</td>
-                    <td>@understandableReturnTime[0]<br />@understandableReturnTime[1]</td>
-                    <td>@Html.DisplayFor(modelItem => journey.departureStationName)</td>
-                    <td>@Html.DisplayFor(modelItem => journey.returnStationName)</td>
-                    <td>@Html.DisplayFor(modelItem => journey.coveredDistance)</td>
-                    <td>@Html.DisplayFor(modelItem => journey.duration)</td>
-                    <td>
-                        <a class="btn btn-primary btn-sm" href="EditJourney?id=@journey.id">Edit</a>
-                    </td>
-                    <td>
-                        <form asp-page-handler="delete" method="post">
-                            <button class="btn btn-danger btn-sm">Delete</button>
-                            <input type="hidden" name="id" value="@journey.id" />
-                            <input type="hidden" name="index" value="@Model.currentPageIndex" />
-                        </form>
-                    </td>
-                </tr>
+    <tr>
+        <td>@understandableDepartureTime[0]<br />@understandableDepartureTime[1]</td>
+        <td>@understandableReturnTime[0]<br />@understandableReturnTime[1]</td>
+        <td>
+            <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.departureStationId">@Html.DisplayFor(modelItem => journey.departureStationName)</a>
+        </td>
+        <td>
+            <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.returnStationId">@Html.DisplayFor(modelItem => journey.returnStationName)</a>
+        </td>
+        <td>@Html.DisplayFor(modelItem => journey.coveredDistance)</td>
+        <td>@Html.DisplayFor(modelItem => journey.duration)</td>
+        <td>
+            <a class="btn btn-primary btn-sm" href="EditJourney?id=@journey.id">Edit</a>
+        </td>
+        <td>
+            <form asp-page-handler="delete" method="post">
+                <button class="btn btn-danger btn-sm">Delete</button>
+                <input type="hidden" name="id" value="@journey.id" />
+                <input type="hidden" name="index" value="@Model.currentPageIndex" />
+            </form>
+        </td>
+    </tr>
             }
         }
 

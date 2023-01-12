@@ -24,7 +24,12 @@
 }
 
 <form method="POST">
-    <input type="hidden" name="id" value="@Model.oldStation.id" />
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Id</label>
+        <div class="col-sm-4">
+            <input type="text" class="form-control" name="id" value="@Model.oldStation.id" />
+        </div>
+    </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Nimi</label>
         <div class="col-sm-4">

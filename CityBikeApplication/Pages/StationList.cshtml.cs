@@ -19,5 +19,10 @@ namespace CityBikeApplication.Pages
         {
             DataHandler.Instance.DeleteStation(id);
         }
+
+        public void OnPostSortStations(string sortStationString)
+        {
+            DataHandler.Instance.SortStations(sortStationString);
+        }
     }
 }

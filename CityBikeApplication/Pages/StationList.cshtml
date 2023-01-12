@@ -26,11 +26,42 @@
 
     <table border="1">
         <tr>
-            <th>Nimi</th>
-            <th>Osoite</th>
-            <th>Kaupunki</th>
-            <th>Operaattori</th>
-            <th>Kapasiteetti</th>
+            <th>
+                <form asp-page-handler="sortStations" method="post">
+                    <button class="btn btn-danger btn-sm">Id</button>
+                    <input type="hidden" name="sortStationString" value="id" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortStations" method="post">
+                    <button class="btn btn-danger btn-sm">Name</button>
+                    <input type="hidden" name="sortStationString" value="name" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortStations" method="post">
+                    <button class="btn btn-danger btn-sm">Address</button>
+                    <input type="hidden" name="sortStationString" value="osoite" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortStations" method="post">
+                    <button class="btn btn-danger btn-sm">City</button>
+                    <input type="hidden" name="sortStationString" value="kaupunki" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortStations" method="post">
+                    <button class="btn btn-danger btn-sm">Operator</button>
+                    <input type="hidden" name="sortStationString" value="operaattori" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortStations" method="post">
+                    <button class="btn btn-danger btn-sm">Capacity</button>
+                    <input type="hidden" name="sortStationString" value="kapasiteetti" />
+                </form>
+            </th>
             <th>Edit</th>
             <th>Delete</th>
             <th>Show on Map</th>
@@ -41,7 +72,8 @@
             foreach (Station station in DataHandler.Instance.stations)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => station.nimi)</td>
+                    <td>@Html.DisplayFor(modelItem => station.id)</td>
+                    <td>@Html.DisplayFor(modelItem => station.name)</td>
                     <td>@Html.DisplayFor(modelItem => station.osoite)</td>
                     <td>@Html.DisplayFor(modelItem => station.kaupunki)</td>
                     <td>@Html.DisplayFor(modelItem => station.operaattori)</td>
