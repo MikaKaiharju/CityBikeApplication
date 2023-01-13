@@ -14,6 +14,8 @@ namespace CityBikeApplication.Pages
 
         public List<string> errorMessages = new List<string>();
 
+        // station that user is editing
+        // if there were errors, information given by the user is stored in oldStation
         public Station oldStation;
 
         public void OnGet()
@@ -23,16 +25,19 @@ namespace CityBikeApplication.Pages
 
         public void GetOldStation()
         {
-            oldStation = DataHandler.Instance.GetStation(Request.Query["id"]);
+            oldStation = DataHandler.Instance.GetStation(int.Parse(Request.Query["id"]));
         }
 
         public void OnPost()
         {
+            // id of the station that user started editing because we need to replace old with new
+            int oldStationId = int.Parse(Request.Query["id"]);
+
             // remove previous errorMessages
             errorMessages.Clear();
 
             Station newStation = new Station();
-            newStation.id = Sanitize(Request.Form["id"]);
+            string idString = Sanitize(Request.Form["id"]);
             newStation.nimi = Sanitize(Request.Form["nimi"]);
             newStation.namn = Sanitize(Request.Form["namn"]);
             newStation.name = Sanitize(Request.Form["name"]);
@@ -44,6 +49,42 @@ namespace CityBikeApplication.Pages
             string kapasiteettiString = Sanitize(Request.Form["kapasiteetti"]);
             string xString = Sanitize(Request.Form["x"]);
             string yString = Sanitize(Request.Form["y"]);
+
+            if(idString.Length > 0)
+            {
+                try
+                {
+                    int id = int.Parse(idString);
+
+                    if(id < 0)
+                    {
+                        errorMessages.Add("Id needs to be integer that >= 0");
+                    }
+                    else
+                    {
+                        // check if there is already a station with this new id and its not the old
+                        Station station = DataHandler.Instance.GetStation(id);
+                        if(station != null && id != oldStationId)
+                        {
+                            errorMessages.Add("There is already a station with this id: " + station.name);
+                        }
+                        else
+                        {
+                            newStation.id = id;
+                        }
+                    }
+
+                }
+                catch(Exception e)
+                {
+
+                }
+
+            }
+            else
+            {
+                
+            }
 
             if(kapasiteettiString.Length > 0)
             {
@@ -109,9 +150,9 @@ namespace CityBikeApplication.Pages
             // if there were errors remember what data was given
             oldStation = newStation;
 
-            if(errorMessages.Count == 0)
+            if (errorMessages.Count == 0)
             {
-                DataHandler.Instance.ReplaceStation(newStation);
+                DataHandler.Instance.ReplaceStation(oldStationId, newStation);
                 Response.Redirect("StationList");
             }
         }
@@ -120,6 +161,11 @@ namespace CityBikeApplication.Pages
         {
             // remove special characters
             return Regex.Replace(str, "[^a-öA-Ö0-9_ .,()]", "", RegexOptions.Compiled);
+        }
+
+        private void p(string s)
+        {
+            System.Diagnostics.Debug.WriteLine(s);
         }
     }
 }

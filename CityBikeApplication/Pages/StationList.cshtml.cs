@@ -15,7 +15,7 @@ namespace CityBikeApplication.Pages
 
         }
 
-        public void OnPostDelete(string id)
+        public void OnPostDelete(int id)
         {
             DataHandler.Instance.DeleteStation(id);
         }

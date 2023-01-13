@@ -196,19 +196,24 @@ namespace CityBikeApplication
                     // 11 == x
                     // 12 == y
 
+                    // parse station id into int
+                    int id;
+                    try { id = int.Parse(values[1]); } catch(Exception e) { continue; }
+
                     // parse coordinate strings to double (skip if can't be read for some reason)
                     double x;
                     try { x = double.Parse(values[11], CultureInfo.InvariantCulture); } catch (Exception e) { continue; }
                     double y;
                     try { y = double.Parse(values[12], CultureInfo.InvariantCulture); } catch (Exception e) { continue; }
 
+                    // parse station capacity into int
                     int kapasiteetti;
                     try { kapasiteetti = int.Parse(values[10]); } catch(Exception e) { continue; }
 
                     // since we got this far line of data should be validated
                     // create new station class class and populate it
                     Station station = new Station();
-                    station.id = values[1];
+                    station.id = id;
                     station.nimi = values[2];
                     station.namn = values[3];
                     station.name = values[4];
@@ -230,11 +235,11 @@ namespace CityBikeApplication
 
         }
 
-        public Station GetStation(string id)
+        public Station GetStation(int id)
         {
             foreach(Station station in stations)
             {
-                if (station.id.Equals(id))
+                if (station.id == id)
                 {
                     return station;
                 }
@@ -254,9 +259,9 @@ namespace CityBikeApplication
             return null;
         }
 
-        public void ReplaceStation(Station newStation)
+        public void ReplaceStation(int oldStationId, Station newStation)
         {
-            Station oldStation = GetStation(newStation.id);
+            Station oldStation = GetStation(oldStationId);
             int index = stations.IndexOf(oldStation);
             stations.RemoveAt(index);
             stations.Insert(index, newStation);
@@ -270,7 +275,7 @@ namespace CityBikeApplication
             journeys.Insert(index, newJourney);
         }
 
-        public void DeleteStation(string id)
+        public void DeleteStation(int id)
         {
             stations.Remove(GetStation(id));
         }

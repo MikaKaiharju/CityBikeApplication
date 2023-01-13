@@ -22,6 +22,8 @@ namespace CityBikeApplication.Pages
         // user can select how many journeys are shown per page
         public int[] Choices = new int[] { 10, 20, 50, 100 };
 
+        public SelectList Select { get; set; }
+
         public void OnGet()
         {
 
@@ -47,9 +49,10 @@ namespace CityBikeApplication.Pages
             GetJourneys();
         }
 
-        public void OnPostSortJourneys(string sortJourneyString)
+        public void OnPostSortJourneys(string sortJourneyString, int selection)
         {
             DataHandler.Instance.SortJourneys(sortJourneyString);
+            journeysPerPage = selection;
         }
 
 
@@ -67,6 +70,13 @@ namespace CityBikeApplication.Pages
 
         public List<Journey> GetJourneys()
         {
+            //int value = (int) Select.SelectedValue;
+            
+            if(Select != null)
+            {
+                p("value=" + Select.SelectedValue);
+            }
+
             // show only a certain amount of journeys per page
             int startIndex = currentPageIndex * journeysPerPage;
 

@@ -8,7 +8,7 @@ namespace CityBikeApplication
 {
     public class Station
     {
-        public string id;
+        public int id;
         public string nimi;
         public string namn;
         public string name;

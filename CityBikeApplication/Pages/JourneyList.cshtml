@@ -55,36 +55,42 @@
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Departure Time</button>
                     <input type="hidden" name="sortJourneyString" value="departureTime" />
+                    <input type="hidden" name="selection" value="@Model.journeysPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Return Time</button>
                     <input type="hidden" name="sortJourneyString" value="returnTime" />
+                    <input type="hidden" name="selection" value="@Model.journeysPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Departure Station</button>
                     <input type="hidden" name="sortJourneyString" value="departureStation" />
+                    <input type="hidden" name="selection" value="@Model.journeysPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Return Station</button>
                     <input type="hidden" name="sortJourneyString" value="returnStation" />
+                    <input type="hidden" name="selection" value="@Model.journeysPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Covered Distance (km)</button>
                     <input type="hidden" name="sortJourneyString" value="coveredDistance" />
+                    <input type="hidden" name="selection" value="@Model.journeysPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Journey Duration</button>
                     <input type="hidden" name="sortJourneyString" value="duration" />
+                    <input type="hidden" name="selection" value="@Model.journeysPerPage" />
                 </form>
             </th>
             <th>Edit</th>
