@@ -48,13 +48,12 @@ namespace CityBikeApplication.Pages
 
             if (idString.Length > 0)
             {
-                try
+                int id;
+                if (int.TryParse(idString, out id))
                 {
-                    int id = int.Parse(idString);
-
                     if (id < 0)
                     {
-                        ErrorMessages.Add("Id needs to be integer that is >= 0");
+                        ErrorMessages.Add("Id needs to be integer that is > 0");
                     }
                     else
                     {
@@ -62,30 +61,28 @@ namespace CityBikeApplication.Pages
                         Station station = DataHandler.Instance.GetStation(id);
                         if (station != null)
                         {
-                            ErrorMessages.Add("There is already a station with this id: id=" + station.Id + " name="+ station.Name);
+                            ErrorMessages.Add("There is already a station with this id: id=" + station.Id + " name=" + station.Name);
                         }
-                        
+
                         newStation.Id = id;
                     }
-
                 }
-                catch (Exception e)
+                else
                 {
-                    ErrorMessages.Add("Id needs to be integer that is >= 0");
+                    ErrorMessages.Add("Id needs to be integer that is > 0");
                 }
 
             }
             else
             {
-                ErrorMessages.Add("Id is required and needs to be integer that is >= 0");
+                ErrorMessages.Add("Id is required and needs to be integer that is > 0");
             }
 
             if (kapasiteettiString.Length > 0)
             {
-                try
+                int kapasiteetti;
+                if (int.TryParse(kapasiteettiString, out kapasiteetti))
                 {
-                    int kapasiteetti = int.Parse(kapasiteettiString);
-
                     if (kapasiteetti < 0)
                     {
                         newStation.Kapasiteetti = kapasiteetti;
@@ -96,7 +93,7 @@ namespace CityBikeApplication.Pages
                         newStation.Kapasiteetti = kapasiteetti;
                     }
                 }
-                catch (Exception e)
+                else
                 {
                     ErrorMessages.Add("Capacity needs to be integer that is >= 0");
                 }

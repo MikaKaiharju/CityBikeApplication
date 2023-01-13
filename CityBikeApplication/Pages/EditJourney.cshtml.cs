@@ -52,7 +52,7 @@ namespace CityBikeApplication.Pages
             string departureTime = Sanitize(Request.Form["departureTime"]);
             string returnTime = Sanitize(Request.Form["returnTime"]);
             newJourney.DepartureStationId = int.Parse(Request.Form["departureStationId"]);
-            if (newJourney.DepartureStationId != -1)
+            if (newJourney.DepartureStationId > 0)
             {
                 newJourney.DepartureStationName = DataHandler.Instance.GetStation(newJourney.DepartureStationId).Name;
             }
@@ -61,7 +61,7 @@ namespace CityBikeApplication.Pages
                 newJourney.ReturnStationName = "";
             }
             newJourney.ReturnStationId = int.Parse(Request.Form["returnStationId"]);
-            if(newJourney.ReturnStationId != -1)
+            if(newJourney.ReturnStationId > 0)
             {
                 newJourney.ReturnStationName = DataHandler.Instance.GetStation(newJourney.ReturnStationId).Name;
             }
@@ -123,42 +123,48 @@ namespace CityBikeApplication.Pages
                 return;
             }
 
-            try
+            if(coveredDistanceString.Length > 0)
             {
-                int coveredDistance = int.Parse(coveredDistanceString);
-                if(coveredDistance < 0)
+                int coveredDistance;
+                if(int.TryParse(coveredDistanceString, out coveredDistance))
                 {
-                    ErrorMessages.Add("Covered Distance needs to be integer that is >= 0");
-                    return;
-                }
-                else
-                {
+                    if (coveredDistance < 0)
+                    {
+                        ErrorMessages.Add("Covered Distance needs to be integer that is >= 0");
+                    }
+                    
                     newJourney.CoveredDistance = coveredDistance;
                 }
+                else
+                {
+                    ErrorMessages.Add("Covered Distance needs to be integer that is >= 0");
+                }
             }
-            catch(Exception e)
+            else
             {
-                ErrorMessages.Add("Covered Distance needs to be integer that is >= 0");
-                return;
+                newJourney.CoveredDistance = 0;
             }
 
-            try
+            if(durationString.Length > 0)
             {
-                int duration = int.Parse(durationString);
-                if (duration < 0)
+                int duration;
+                if(int.TryParse(durationString, out duration))
                 {
-                    ErrorMessages.Add("Duration needs to be integer that is >= 0");
-                    return;
+                    if (duration < 0)
+                    {
+                        ErrorMessages.Add("Duration needs to be integer that is >= 0");
+                    }
+
+                    newJourney.Duration = duration;
                 }
                 else
                 {
-                    newJourney.Duration = duration;
+                    ErrorMessages.Add("Duration needs to be integer that is >= 0");
                 }
             }
-            catch (Exception e)
+            else
             {
-                ErrorMessages.Add("Duration needs to be integer that is >= 0");
-                return;
+                newJourney.Duration = 0;
             }
 
             // if there were errors remember what data was given

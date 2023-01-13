@@ -18,6 +18,9 @@ namespace CityBikeApplication.Pages
         // store what data user gave
         public Journey OldJourney;
 
+        // user can select how many journeys are shown per page
+        public List<Station> Choices = new List<Station>();
+
         public void OnGet()
         {
             GetOldJourney();
@@ -26,6 +29,12 @@ namespace CityBikeApplication.Pages
         public void GetOldJourney()
         {
             if (OldJourney == null) { OldJourney = new Journey(); }
+        }
+
+        public List<Station> GetChoices()
+        {
+            DataHandler.Instance.SortStations(DataHandler.SortOrder.Id, false);
+            return Choices = DataHandler.Instance.Stations;
         }
 
         public void OnPost()
@@ -37,10 +46,24 @@ namespace CityBikeApplication.Pages
 
             string departureTime = Sanitize(Request.Form["departureTime"]);
             string returnTime = Sanitize(Request.Form["returnTime"]);
-            //string departureStationId = Sanitize(Request.Form["departureStationId"]);
-            //string returnStationId = Sanitize(Request.Form["returnStationId"]);
-            newJourney.DepartureStationName = Sanitize(Request.Form["departureStationName"]);
-            newJourney.ReturnStationName = Sanitize(Request.Form["returnStationName"]);
+            newJourney.DepartureStationId = int.Parse(Request.Form["departureStationId"]);
+            if (newJourney.DepartureStationId > 0)
+            {
+                newJourney.DepartureStationName = DataHandler.Instance.GetStation(newJourney.DepartureStationId).Name;
+            }
+            else
+            {
+                newJourney.ReturnStationName = "";
+            }
+            newJourney.ReturnStationId = int.Parse(Request.Form["returnStationId"]);
+            if (newJourney.ReturnStationId > 0)
+            {
+                newJourney.ReturnStationName = DataHandler.Instance.GetStation(newJourney.ReturnStationId).Name;
+            }
+            else
+            {
+                newJourney.ReturnStationName = "";
+            }
             string coveredDistanceString = Sanitize(Request.Form["coveredDistance"]);
             string durationString = Sanitize(Request.Form["duration"]);
 
@@ -83,40 +106,48 @@ namespace CityBikeApplication.Pages
                 ErrorMessages.Add("Return Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"");
             }
 
-            
-
-            try
+            if (coveredDistanceString.Length > 0)
             {
-                int coveredDistance = int.Parse(coveredDistanceString);
-                if (coveredDistance < 0)
+                int coveredDistance;
+                if (int.TryParse(coveredDistanceString, out coveredDistance))
+                {
+                    if (coveredDistance < 0)
+                    {
+                        ErrorMessages.Add("Covered Distance needs to be integer that is >= 0");
+                    }
+
+                    newJourney.CoveredDistance = coveredDistance;
+                }
+                else
                 {
                     ErrorMessages.Add("Covered Distance needs to be integer that is >= 0");
                 }
-                else
-                {
-                    newJourney.CoveredDistance = coveredDistance;
-                }
             }
-            catch (Exception e)
+            else
             {
-                ErrorMessages.Add("Covered Distance needs to be integer  that is >= 0");
+                newJourney.CoveredDistance = 0;
             }
 
-            try
+            if (durationString.Length > 0)
             {
-                int duration = int.Parse(durationString);
-                if (duration < 0)
+                int duration;
+                if (int.TryParse(durationString, out duration))
+                {
+                    if (duration < 0)
+                    {
+                        ErrorMessages.Add("Duration needs to be integer that is >= 0");
+                    }
+
+                    newJourney.Duration = duration;
+                }
+                else
                 {
                     ErrorMessages.Add("Duration needs to be integer that is >= 0");
                 }
-                else
-                {
-                    newJourney.Duration = duration;
-                }
             }
-            catch (Exception e)
+            else
             {
-                ErrorMessages.Add("Duration needs to be integer that is >= 0");
+                newJourney.Duration = 0;
             }
 
             // if there were errors remember what data was given

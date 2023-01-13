@@ -34,7 +34,7 @@ namespace CityBikeApplication
             // ->
             // 23.57.25 31.05.2021
 
-            if (timeString.Equals(""))
+            if (timeString == null || timeString == "")
             {
                 DateTime dateTime1 = DateTime.Now;
                 return dateTime1.ToString("HH.mm.ss dd.MM.yyyy");

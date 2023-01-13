@@ -36,27 +36,52 @@
         </div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Departure Station Id</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" name="departureStationId" value="@Model.OldJourney.DepartureStationId" />
-        </div>
-    </div>
-    <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Departure Station</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" name="departureStationName" value="@Model.OldJourney.DepartureStationName" />
+        <select class="col-sm-4" name="departureStationId">
+            <option value="-1" selected="selected">Select station</option>
+            @{
+                List<Station> stations = Model.GetChoices();
+                foreach (Station station in stations)
+                {
+                    string optionName = station.Id + ": " + station.Name;
+                    if (station.Id == Model.OldJourney.DepartureStationId)
+                    {
+                        <option value="@station.Id" selected="selected">@optionName</option>
+                    }
+                    else
+                    {
+                        <option value="@station.Id">@optionName</option>
+                    }
+                }
+            }
+        </select>
+        <div class="col-sm-2">
+            <a class="btn btn-primary btn-sm" href="/CreateNewStation">Create New Station</a>
         </div>
     </div>
-    <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Return Station Id</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" name="returnStationId" value="@Model.OldJourney.ReturnStationId" />
-        </div>
-    </div>
+
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Return Station</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" name="returnStationName" value="@Model.OldJourney.ReturnStationName" />
+        <select class="col-sm-4" name="returnStationId">
+            <option value="-1" selected="selected">Select station</option>
+            @{
+                foreach (Station station in stations)
+                {
+                    string optionName = station.Id + ": " + station.Name;
+                    if (station.Id == Model.OldJourney.ReturnStationId)
+                    {
+                        <option value="@station.Id" selected="selected">@optionName</option>
+                    }
+                    else
+                    {
+                        <option value="@station.Id">@optionName</option>
+                    }
+
+                }
+            }
+        </select>
+        <div class="col-sm-2">
+            <a class="btn btn-primary btn-sm" href="/CreateNewStation">Create New Station</a>
         </div>
     </div>
     <div class="row mb-3">
