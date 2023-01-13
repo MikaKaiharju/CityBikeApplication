@@ -127,6 +127,12 @@ namespace CityBikeApplication
                     // 6 == coveredDistance in metres
                     // 7 == journey duration is seconds
 
+                    // parse stationIds
+                    int departureStationId;
+                    try { departureStationId = int.Parse(values[2]); } catch(Exception e) { continue; }
+                    int returnStationId;
+                    try { returnStationId = int.Parse(values[4]); } catch (Exception e) { continue; }
+
                     // parse limiting factor strings to int (skip if can't be read for some reason)
                     int coveredDistanceInMetres;
                     try { coveredDistanceInMetres = int.Parse(values[6]); } catch (Exception e) { continue; }
@@ -148,9 +154,9 @@ namespace CityBikeApplication
                     journey.id = Guid.NewGuid().ToString();
                     journey.departureTime = values[0];
                     journey.returnTime = values[1];
-                    journey.departureStationId = values[2];
+                    journey.departureStationId = departureStationId;
                     journey.departureStationName = values[3];
-                    journey.returnStationId = values[4];
+                    journey.returnStationId = returnStationId;
                     journey.returnStationName = values[5];
                     journey.coveredDistance = coveredDistanceInKilometres;
                     journey.duration = journeyDurationInMinutes;
@@ -267,9 +273,9 @@ namespace CityBikeApplication
             stations.Insert(index, newStation);
         }
 
-        public void ReplaceJourney(Journey newJourney)
+        public void ReplaceJourney(string oldJourneyId, Journey newJourney)
         {
-            Journey oldJourney = GetJourney(newJourney.id);
+            Journey oldJourney = GetJourney(oldJourneyId);
             int index = journeys.IndexOf(oldJourney);
             journeys.RemoveAt(index);
             journeys.Insert(index, newJourney);

@@ -17,9 +17,21 @@ namespace CityBikeApplication.Pages
         // store what data user gave
         public Journey oldJourney;
 
+        // user can select how many journeys are shown per page
+        public List<Station> choices = new List<Station>();
+
         public void OnGet()
         {
             GetOldJourney();
+
+            DataHandler.Instance.SortStations("id", false);
+            choices = DataHandler.Instance.stations;
+        }
+
+        public List<Station> GetChoices()
+        {
+            DataHandler.Instance.SortStations("id", false);
+            return choices = DataHandler.Instance.stations;
         }
 
         public void GetOldJourney()
@@ -31,19 +43,36 @@ namespace CityBikeApplication.Pages
         {
             // remove previous errorMessages
             errorMessages.Clear();
-            
+
+            string oldJourneyId = Request.Query["id"];
+
             Journey newJourney = new Journey();
-            newJourney.id = Request.Form["id"];
+            newJourney.id = oldJourneyId;
 
             string departureTime = Sanitize(Request.Form["departureTime"]);
             string returnTime = Sanitize(Request.Form["returnTime"]);
-            newJourney.departureStationId = Sanitize(Request.Form["departureStationId"]);
-            newJourney.departureStationName = Sanitize(Request.Form["departureStationName"]);
-            newJourney.returnStationId = Sanitize(Request.Form["returnStationId"]);
-            newJourney.returnStationName = Sanitize(Request.Form["returnStationName"]);
+            newJourney.departureStationId = int.Parse(Request.Form["departureStationId"]);
+            if (newJourney.departureStationId != -1)
+            {
+                newJourney.departureStationName = DataHandler.Instance.GetStation(newJourney.departureStationId).name;
+            }
+            else
+            {
+                newJourney.returnStationName = "";
+            }
+            newJourney.returnStationId = int.Parse(Request.Form["returnStationId"]);
+            if(newJourney.returnStationId != -1)
+            {
+                newJourney.returnStationName = DataHandler.Instance.GetStation(newJourney.returnStationId).name;
+            }
+            else
+            {
+                newJourney.returnStationName = "";
+            }
             string coveredDistanceString = Sanitize(Request.Form["coveredDistance"]);
             string durationString = Sanitize(Request.Form["duration"]);
 
+            // initialization to check if return time is earlier than departure time
             DateTime departureDateTime = DateTime.MinValue;
             try
             {
@@ -139,7 +168,7 @@ namespace CityBikeApplication.Pages
 
             if (errorMessages.Count == 0)
             {
-                DataHandler.Instance.ReplaceJourney(newJourney);
+                DataHandler.Instance.ReplaceJourney(oldJourneyId, newJourney);
                 Response.Redirect("JourneyList");
             }
         }
@@ -147,7 +176,11 @@ namespace CityBikeApplication.Pages
         private string Sanitize(string str)
         {
             // remove special characters
-            return Regex.Replace(str, "[^a-öA-Ö0-9_ .,()]", "", RegexOptions.Compiled);
+            if(str != null)
+            {
+                return Regex.Replace(str, "[^a-öA-Ö0-9_ .,()]", "", RegexOptions.Compiled);
+            }
+            else { return ""; }
         }
 
         private void p(string s)

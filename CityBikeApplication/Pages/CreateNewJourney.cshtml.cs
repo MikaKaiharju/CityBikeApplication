@@ -37,9 +37,9 @@ namespace CityBikeApplication.Pages
 
             string departureTime = Sanitize(Request.Form["departureTime"]);
             string returnTime = Sanitize(Request.Form["returnTime"]);
-            newJourney.departureStationId = Sanitize(Request.Form["departureStationId"]);
+            //string departureStationId = Sanitize(Request.Form["departureStationId"]);
+            //string returnStationId = Sanitize(Request.Form["returnStationId"]);
             newJourney.departureStationName = Sanitize(Request.Form["departureStationName"]);
-            newJourney.returnStationId = Sanitize(Request.Form["returnStationId"]);
             newJourney.returnStationName = Sanitize(Request.Form["returnStationName"]);
             string coveredDistanceString = Sanitize(Request.Form["coveredDistance"]);
             string durationString = Sanitize(Request.Form["duration"]);
@@ -82,6 +82,8 @@ namespace CityBikeApplication.Pages
             {
                 errorMessages.Add("Return Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"");
             }
+
+            
 
             try
             {
@@ -133,7 +135,11 @@ namespace CityBikeApplication.Pages
         private string Sanitize(string str)
         {
             // remove special characters
-            return Regex.Replace(str, "[^a-öA-Ö0-9_ .,()]", "", RegexOptions.Compiled);
+            if(str != null)
+            {
+                return Regex.Replace(str, "[^a-öA-Ö0-9_ .,()]", "", RegexOptions.Compiled);
+            }
+            else { return ""; }
         }
 
     }

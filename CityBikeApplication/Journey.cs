@@ -11,9 +11,9 @@ namespace CityBikeApplication
         public string id;
         public string departureTime = "";
         public string returnTime = "";
-        public string departureStationId;
+        public int departureStationId;
         public string departureStationName;
-        public string returnStationId;
+        public int returnStationId;
         public string returnStationName;
         public int coveredDistance; // in kilometres
         public int duration; // in minutes

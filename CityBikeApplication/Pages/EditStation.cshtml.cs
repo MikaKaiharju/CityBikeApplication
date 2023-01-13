@@ -157,7 +157,11 @@ namespace CityBikeApplication.Pages
         private string Sanitize(string str)
         {
             // remove special characters
-            return Regex.Replace(str, "[^a-öA-Ö0-9_ .,()]", "", RegexOptions.Compiled);
+            if(str != null) 
+            {
+                return Regex.Replace(str, "[^a-öA-Ö0-9_ .,()]", "", RegexOptions.Compiled);
+            }
+            else { return ""; }
         }
 
         private void p(string s)

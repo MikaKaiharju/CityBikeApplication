@@ -54,7 +54,7 @@ namespace CityBikeApplication.Pages
 
                     if (id < 0)
                     {
-                        errorMessages.Add("Id needs to be integer that >= 0");
+                        errorMessages.Add("Id needs to be integer that is >= 0");
                     }
                     else
                     {
@@ -71,13 +71,13 @@ namespace CityBikeApplication.Pages
                 }
                 catch (Exception e)
                 {
-                    errorMessages.Add("Id needs to be integer that >= 0");
+                    errorMessages.Add("Id needs to be integer that is >= 0");
                 }
 
             }
             else
             {
-                errorMessages.Add("Id is required and needs to be integer that >= 0");
+                errorMessages.Add("Id is required and needs to be integer that is >= 0");
             }
 
             if (kapasiteettiString.Length > 0)
@@ -154,7 +154,11 @@ namespace CityBikeApplication.Pages
         private string Sanitize(string str)
         {
             // remove special characters
-            return Regex.Replace(str, "[^a-öA-Ö0-9_ .,()]", "", RegexOptions.Compiled);
+            if(str != null)
+            {
+                return Regex.Replace(str, "[^a-öA-Ö0-9_ .,()]", "", RegexOptions.Compiled);
+            }
+            else { return ""; }
         }
 
         private void p(string s)

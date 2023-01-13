@@ -24,7 +24,7 @@
 }
 
 <form method="POST">
-    <input type="hidden" name="id" value="@Model.oldJourney.id" />
+
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Departure Time</label>
         <div class="col-sm-4">
@@ -37,28 +37,54 @@
             <input type="text" class="form-control" name="returnTime" value="@Model.oldJourney.GetUnderstandableReturnTime()" />
         </div>
     </div>
-    <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Departure Station Id</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" name="departureStationId" value="@Model.oldJourney.departureStationId" />
-        </div>
-    </div>
+
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Departure Station</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" name="departureStationName" value="@Model.oldJourney.departureStationName" />
+        <select class="col-sm-4" name="departureStationId">
+            <option value="-1" selected="selected">Select station</option>
+            @{
+                List<Station> stations = Model.GetChoices();
+                foreach (Station station in stations)
+                {
+                    string optionName = station.id + ": " + station.name;
+                    if (station.id == Model.oldJourney.departureStationId)
+                    {
+                        <option value="@station.id" selected="selected">@optionName</option>
+                    }
+                    else
+                    {
+                        <option value="@station.id">@optionName</option>
+                    }
+                }
+            }
+        </select>
+        <div class="col-sm-2">
+            <a class="btn btn-primary btn-sm" href="/CreateNewStation">Create New Station</a>
         </div>
     </div>
-    <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Return Station Id</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" name="returnStationId" value="@Model.oldJourney.returnStationId" />
-        </div>
-    </div>
+
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Return Station</label>
-        <div class="col-sm-4">
-            <input type="text" class="form-control" name="returnStationName" value="@Model.oldJourney.returnStationName" />
+        <select class="col-sm-4" name="returnStationId">
+            <option value="-1" selected="selected">Select station</option>
+            @{
+                foreach (Station station in stations)
+                {
+                    string optionName = station.id + ": " + station.name;
+                    if (station.id == Model.oldJourney.returnStationId)
+                    {
+                        <option value="@station.id" selected="selected">@optionName</option>
+                    }
+                    else
+                    {
+                        <option value="@station.id">@optionName</option>
+                    }
+
+                }
+            }
+        </select>
+        <div class="col-sm-2">
+            <a class="btn btn-primary btn-sm" href="/CreateNewStation">Create New Station</a>
         </div>
     </div>
     <div class="row mb-3">
