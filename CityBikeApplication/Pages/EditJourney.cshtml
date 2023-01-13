@@ -8,9 +8,9 @@
 <p></p>
 
 
-@if (Model.errorMessages.Count > 0)
+@if (Model.ErrorMessages.Count > 0)
 {
-    foreach (string errorMessage in Model.errorMessages)
+    foreach (string errorMessage in Model.ErrorMessages)
     {
         <div class="alert alert-warning" role="alert">
             <strong>@errorMessage</strong>
@@ -18,7 +18,7 @@
     }
 }
 
-@if (Model.oldJourney == null)
+@if (Model.OldJourney == null)
 {
     Model.GetOldJourney();
 }
@@ -28,13 +28,13 @@
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Departure Time</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="departureTime" value="@Model.oldJourney.GetUnderstandableDepartureTime()" />
+            <input type="text" class="form-control" name="departureTime" value="@Model.OldJourney.GetUnderstandableDepartureTime()" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Return Time</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="returnTime" value="@Model.oldJourney.GetUnderstandableReturnTime()" />
+            <input type="text" class="form-control" name="returnTime" value="@Model.OldJourney.GetUnderstandableReturnTime()" />
         </div>
     </div>
 
@@ -46,14 +46,14 @@
                 List<Station> stations = Model.GetChoices();
                 foreach (Station station in stations)
                 {
-                    string optionName = station.id + ": " + station.name;
-                    if (station.id == Model.oldJourney.departureStationId)
+                    string optionName = station.Id + ": " + station.Name;
+                    if (station.Id == Model.OldJourney.DepartureStationId)
                     {
-                        <option value="@station.id" selected="selected">@optionName</option>
+                        <option value="@station.Id" selected="selected">@optionName</option>
                     }
                     else
                     {
-                        <option value="@station.id">@optionName</option>
+                        <option value="@station.Id">@optionName</option>
                     }
                 }
             }
@@ -70,14 +70,14 @@
             @{
                 foreach (Station station in stations)
                 {
-                    string optionName = station.id + ": " + station.name;
-                    if (station.id == Model.oldJourney.returnStationId)
+                    string optionName = station.Id + ": " + station.Name;
+                    if (station.Id == Model.OldJourney.ReturnStationId)
                     {
-                        <option value="@station.id" selected="selected">@optionName</option>
+                        <option value="@station.Id" selected="selected">@optionName</option>
                     }
                     else
                     {
-                        <option value="@station.id">@optionName</option>
+                        <option value="@station.Id">@optionName</option>
                     }
 
                 }
@@ -90,13 +90,13 @@
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Covered Distance (km)</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="coveredDistance" value="@Model.oldJourney.coveredDistance" />
+            <input type="text" class="form-control" name="coveredDistance" value="@Model.OldJourney.CoveredDistance" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Duration (min)</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="duration" value="@Model.oldJourney.duration" />
+            <input type="text" class="form-control" name="duration" value="@Model.OldJourney.Duration" />
         </div>
     </div>
 

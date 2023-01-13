@@ -8,9 +8,9 @@
 <p></p>
 
 
-@if (Model.errorMessages.Count > 0)
+@if (Model.ErrorMessages.Count > 0)
 {
-    foreach (string errorMessage in Model.errorMessages)
+    foreach (string errorMessage in Model.ErrorMessages)
     {
         <div class="alert alert-warning" role="alert">
             <strong>@errorMessage</strong>

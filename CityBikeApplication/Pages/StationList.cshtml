@@ -16,7 +16,7 @@
         <select name="selection">
             @foreach (int Value in Model.Choices)
             {
-                if (Value == Model.stationsPerPage)
+                if (Value == Model.StationsPerPage)
                 {
                     <option value="@Value" selected="selected">@Value</option>
                 }
@@ -56,42 +56,42 @@
                 <form asp-page-handler="sortStations" method="post">
                     <button class="btn btn-danger btn-sm">Id</button>
                     <input type="hidden" name="sortStationString" value="id" />
-                    <input type="hidden" name="selection" value="@Model.stationsPerPage" />
+                    <input type="hidden" name="selection" value="@Model.StationsPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortStations" method="post">
                     <button class="btn btn-danger btn-sm">Name</button>
                     <input type="hidden" name="sortStationString" value="name" />
-                    <input type="hidden" name="selection" value="@Model.stationsPerPage" />
+                    <input type="hidden" name="selection" value="@Model.StationsPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortStations" method="post">
                     <button class="btn btn-danger btn-sm">Address</button>
                     <input type="hidden" name="sortStationString" value="osoite" />
-                    <input type="hidden" name="selection" value="@Model.stationsPerPage" />
+                    <input type="hidden" name="selection" value="@Model.StationsPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortStations" method="post">
                     <button class="btn btn-danger btn-sm">City</button>
                     <input type="hidden" name="sortStationString" value="kaupunki" />
-                    <input type="hidden" name="selection" value="@Model.stationsPerPage" />
+                    <input type="hidden" name="selection" value="@Model.StationsPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortStations" method="post">
                     <button class="btn btn-danger btn-sm">Operator</button>
                     <input type="hidden" name="sortStationString" value="operaattori" />
-                    <input type="hidden" name="selection" value="@Model.stationsPerPage" />
+                    <input type="hidden" name="selection" value="@Model.StationsPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortStations" method="post">
                     <button class="btn btn-danger btn-sm">Capacity</button>
                     <input type="hidden" name="sortStationString" value="kapasiteetti" />
-                    <input type="hidden" name="selection" value="@Model.stationsPerPage" />
+                    <input type="hidden" name="selection" value="@Model.StationsPerPage" />
                 </form>
             </th>
             <th>Edit</th>
@@ -99,25 +99,25 @@
             <th>Show on Map</th>
         </tr>
 
-        @if (DataHandler.Instance.ready)
+        @if (DataHandler.Instance.Ready)
         {
             foreach (Station station in Model.GetStations())
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => station.id)</td>
-                    <td>@Html.DisplayFor(modelItem => station.name)</td>
-                    <td>@Html.DisplayFor(modelItem => station.osoite)</td>
-                    <td>@Html.DisplayFor(modelItem => station.kaupunki)</td>
-                    <td>@Html.DisplayFor(modelItem => station.operaattori)</td>
-                    <td>@Html.DisplayFor(modelItem => station.kapasiteetti)</td>
+                    <td>@Html.DisplayFor(modelItem => station.Id)</td>
+                    <td>@Html.DisplayFor(modelItem => station.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => station.Osoite)</td>
+                    <td>@Html.DisplayFor(modelItem => station.Kaupunki)</td>
+                    <td>@Html.DisplayFor(modelItem => station.Operaattori)</td>
+                    <td>@Html.DisplayFor(modelItem => station.Kapasiteetti)</td>
                     <td>
-                        <a class="btn btn-primary btn-sm" href="EditStation?id=@station.id">Edit</a>
+                        <a class="btn btn-primary btn-sm" href="EditStation?id=@station.Id">Edit</a>
                     </td>
                     <td>
                         <form asp-page-handler="delete" method="post">
                             <button class="btn btn-danger btn-sm">Delete</button>
-                            <input type="hidden" name="id" value="@station.id" />
-                            <input type="hidden" name="index" value="@Model.currentPageIndex" />
+                            <input type="hidden" name="id" value="@station.Id" />
+                            <input type="hidden" name="index" value="@Model.CurrentPageIndex" />
                         </form>
                     </td>
                     <td>
@@ -133,9 +133,9 @@
 
     <div class="row mb-3">
 
-        @if (DataHandler.Instance.ready)
+        @if (DataHandler.Instance.Ready)
         {
-            int currentIndex = Model.currentPageIndex;
+            int currentIndex = Model.CurrentPageIndex;
             for (int index = 0; index < Model.GetPagesCount(); index++)
             {
                 <form asp-page-handler="ChangePage" method="post">
@@ -149,7 +149,7 @@
                         <button class="btn btn-danger btn-sm">@index</button>
                     }
                     <input type="hidden" name="index" value="@index" />
-                    <input type="hidden" name="perPage" value="@Model.stationsPerPage" />
+                    <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
                 </form>
             }
 

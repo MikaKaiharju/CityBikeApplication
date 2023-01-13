@@ -11,10 +11,10 @@ namespace CityBikeApplication.Pages
     {
 
         // index used in paging
-        public int currentPageIndex = 0;
+        public int CurrentPageIndex = 0;
 
         // how many stations are shown per page
-        public int stationsPerPage = 20;
+        public int StationsPerPage = 20;
 
         // user can select how many stations are shown per page
         public int[] Choices = new int[] { 10, 20, 50, 100 };
@@ -27,37 +27,37 @@ namespace CityBikeApplication.Pages
         public void OnPostChangeStationsPerPage(int selection)
         {
             // how many stations are shown per page was changed
-            currentPageIndex = 0;
-            stationsPerPage = selection;
+            CurrentPageIndex = 0;
+            StationsPerPage = selection;
         }
 
         public int GetPagesCount()
         {
-            int count = (int)Math.Ceiling((double)DataHandler.Instance.stations.Count / (double)stationsPerPage);
+            int count = (int)Math.Ceiling((double)DataHandler.Instance.Stations.Count / (double)StationsPerPage);
             return count;
         }
 
         public void OnPostChangePage(int index, int perPage)
         {
-            currentPageIndex = index;
-            stationsPerPage = perPage;
+            CurrentPageIndex = index;
+            StationsPerPage = perPage;
             GetStations();
         }
 
         public List<Station> GetStations()
         {
             // show only a certain amount of stations per page
-            int startIndex = currentPageIndex * stationsPerPage;
+            int startIndex = CurrentPageIndex * StationsPerPage;
 
             // need to know how many stations can be shown 
-            int leftOver = DataHandler.Instance.stations.Count - startIndex + 1;
-            if (leftOver > stationsPerPage)
+            int leftOver = DataHandler.Instance.Stations.Count - startIndex + 1;
+            if (leftOver > StationsPerPage)
             {
-                return DataHandler.Instance.stations.GetRange(startIndex, stationsPerPage);
+                return DataHandler.Instance.Stations.GetRange(startIndex, StationsPerPage);
             }
             else
             {
-                return DataHandler.Instance.stations.GetRange(startIndex, leftOver - 1);
+                return DataHandler.Instance.Stations.GetRange(startIndex, leftOver - 1);
             }
 
         }
@@ -66,18 +66,18 @@ namespace CityBikeApplication.Pages
         {
             DataHandler.Instance.DeleteStation(id);
             // if stations count is divisible with stationsPerPage last page is blank
-            if (DataHandler.Instance.stations.Count % stationsPerPage == 0 && index == GetPagesCount())
+            if (DataHandler.Instance.Stations.Count % StationsPerPage == 0 && index == GetPagesCount())
             {
                 index--;
             }
             // set showing page to index
-            OnPostChangePage(index, stationsPerPage);
+            OnPostChangePage(index, StationsPerPage);
         }
 
-        public void OnPostSortStations(string sortStationString, int selection)
+        public void OnPostSortStations(DataHandler.SortOrder sortStationString, int selection)
         {
             DataHandler.Instance.SortStations(sortStationString);
-            stationsPerPage = selection;
+            StationsPerPage = selection;
         }
     }
 }

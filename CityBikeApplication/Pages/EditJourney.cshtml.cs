@@ -12,62 +12,62 @@ namespace CityBikeApplication.Pages
     public class EditJourneyModel : PageModel
     {
         // if data couldn't be validated show user what went wrong
-        public List<string> errorMessages = new List<string>();
+        public List<string> ErrorMessages = new List<string>();
 
         // store what data user gave
-        public Journey oldJourney;
+        public Journey OldJourney;
 
         // user can select how many journeys are shown per page
-        public List<Station> choices = new List<Station>();
+        public List<Station> Choices = new List<Station>();
 
         public void OnGet()
         {
             GetOldJourney();
 
-            DataHandler.Instance.SortStations("id", false);
-            choices = DataHandler.Instance.stations;
+            DataHandler.Instance.SortStations(DataHandler.SortOrder.Id, false);
+            Choices = DataHandler.Instance.Stations;
         }
 
         public List<Station> GetChoices()
         {
-            DataHandler.Instance.SortStations("id", false);
-            return choices = DataHandler.Instance.stations;
+            DataHandler.Instance.SortStations(DataHandler.SortOrder.Id, false);
+            return Choices = DataHandler.Instance.Stations;
         }
 
         public void GetOldJourney()
         {
-            oldJourney = DataHandler.Instance.GetJourney(Request.Query["id"]);
+            OldJourney = DataHandler.Instance.GetJourney(Request.Query["id"]);
         }
 
         public void OnPost()
         {
             // remove previous errorMessages
-            errorMessages.Clear();
+            ErrorMessages.Clear();
 
             string oldJourneyId = Request.Query["id"];
 
             Journey newJourney = new Journey();
-            newJourney.id = oldJourneyId;
+            newJourney.Id = oldJourneyId;
 
             string departureTime = Sanitize(Request.Form["departureTime"]);
             string returnTime = Sanitize(Request.Form["returnTime"]);
-            newJourney.departureStationId = int.Parse(Request.Form["departureStationId"]);
-            if (newJourney.departureStationId != -1)
+            newJourney.DepartureStationId = int.Parse(Request.Form["departureStationId"]);
+            if (newJourney.DepartureStationId != -1)
             {
-                newJourney.departureStationName = DataHandler.Instance.GetStation(newJourney.departureStationId).name;
+                newJourney.DepartureStationName = DataHandler.Instance.GetStation(newJourney.DepartureStationId).Name;
             }
             else
             {
-                newJourney.returnStationName = "";
+                newJourney.ReturnStationName = "";
             }
-            newJourney.returnStationId = int.Parse(Request.Form["returnStationId"]);
-            if(newJourney.returnStationId != -1)
+            newJourney.ReturnStationId = int.Parse(Request.Form["returnStationId"]);
+            if(newJourney.ReturnStationId != -1)
             {
-                newJourney.returnStationName = DataHandler.Instance.GetStation(newJourney.returnStationId).name;
+                newJourney.ReturnStationName = DataHandler.Instance.GetStation(newJourney.ReturnStationId).Name;
             }
             else
             {
-                newJourney.returnStationName = "";
+                newJourney.ReturnStationName = "";
             }
             string coveredDistanceString = Sanitize(Request.Form["coveredDistance"]);
             string durationString = Sanitize(Request.Form["duration"]);
@@ -81,18 +81,18 @@ namespace CityBikeApplication.Pages
 
                 if (comparison < 0)
                 {
-                    errorMessages.Add("Given departure time is in the future");
+                    ErrorMessages.Add("Given departure time is in the future");
                 }
                 else
                 {
                     departureTime = departureDateTime.ToString("yyyy-MM-dd") + "T" + departureDateTime.ToString("HH:mm:ss");
-                    newJourney.departureTime = departureTime;
+                    newJourney.DepartureTime = departureTime;
                 }
             }
             catch(Exception e)
             {
-                newJourney.departureTime = departureTime;
-                errorMessages.Add("Departure Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"");
+                newJourney.DepartureTime = departureTime;
+                ErrorMessages.Add("Departure Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"");
                 return;
             }
 
@@ -102,45 +102,43 @@ namespace CityBikeApplication.Pages
                 int comparison = DateTime.Compare(DateTime.Now, dateTime);
                 if (comparison < 0)
                 {
-                    errorMessages.Add("Given return time is in the future");
+                    ErrorMessages.Add("Given return time is in the future");
                 }
                 else
                 {
                     returnTime = dateTime.ToString("yyyy-MM-dd") + "T" + dateTime.ToString("HH:mm:ss");
-                    newJourney.returnTime = returnTime;
+                    newJourney.ReturnTime = returnTime;
 
                     // check if return time is earlier than departure time
                     if(departureDateTime != DateTime.MinValue && DateTime.Compare(dateTime, departureDateTime) < 0)
                     {
-                        errorMessages.Add("Return time is earlier than departure time");
+                        ErrorMessages.Add("Return time is earlier than departure time");
                     }
                 }
             }
             catch (Exception e)
             {
-                newJourney.returnTime = returnTime;
-                errorMessages.Add("Return Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"");
+                newJourney.ReturnTime = returnTime;
+                ErrorMessages.Add("Return Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"");
                 return;
             }
 
-            
-            
             try
             {
                 int coveredDistance = int.Parse(coveredDistanceString);
                 if(coveredDistance < 0)
                 {
-                    errorMessages.Add("Covered Distance needs to be integer that is >= 0");
+                    ErrorMessages.Add("Covered Distance needs to be integer that is >= 0");
                     return;
                 }
                 else
                 {
-                    newJourney.coveredDistance = coveredDistance;
+                    newJourney.CoveredDistance = coveredDistance;
                 }
             }
             catch(Exception e)
             {
-                errorMessages.Add("Covered Distance needs to be integer that is >= 0");
+                ErrorMessages.Add("Covered Distance needs to be integer that is >= 0");
                 return;
             }
 
@@ -149,24 +147,24 @@ namespace CityBikeApplication.Pages
                 int duration = int.Parse(durationString);
                 if (duration < 0)
                 {
-                    errorMessages.Add("Duration needs to be integer that is >= 0");
+                    ErrorMessages.Add("Duration needs to be integer that is >= 0");
                     return;
                 }
                 else
                 {
-                    newJourney.duration = duration;
+                    newJourney.Duration = duration;
                 }
             }
             catch (Exception e)
             {
-                errorMessages.Add("Duration needs to be integer that is >= 0");
+                ErrorMessages.Add("Duration needs to be integer that is >= 0");
                 return;
             }
 
             // if there were errors remember what data was given
-            oldJourney = newJourney;
+            OldJourney = newJourney;
 
-            if (errorMessages.Count == 0)
+            if (ErrorMessages.Count == 0)
             {
                 DataHandler.Instance.ReplaceJourney(oldJourneyId, newJourney);
                 Response.Redirect("JourneyList");

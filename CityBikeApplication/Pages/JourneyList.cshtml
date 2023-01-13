@@ -15,7 +15,7 @@
         <select name="selection">
             @foreach (int Value in Model.Choices)
             {
-                if (Value == Model.journeysPerPage)
+                if (Value == Model.JourneysPerPage)
                 {
                     <option value="@Value" selected="selected">@Value</option>
                 }
@@ -55,49 +55,49 @@
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Departure Time</button>
                     <input type="hidden" name="sortJourneyString" value="departureTime" />
-                    <input type="hidden" name="selection" value="@Model.journeysPerPage" />
+                    <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Return Time</button>
                     <input type="hidden" name="sortJourneyString" value="returnTime" />
-                    <input type="hidden" name="selection" value="@Model.journeysPerPage" />
+                    <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Departure Station</button>
                     <input type="hidden" name="sortJourneyString" value="departureStation" />
-                    <input type="hidden" name="selection" value="@Model.journeysPerPage" />
+                    <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Return Station</button>
                     <input type="hidden" name="sortJourneyString" value="returnStation" />
-                    <input type="hidden" name="selection" value="@Model.journeysPerPage" />
+                    <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Covered Distance (km)</button>
                     <input type="hidden" name="sortJourneyString" value="coveredDistance" />
-                    <input type="hidden" name="selection" value="@Model.journeysPerPage" />
+                    <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
                 </form>
             </th>
             <th>
                 <form asp-page-handler="sortJourneys" method="post">
                     <button class="btn btn-danger btn-sm">Journey Duration</button>
                     <input type="hidden" name="sortJourneyString" value="duration" />
-                    <input type="hidden" name="selection" value="@Model.journeysPerPage" />
+                    <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
                 </form>
             </th>
             <th>Edit</th>
             <th>Delete</th>
         </tr>
 
-        @if (DataHandler.Instance.ready)
+        @if (DataHandler.Instance.Ready)
         {
             foreach (Journey journey in Model.GetJourneys())
             {
@@ -107,21 +107,21 @@
                     <td>@understandableDepartureTime[0]<br />@understandableDepartureTime[1]</td>
                     <td>@understandableReturnTime[0]<br />@understandableReturnTime[1]</td>
                     <td>
-                        <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.departureStationId">@Html.DisplayFor(modelItem => journey.departureStationName)</a>
+                        <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.DepartureStationId">@Html.DisplayFor(modelItem => journey.DepartureStationName)</a>
                     </td>
                     <td>
-                        <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.returnStationId">@Html.DisplayFor(modelItem => journey.returnStationName)</a>
+                        <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.ReturnStationId">@Html.DisplayFor(modelItem => journey.ReturnStationName)</a>
                     </td>
-                    <td>@Html.DisplayFor(modelItem => journey.coveredDistance)</td>
-                    <td>@Html.DisplayFor(modelItem => journey.duration)</td>
+                    <td>@Html.DisplayFor(modelItem => journey.CoveredDistance)</td>
+                    <td>@Html.DisplayFor(modelItem => journey.Duration)</td>
                     <td>
-                        <a class="btn btn-primary btn-sm" href="EditJourney?id=@journey.id">Edit</a>
+                        <a class="btn btn-primary btn-sm" href="EditJourney?id=@journey.Id">Edit</a>
                     </td>
                     <td>
                         <form asp-page-handler="delete" method="post">
                             <button class="btn btn-danger btn-sm">Delete</button>
-                            <input type="hidden" name="id" value="@journey.id" />
-                            <input type="hidden" name="index" value="@Model.currentPageIndex" />
+                            <input type="hidden" name="id" value="@journey.Id" />
+                            <input type="hidden" name="index" value="@Model.CurrentPageIndex" />
                         </form>
                     </td>
                 </tr>
@@ -136,9 +136,9 @@
 
     <div class="row mb-3">
 
-        @if (DataHandler.Instance.ready)
+        @if (DataHandler.Instance.Ready)
         {
-            int currentIndex = Model.currentPageIndex;
+            int currentIndex = Model.CurrentPageIndex;
             for (int index = 0; index < Model.GetPagesCount(); index++)
             {
                 <form asp-page-handler="ChangePage" method="post">
@@ -152,7 +152,7 @@
                         <button class="btn btn-danger btn-sm">@index</button>
                     }
                     <input type="hidden" name="index" value="@index" />
-                    <input type="hidden" name="perPage" value="@Model.journeysPerPage" />
+                    <input type="hidden" name="perPage" value="@Model.JourneysPerPage" />
                 </form>
             }
 

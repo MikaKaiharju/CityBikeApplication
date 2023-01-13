@@ -10,20 +10,36 @@ namespace CityBikeApplication
 {
     public class DataHandler
     {
-        private static DataHandler instance;
+        private static DataHandler _instance;
 
         // see if datahandler has completed all tasks
-        public bool ready = false;
+        public bool Ready = false;
 
         // store sort order to invert order
-        string currentJourneySortOrder = "";
+        SortOrder _currentJourneySortOrder;
         // is current sort order ascending
-        bool ascendingJourneyOrder = true;
+        bool _ascendingJourneyOrder = true;
 
         // store sort order to invert order
-        string currentStationSortOrder = "";
+        SortOrder _currentStationSortOrder;
         // is current sort order ascending
-        bool ascendingStationOrder = true;
+        bool _ascendingStationOrder = true;
+
+        public enum SortOrder
+        {
+            Id,
+            Name,
+            Osoite,
+            Kaupunki,
+            Operaattori,
+            Kapasiteetti,
+            DepartureTime,
+            ReturnTime,
+            DepartureStation,
+            ReturnStation,
+            CoveredDistance,
+            Duration
+        }
 
         // import data sets only once
         private DataHandler()
@@ -36,56 +52,56 @@ namespace CityBikeApplication
         {
             get
             {
-                return (instance != null ? instance : instance = new DataHandler());
+                return (_instance != null ? _instance : _instance = new DataHandler());
             }
         }
 
         // for debugging limit amount of lines to be read per data set
-        int limit = 500;
+        int _limit = 500;
 
         // imported data
-        public List<Journey> journeys = new List<Journey>();
-        public List<Station> stations = new List<Station>();
+        public List<Journey> Journeys = new List<Journey>();
+        public List<Station> Stations = new List<Station>();
 
         // journey data urls
-        //string path1 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv";
-        //string path2 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv";
-        //string path3 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv";
+        //string _path1 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv";
+        //string _path2 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv";
+        //string _path3 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv";
 
         // if data is on local hard drive
-        string path1 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-05.csv";
-        string path2 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-06.csv";
-        string path3 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-07.csv";
+        string _path1 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-05.csv";
+        string _path2 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-06.csv";
+        string _path3 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-07.csv";
 
         // station data urls
-        //string path4 = "https://opendata.arcgis.com/datasets/726277c507ef4914b0aec3cbcfcbfafc_0.csv";
+        //string _path4 = "https://opendata.arcgis.com/datasets/726277c507ef4914b0aec3cbcfcbfafc_0.csv";
 
         // if data is on local hard drive
-        string path4 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\Helsingin_ja_Espoon_kaupunkipyB6rA4asemat_avoin.csv";
+        string _path4 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\Helsingin_ja_Espoon_kaupunkipyB6rA4asemat_avoin.csv";
 
         private async void ImportDataSets()
         {
             // create async tasks for reading data
             List<Task> tasks = new List<Task>();
-            tasks.Add(GetJourneyListAsync(path1));
-            tasks.Add(GetJourneyListAsync(path2));
-            tasks.Add(GetJourneyListAsync(path3));
-            tasks.Add(GetStationListAsync(path4));
+            tasks.Add(GetJourneyListAsync(_path1));
+            tasks.Add(GetJourneyListAsync(_path2));
+            tasks.Add(GetJourneyListAsync(_path3));
+            tasks.Add(GetStationListAsync(_path4));
 
             await Task.WhenAll(tasks);
             foreach (Task task in tasks)
             {
                 if (task.GetType().Equals(typeof(Task<List<Journey>>)))
                 {
-                    journeys.AddRange(((Task<List<Journey>>)task).Result);
+                    Journeys.AddRange(((Task<List<Journey>>)task).Result);
                 }
                 if (task.GetType().Equals(typeof(Task<List<Station>>)))
                 {
-                    stations.AddRange(((Task<List<Station>>)task).Result);
+                    Stations.AddRange(((Task<List<Station>>)task).Result);
                 }
             }
 
-            ready = true;
+            Ready = true;
         }
 
         private Task<List<Journey>> GetJourneyListAsync(string path)
@@ -113,7 +129,7 @@ namespace CityBikeApplication
             //using (StreamReader reader = new StreamReader(httpWebResponse.GetResponseStream()))
             using (StreamReader reader = new StreamReader(path))
             {
-                while (!reader.EndOfStream && currentIteration++ < limit)
+                while (!reader.EndOfStream && currentIteration++ < _limit)
                 {
                     string line = reader.ReadLine();
                     string[] values = line.Split(",");
@@ -151,15 +167,15 @@ namespace CityBikeApplication
                     // since we got this far line of data should be validated
                     // create new journey class class and populate it
                     Journey journey = new Journey();
-                    journey.id = Guid.NewGuid().ToString();
-                    journey.departureTime = values[0];
-                    journey.returnTime = values[1];
-                    journey.departureStationId = departureStationId;
-                    journey.departureStationName = values[3];
-                    journey.returnStationId = returnStationId;
-                    journey.returnStationName = values[5];
-                    journey.coveredDistance = coveredDistanceInKilometres;
-                    journey.duration = journeyDurationInMinutes;
+                    journey.Id = Guid.NewGuid().ToString();
+                    journey.DepartureTime = values[0];
+                    journey.ReturnTime = values[1];
+                    journey.DepartureStationId = departureStationId;
+                    journey.DepartureStationName = values[3];
+                    journey.ReturnStationId = returnStationId;
+                    journey.ReturnStationName = values[5];
+                    journey.CoveredDistance = coveredDistanceInKilometres;
+                    journey.Duration = journeyDurationInMinutes;
 
                     // add journey to journeys list
                     importedJourneys.Add(journey);
@@ -183,7 +199,7 @@ namespace CityBikeApplication
             //using (StreamReader reader = new StreamReader(httpWebResponse.GetResponseStream()))
             using (StreamReader reader = new StreamReader(path))
             {
-                while (!reader.EndOfStream && currentIteration++ < limit)
+                while (!reader.EndOfStream && currentIteration++ < _limit)
                 {
                     string line = reader.ReadLine();
                     string[] values = line.Split(",");
@@ -219,18 +235,18 @@ namespace CityBikeApplication
                     // since we got this far line of data should be validated
                     // create new station class class and populate it
                     Station station = new Station();
-                    station.id = id;
-                    station.nimi = values[2];
-                    station.namn = values[3];
-                    station.name = values[4];
-                    station.osoite = values[5];
-                    station.address = values[6];
-                    station.kaupunki = values[7];
-                    station.stad = values[8];
-                    station.operaattori = values[9];
-                    station.kapasiteetti = kapasiteetti;
-                    station.x = ("" + x).Replace(",", "."); // store in dot form
-                    station.y = ("" + y).Replace(",", ".");
+                    station.Id = id;
+                    station.Nimi = values[2];
+                    station.Namn = values[3];
+                    station.Name = values[4];
+                    station.Osoite = values[5];
+                    station.Address = values[6];
+                    station.Kaupunki = values[7];
+                    station.Stad = values[8];
+                    station.Operaattori = values[9];
+                    station.Kapasiteetti = kapasiteetti;
+                    station.X = ("" + x).Replace(",", "."); // store in dot form
+                    station.Y = ("" + y).Replace(",", ".");
 
                     // add station to station list
                     importedStations.Add(station);
@@ -243,9 +259,9 @@ namespace CityBikeApplication
 
         public Station GetStation(int id)
         {
-            foreach(Station station in stations)
+            foreach(Station station in Stations)
             {
-                if (station.id == id)
+                if (station.Id == id)
                 {
                     return station;
                 }
@@ -255,9 +271,9 @@ namespace CityBikeApplication
 
         public Journey GetJourney(string id)
         {
-            foreach(Journey journey in journeys)
+            foreach(Journey journey in Journeys)
             {
-                if (journey.id.Equals(id))
+                if (journey.Id.Equals(id))
                 {
                     return journey;
                 }
@@ -268,176 +284,178 @@ namespace CityBikeApplication
         public void ReplaceStation(int oldStationId, Station newStation)
         {
             Station oldStation = GetStation(oldStationId);
-            int index = stations.IndexOf(oldStation);
-            stations.RemoveAt(index);
-            stations.Insert(index, newStation);
+            int index = Stations.IndexOf(oldStation);
+            Stations.RemoveAt(index);
+            Stations.Insert(index, newStation);
         }
 
         public void ReplaceJourney(string oldJourneyId, Journey newJourney)
         {
             Journey oldJourney = GetJourney(oldJourneyId);
-            int index = journeys.IndexOf(oldJourney);
-            journeys.RemoveAt(index);
-            journeys.Insert(index, newJourney);
+            int index = Journeys.IndexOf(oldJourney);
+            Journeys.RemoveAt(index);
+            Journeys.Insert(index, newJourney);
         }
 
         public void CreateNewJourney(Journey newJourney)
         {
-            journeys.Add(newJourney);
-            SortJourneys(currentJourneySortOrder, false);
+            Journeys.Add(newJourney);
+            SortJourneys(_currentJourneySortOrder, false);
         }
 
         public void CreateNewStation(Station newStation)
         {
-            stations.Add(newStation);
-            SortStations(currentStationSortOrder, false);
+            Stations.Add(newStation);
+            SortStations(_currentStationSortOrder, false);
         }
 
         public void DeleteStation(int id)
         {
-            stations.Remove(GetStation(id));
+            Stations.Remove(GetStation(id));
         }
 
         public void DeleteJourney(string id)
         {
-            journeys.Remove(GetJourney(id));
+            Journeys.Remove(GetJourney(id));
         }
 
         
 
-        public void SortStations(string sortOrder)
+        public void SortStations(SortOrder sortOrder)
         {
             // use normal inversion rules (pressing twice inverts order)
             SortStations(sortOrder, true);
         }
 
-        public void SortStations(string sortOrder, bool useInversion)
+       
+
+        public void SortStations(SortOrder sortOrder, bool useInversion)
         {
             // use of IQueryable to ease sorting
-            IQueryable<Station> sortedStations = from s in stations.AsQueryable<Station>() select s;
+            IQueryable<Station> sortedStations = from s in Stations.AsQueryable<Station>() select s;
 
             if (useInversion)
             {
                 // if header is pressed twice sorting inverts
-                ascendingStationOrder = currentStationSortOrder.Equals(sortOrder) ? !ascendingStationOrder : true;
+                _ascendingStationOrder = _currentStationSortOrder.Equals(sortOrder) ? !_ascendingStationOrder : true;
             }
 
             // store latest sortOrder
-            currentStationSortOrder = sortOrder;
+            _currentStationSortOrder = sortOrder;
 
-            switch(sortOrder, ascendingStationOrder)
+            switch(sortOrder, _ascendingStationOrder)
             {
-                case ("id", true):
-                    sortedStations = sortedStations.OrderBy(s => s.id);
+                case (SortOrder.Id, true):
+                    sortedStations = sortedStations.OrderBy(s => s.Id);
                     break;
-                case ("id", false):
-                    sortedStations = sortedStations.OrderByDescending(s => s.id);
+                case (SortOrder.Id, false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.Id);
                     break;
-                case ("name", true):
-                    sortedStations = sortedStations.OrderBy(s => s.name);
+                case (SortOrder.Name, true):
+                    sortedStations = sortedStations.OrderBy(s => s.Name);
                     break;
-                case ("name", false):
-                    sortedStations = sortedStations.OrderByDescending(s => s.name);
+                case (SortOrder.Name, false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.Name);
                     break;
-                case ("osoite", true):
-                    sortedStations = sortedStations.OrderBy(s => s.osoite);
+                case (SortOrder.Osoite, true):
+                    sortedStations = sortedStations.OrderBy(s => s.Osoite);
                     break;
-                case ("osoite", false):
-                    sortedStations = sortedStations.OrderByDescending(s => s.osoite);
+                case (SortOrder.Osoite, false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.Osoite);
                     break;
-                case ("kaupunki", true):
-                    sortedStations = sortedStations.OrderBy(s => s.kaupunki);
+                case (SortOrder.Kaupunki, true):
+                    sortedStations = sortedStations.OrderBy(s => s.Kaupunki);
                     break;
-                case ("kaupunki", false):
-                    sortedStations = sortedStations.OrderByDescending(s => s.kaupunki);
+                case (SortOrder.Kaupunki, false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.Kaupunki);
                     break;
-                case ("operaattori", true):
-                    sortedStations = sortedStations.OrderBy(s => s.operaattori);
+                case (SortOrder.Operaattori, true):
+                    sortedStations = sortedStations.OrderBy(s => s.Operaattori);
                     break;
-                case ("operaattori", false):
-                    sortedStations = sortedStations.OrderByDescending(s => s.operaattori);
+                case (SortOrder.Operaattori, false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.Operaattori);
                     break;
-                case ("kapasiteetti", true):
-                    sortedStations = sortedStations.OrderBy(s => s.kapasiteetti);
+                case (SortOrder.Kapasiteetti, true):
+                    sortedStations = sortedStations.OrderBy(s => s.Kapasiteetti);
                     break;
-                case ("kapasiteetti", false):
-                    sortedStations = sortedStations.OrderByDescending(s => s.kapasiteetti);
+                case (SortOrder.Kapasiteetti, false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.Kapasiteetti);
                     break;
                 default:
-                    sortedStations = sortedStations.OrderBy(s => s.id);
+                    sortedStations = sortedStations.OrderBy(s => s.Id);
                     break;
             }
 
             // convert IQueryable back to list
-            stations = sortedStations.ToList<Station>();
+            Stations = sortedStations.ToList<Station>();
         }
 
-        public void SortJourneys(string sortOrder)
+        public void SortJourneys(SortOrder sortOrder)
         {
             // use normal inversion rules (pressing twice inverts order)
             SortJourneys(sortOrder, true);
         }
 
-        public void SortJourneys(string sortOrder, bool useInversion)
+        public void SortJourneys(SortOrder sortOrder, bool useInversion)
         {
             // use of IQueryable to ease sorting
-            IQueryable<Journey> sortedJourneys = from j in journeys.AsQueryable<Journey>() select j;
+            IQueryable<Journey> sortedJourneys = from j in Journeys.AsQueryable<Journey>() select j;
 
             if (useInversion)
             {
                 // if header is pressed twice sorting inverts
-                ascendingJourneyOrder = currentJourneySortOrder.Equals(sortOrder) ? !ascendingJourneyOrder : true;
+                _ascendingJourneyOrder = _currentJourneySortOrder.Equals(sortOrder) ? !_ascendingJourneyOrder : true;
             }
 
             // store latest sortOrder
-            currentJourneySortOrder = sortOrder;
+            _currentJourneySortOrder = sortOrder;
 
-            switch (sortOrder, ascendingJourneyOrder)
+            switch (sortOrder, _ascendingJourneyOrder)
             {
-                case ("departureTime", true):
-                    sortedJourneys = sortedJourneys.OrderBy(j => j.departureTime);
+                case (SortOrder.DepartureTime, true):
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.DepartureTime);
                     break;
-                case ("departureTime", false):
-                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.departureTime);
+                case (SortOrder.DepartureTime, false):
+                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.DepartureTime);
                     break;
-                case ("returnTime", true):
-                    sortedJourneys = sortedJourneys.OrderBy(j => j.returnTime);
+                case (SortOrder.ReturnTime, true):
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.ReturnTime);
                     break;
-                case ("returnTime", false):
-                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.returnTime);
+                case (SortOrder.ReturnTime, false):
+                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.ReturnTime);
                     break;
-                case ("departureStation", true):
-                    sortedJourneys = sortedJourneys.OrderBy(j => j.departureStationName);
+                case (SortOrder.DepartureStation, true):
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.DepartureStationName);
                     break;
-                case ("departureStation", false):
-                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.departureStationName);
+                case (SortOrder.DepartureStation, false):
+                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.DepartureStationName);
                     break;
-                case ("returnStation", true):
-                    sortedJourneys = sortedJourneys.OrderBy(j => j.returnStationName);
+                case (SortOrder.ReturnStation, true):
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.ReturnStationName);
                     break;
-                case ("returnStation", false):
-                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.returnStationName);
+                case (SortOrder.ReturnStation, false):
+                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.ReturnStationName);
                     break;
-                case ("coveredDistance", true):
-                    sortedJourneys = sortedJourneys.OrderBy(j => j.coveredDistance);
+                case (SortOrder.CoveredDistance, true):
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.CoveredDistance);
                     break;
-                case ("coveredDistance", false):
-                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.coveredDistance);
+                case (SortOrder.CoveredDistance, false):
+                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.CoveredDistance);
                     break;
-                case ("duration", true):
-                    sortedJourneys = sortedJourneys.OrderBy(j => j.duration);
+                case (SortOrder.Duration, true):
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.Duration);
                     break;
-                case ("duration", false):
-                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.duration);
+                case (SortOrder.Duration, false):
+                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.Duration);
                     break;
                 default:
                     // as default sort by first column
-                    sortedJourneys = sortedJourneys.OrderBy(j => j.departureTime);
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.DepartureTime);
                     break;
             }
 
             // convert IQueryable back to list
-            journeys = sortedJourneys.ToList<Journey>();
+            Journeys = sortedJourneys.ToList<Journey>();
         }
 
         private void p(string s)

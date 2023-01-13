@@ -8,25 +8,22 @@ namespace CityBikeApplication
 {
     public class Station
     {
-        public int id;
-        public string nimi;
-        public string namn;
-        public string name;
-        public string osoite;
-        public string address;
-        public string kaupunki;
-        public string stad;
-        public string operaattori;
-        public int kapasiteetti;
-        public string x;
-        public string y;
+        public int Id { get; set; }
+        public string Nimi { get; set; }
+        public string Namn { get; set; }
+        public string Name { get; set; }
+        public string Osoite { get; set; }
+        public string Address { get; set; }
+        public string Kaupunki { get; set; }
+        public string Stad { get; set; }
+        public string Operaattori { get; set; }
+        public int Kapasiteetti { get; set; }
+        public string X { get; set; }
+        public string Y { get; set; }
 
         public string GetLocation()
         {
-            string latitude = y;
-            string longitude = x;
-
-            return "https://www.google.com/maps/search/?api=1&query=" + latitude + "," + longitude;
+            return "https://www.google.com/maps/search/?api=1&query=" + Y + "," + X;
         }
 
 

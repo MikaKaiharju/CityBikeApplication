@@ -14,10 +14,10 @@ namespace CityBikeApplication.Pages
     {
 
         // index used in paging
-        public int currentPageIndex = 0;
+        public int CurrentPageIndex = 0;
 
         // how many journeys are shown per page
-        public int journeysPerPage = 20;
+        public int JourneysPerPage = 20;
 
         // user can select how many journeys are shown per page
         public int[] Choices = new int[] { 10, 20, 50, 100 };
@@ -31,27 +31,27 @@ namespace CityBikeApplication.Pages
         public void OnPostChangeJourneysPerPage(int selection)
         {
             // how many journeys are shown per page was changed
-            currentPageIndex = 0;
-            journeysPerPage = selection;
+            CurrentPageIndex = 0;
+            JourneysPerPage = selection;
         }
 
         public int GetPagesCount()
         {
-            int count = (int)Math.Ceiling((double)DataHandler.Instance.journeys.Count / (double)journeysPerPage);
+            int count = (int)Math.Ceiling((double)DataHandler.Instance.Journeys.Count / (double)JourneysPerPage);
             return count;
         }
 
         public void OnPostChangePage(int index, int perPage)
         {
-            currentPageIndex = index;
-            journeysPerPage = perPage;
+            CurrentPageIndex = index;
+            JourneysPerPage = perPage;
             GetJourneys();
         }
 
-        public void OnPostSortJourneys(string sortJourneyString, int selection)
+        public void OnPostSortJourneys(DataHandler.SortOrder sortJourneyString, int selection)
         {
             DataHandler.Instance.SortJourneys(sortJourneyString);
-            journeysPerPage = selection;
+            JourneysPerPage = selection;
         }
 
 
@@ -59,28 +59,28 @@ namespace CityBikeApplication.Pages
         {
             DataHandler.Instance.DeleteJourney(id);
             // if journeys count is divisible with journeysPerPage last page is blank
-            if (DataHandler.Instance.journeys.Count % journeysPerPage == 0 && index == GetPagesCount()) 
+            if (DataHandler.Instance.Journeys.Count % JourneysPerPage == 0 && index == GetPagesCount()) 
             {
                 index--;
             }
             // set showing page to index
-            OnPostChangePage(index, journeysPerPage);
+            OnPostChangePage(index, JourneysPerPage);
         }
 
         public List<Journey> GetJourneys()
         {
             // show only a certain amount of journeys per page
-            int startIndex = currentPageIndex * journeysPerPage;
+            int startIndex = CurrentPageIndex * JourneysPerPage;
 
             // need to know how many journeys can be shown 
-            int leftOver = DataHandler.Instance.journeys.Count - startIndex + 1;
-            if(leftOver > journeysPerPage)
+            int leftOver = DataHandler.Instance.Journeys.Count - startIndex + 1;
+            if(leftOver > JourneysPerPage)
             {
-                return DataHandler.Instance.journeys.GetRange(startIndex, journeysPerPage);
+                return DataHandler.Instance.Journeys.GetRange(startIndex, JourneysPerPage);
             }
             else
             {
-                return DataHandler.Instance.journeys.GetRange(startIndex, leftOver - 1);
+                return DataHandler.Instance.Journeys.GetRange(startIndex, leftOver - 1);
             }
             
         }

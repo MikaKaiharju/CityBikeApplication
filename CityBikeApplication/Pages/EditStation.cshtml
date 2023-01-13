@@ -8,9 +8,9 @@
 <p></p>
 
 
-@if (Model.errorMessages.Count > 0)
+@if (Model.ErrorMessages.Count > 0)
 {
-    foreach (string errorMessage in Model.errorMessages)
+    foreach (string errorMessage in Model.ErrorMessages)
     {
         <div class="alert alert-warning" role="alert">
             <strong>@errorMessage</strong>
@@ -18,7 +18,7 @@
     }
 }
 
-@if (Model.oldStation == null)
+@if (Model.OldStation == null)
 {
     Model.GetOldStation();
 }
@@ -29,73 +29,73 @@
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Id</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="id" value="@Model.oldStation.id" />
+            <input type="text" class="form-control" name="id" value="@Model.OldStation.Id" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Nimi</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="nimi" value="@Model.oldStation.nimi" />
+            <input type="text" class="form-control" name="nimi" value="@Model.OldStation.Nimi" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Namn</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="namn" value="@Model.oldStation.namn" />
+            <input type="text" class="form-control" name="namn" value="@Model.OldStation.Namn" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Name</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="name" value="@Model.oldStation.name" />
+            <input type="text" class="form-control" name="name" value="@Model.OldStation.Name" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Osoite</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="osoite" value="@Model.oldStation.osoite" />
+            <input type="text" class="form-control" name="osoite" value="@Model.OldStation.Osoite" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Address</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="address" value="@Model.oldStation.address" />
+            <input type="text" class="form-control" name="address" value="@Model.OldStation.Address" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Kaupunki</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="kaupunki" value="@Model.oldStation.kaupunki" />
+            <input type="text" class="form-control" name="kaupunki" value="@Model.OldStation.Kaupunki" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Stad</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="stad" value="@Model.oldStation.stad" />
+            <input type="text" class="form-control" name="stad" value="@Model.OldStation.Stad" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Operaattori</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="operaattori" value="@Model.oldStation.operaattori" />
+            <input type="text" class="form-control" name="operaattori" value="@Model.OldStation.Operaattori" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Kapasiteetti</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="kapasiteetti" value="@Model.oldStation.kapasiteetti" />
+            <input type="text" class="form-control" name="kapasiteetti" value="@Model.OldStation.Kapasiteetti" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Latitude</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="y" value="@Model.oldStation.y" />
+            <input type="text" class="form-control" name="y" value="@Model.OldStation.Y" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Longitude</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="x" value="@Model.oldStation.x" />
+            <input type="text" class="form-control" name="x" value="@Model.OldStation.X" />
         </div>
     </div>
 
