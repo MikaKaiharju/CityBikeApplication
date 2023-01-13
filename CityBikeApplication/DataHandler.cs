@@ -275,6 +275,18 @@ namespace CityBikeApplication
             journeys.Insert(index, newJourney);
         }
 
+        public void CreateNewJourney(Journey newJourney)
+        {
+            journeys.Add(newJourney);
+            SortJourneys(currentJourneySortOrder, false);
+        }
+
+        public void CreateNewStation(Station newStation)
+        {
+            stations.Add(newStation);
+            SortStations(currentStationSortOrder, false);
+        }
+
         public void DeleteStation(int id)
         {
             stations.Remove(GetStation(id));
@@ -285,11 +297,7 @@ namespace CityBikeApplication
             journeys.Remove(GetJourney(id));
         }
 
-        public void CreateNewJourney(Journey newJourney)
-        {
-            journeys.Add(newJourney);
-            SortJourneys(currentJourneySortOrder, false);
-        }
+        
 
         public void SortStations(string sortOrder)
         {

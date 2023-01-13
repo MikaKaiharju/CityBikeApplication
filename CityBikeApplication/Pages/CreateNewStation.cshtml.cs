@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -9,29 +8,26 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace CityBikeApplication.Pages
 {
-    public class EditStationModel : PageModel
+    public class CreateNewStationModel : PageModel
     {
-
         public List<string> errorMessages = new List<string>();
 
         // station that user is editing
         // if there were errors, information given by the user is stored in oldStation
-        public Station oldStation;
+        public Station oldStation { get { return (oldStation == null ? new Station() : oldStation); } set { } }
 
         public void OnGet()
         {
-            GetOldStation();
+            
         }
 
         public void GetOldStation()
         {
-            oldStation = DataHandler.Instance.GetStation(int.Parse(Request.Query["id"]));
+
         }
 
         public void OnPost()
         {
-            // id of the station that user started editing because we need to replace old with new
-            int oldStationId = int.Parse(Request.Query["id"]);
 
             // remove previous errorMessages
             errorMessages.Clear();
@@ -50,13 +46,13 @@ namespace CityBikeApplication.Pages
             string xString = Sanitize(Request.Form["x"]);
             string yString = Sanitize(Request.Form["y"]);
 
-            if(idString.Length > 0)
+            if (idString.Length > 0)
             {
                 try
                 {
                     int id = int.Parse(idString);
 
-                    if(id < 0)
+                    if (id < 0)
                     {
                         errorMessages.Add("Id needs to be integer that >= 0");
                     }
@@ -64,32 +60,33 @@ namespace CityBikeApplication.Pages
                     {
                         // check if there is already a station with this new id and its not the old
                         Station station = DataHandler.Instance.GetStation(id);
-                        if(station != null && id != oldStationId)
-                        {    
-                            errorMessages.Add("There is already a station with this id: id=" + station.id + " name=" + station.name);
+                        if (station != null)
+                        {
+                            errorMessages.Add("There is already a station with this id: id=" + station.id + " name="+ station.name);
                         }
                         
                         newStation.id = id;
                     }
 
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     errorMessages.Add("Id needs to be integer that >= 0");
                 }
+
             }
             else
             {
                 errorMessages.Add("Id is required and needs to be integer that >= 0");
             }
 
-            if(kapasiteettiString.Length > 0)
+            if (kapasiteettiString.Length > 0)
             {
                 try
                 {
                     int kapasiteetti = int.Parse(kapasiteettiString);
 
-                    if(kapasiteetti < 0)
+                    if (kapasiteetti < 0)
                     {
                         newStation.kapasiteetti = kapasiteetti;
                         errorMessages.Add("Capacity needs to be >= 0");
@@ -99,7 +96,7 @@ namespace CityBikeApplication.Pages
                         newStation.kapasiteetti = kapasiteetti;
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     errorMessages.Add("Capacity needs to be integer that is >= 0");
                 }
@@ -114,7 +111,7 @@ namespace CityBikeApplication.Pages
                 try
                 {
                     // store in dot form
-                    newStation.x = ("" + double.Parse(xString)).Replace(",","."); // longitude
+                    newStation.x = ("" + double.Parse(xString)).Replace(",", "."); // longitude
                 }
                 catch (Exception e)
                 {
@@ -126,14 +123,14 @@ namespace CityBikeApplication.Pages
             {
                 newStation.x = "";
             }
-            if(yString.Length > 0)
+            if (yString.Length > 0)
             {
                 try
                 {
                     // store in dot form
                     newStation.y = ("" + double.Parse(yString)).Replace(",", "."); // latitude
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     errorMessages.Add("Latitude must be a decimal number with either . or , as a separator");
                     return;
@@ -149,7 +146,7 @@ namespace CityBikeApplication.Pages
 
             if (errorMessages.Count == 0)
             {
-                DataHandler.Instance.ReplaceStation(oldStationId, newStation);
+                DataHandler.Instance.CreateNewStation(newStation);
                 Response.Redirect("StationList");
             }
         }
@@ -166,3 +163,4 @@ namespace CityBikeApplication.Pages
         }
     }
 }
+
