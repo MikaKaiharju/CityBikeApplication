@@ -23,18 +23,21 @@
     Model.GetOldJourney();
 }
 
-<form method="POST">
-
+<form method="POST" >
+    @{ 
+        string ddt = Model.OldJourney.DepartureTime.ToString("yyyy-MM-ddTHH:mm:ss").Replace(".",":");
+        string rdt = Model.OldJourney.ReturnTime.ToString("yyyy-MM-ddTHH:mm:ss").Replace(".", ":");
+    }
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Departure Time</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="departureTime" value="@Model.OldJourney.GetUnderstandableDepartureTime()" />
+            <input class="form-control" asp-for="@Model.OldJourney.DepartureTime" name="departureTime" value="@ddt" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Return Time</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="returnTime" value="@Model.OldJourney.GetUnderstandableReturnTime()" />
+            <input class="form-control" asp-for="@Model.OldJourney.ReturnTime" name="returnTime" value="@rdt"/>
         </div>
     </div>
 
@@ -58,8 +61,8 @@
                 }
             }
         </select>
-        <div class="col-sm-2">
-            <a class="btn btn-primary btn-sm" href="/CreateNewStation">Create New Station</a>
+        <div>
+            <a class="btn btn-primary btn-sm" href="CreateNewStation?cameFromEditJourney=true&asdf=">Create New Station</a>
         </div>
     </div>
 
@@ -83,8 +86,8 @@
                 }
             }
         </select>
-        <div class="col-sm-2">
-            <a class="btn btn-primary btn-sm" href="/CreateNewStation">Create New Station</a>
+        <div>
+            <a class="btn btn-primary btn-sm" href="CreateNewStation?cameFromEditJourney=true&asdf=">Create New Station</a>
         </div>
     </div>
     <div class="row mb-3">
@@ -104,7 +107,7 @@
 
     <div class="row mb-3">
         <div class="col-sm-2 d-grid">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary" formnovalidate>Submit</button>
         </div>
         <div class="col-sm-2 d-grid">
             <a class="btn btn-outline-primary" href="/JourneyList" role="button">Cancel</a>

@@ -44,8 +44,30 @@ namespace CityBikeApplication.Pages
             
             Journey newJourney = new Journey();
 
-            string departureTime = Sanitize(Request.Form["departureTime"]);
-            string returnTime = Sanitize(Request.Form["returnTime"]);
+            p("dt=" + Request.Form["departureTime"]);
+
+            DateTime dt = DateTime.Parse(Request.Form["departureTime"].ToString().Replace(".", ":"));
+            newJourney.DepartureTime = dt;
+
+            if (DateTime.Compare(DateTime.Now, dt) < 0)
+            {
+                ErrorMessages.Add("Given departure time is in the future");
+            }
+
+            DateTime rt = DateTime.Parse(Request.Form["returnTime"].ToString().Replace(".", ":"));
+            newJourney.ReturnTime = rt;
+
+            if (DateTime.Compare(DateTime.Now, rt) < 0)
+            {
+                ErrorMessages.Add("Given return time is in the future");
+            }
+
+            // check if return time is earlier than departure time
+            if (DateTime.Compare(rt, dt) < 0)
+            {
+                ErrorMessages.Add("Return time is earlier than departure time");
+            }
+
             newJourney.DepartureStationId = int.Parse(Request.Form["departureStationId"]);
             if (newJourney.DepartureStationId > 0)
             {
@@ -64,47 +86,9 @@ namespace CityBikeApplication.Pages
             {
                 newJourney.ReturnStationName = "";
             }
+
             string coveredDistanceString = Sanitize(Request.Form["coveredDistance"]);
             string durationString = Sanitize(Request.Form["duration"]);
-
-            try
-            {
-                DateTime dateTime = DateTime.ParseExact(departureTime, "HH.mm.ss dd.MM.yyyy", CultureInfo.InvariantCulture);
-                int comparison = DateTime.Compare(DateTime.Now, dateTime);
-
-                if(comparison < 0)
-                {
-                    ErrorMessages.Add("Given departure time is in the future");
-                }
-                else
-                {
-                    departureTime = dateTime.ToString("yyyy-MM-dd") + "T" + dateTime.ToString("HH:mm:ss");
-                    newJourney.DepartureTime = departureTime;
-                }
-            }
-            catch (Exception e)
-            {
-                ErrorMessages.Add("Departure Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"");
-            }
-
-            try
-            {
-                DateTime dateTime = DateTime.ParseExact(returnTime, "HH.mm.ss dd.MM.yyyy", CultureInfo.InvariantCulture);
-                int comparison = DateTime.Compare(DateTime.Now, dateTime);
-                if(comparison < 0)
-                {
-                    ErrorMessages.Add("Given return time is in the future");
-                }
-                else
-                {
-                    returnTime = dateTime.ToString("yyyy-MM-dd") + "T" + dateTime.ToString("HH:mm:ss");
-                    newJourney.ReturnTime = returnTime;
-                }
-            }
-            catch (Exception e)
-            {
-                ErrorMessages.Add("Return Time needs to be in the form of \"HH.mm.ss dd.MM.yyyy\"");
-            }
 
             if (coveredDistanceString.Length > 0)
             {
@@ -121,6 +105,7 @@ namespace CityBikeApplication.Pages
                 else
                 {
                     ErrorMessages.Add("Covered Distance needs to be integer that is >= 0");
+                    newJourney.CoveredDistance = 0;
                 }
             }
             else
@@ -143,6 +128,7 @@ namespace CityBikeApplication.Pages
                 else
                 {
                     ErrorMessages.Add("Duration needs to be integer that is >= 0");
+                    newJourney.Duration = 0;
                 }
             }
             else
@@ -171,6 +157,11 @@ namespace CityBikeApplication.Pages
                 return Regex.Replace(str, "[^a-öA-Ö0-9_ .,()]", "", RegexOptions.Compiled);
             }
             else { return ""; }
+        }
+
+        private void p(string s)
+        {
+            System.Diagnostics.Debug.WriteLine(s);
         }
 
     }

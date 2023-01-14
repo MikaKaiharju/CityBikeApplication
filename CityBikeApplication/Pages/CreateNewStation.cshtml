@@ -18,79 +18,82 @@
     }
 }
 
+@if (Model.OldStation == null)
+{
+    Model.OldStation = new Station();
+}
+
 <form method="POST">
-
-
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Id</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="id" value="" />
+            <input type="text" class="form-control" name="id" value="@Model.OldStation.Id" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Nimi</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="nimi" value="" />
+            <input type="text" class="form-control" name="nimi" value="@Model.OldStation.Nimi" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Namn</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="namn" value="" />
+            <input type="text" class="form-control" name="namn" value="@Model.OldStation.Namn" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Name</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="name" value="" />
+            <input type="text" class="form-control" name="name" value="@Model.OldStation.Name" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Osoite</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="osoite" value="" />
+            <input type="text" class="form-control" name="osoite" value="@Model.OldStation.Osoite" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Address</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="address" value="" />
+            <input type="text" class="form-control" name="address" value="@Model.OldStation.Address" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Kaupunki</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="kaupunki" value="" />
+            <input type="text" class="form-control" name="kaupunki" value="@Model.OldStation.Kaupunki" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Stad</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="stad" value="" />
+            <input type="text" class="form-control" name="stad" value="@Model.OldStation.Stad" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Operaattori</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="operaattori" value="" />
+            <input type="text" class="form-control" name="operaattori" value="@Model.OldStation.Operaattori" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Kapasiteetti</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="kapasiteetti" value="" />
+            <input type="text" class="form-control" name="kapasiteetti" value="@Model.OldStation.Kapasiteetti" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Latitude</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="y" value="" />
+            <input type="text" class="form-control" name="y" value="@Model.OldStation.Y" />
         </div>
     </div>
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Longitude</label>
         <div class="col-sm-4">
-            <input type="text" class="form-control" name="x" value="" />
+            <input type="text" class="form-control" name="x" value="@Model.OldStation.X" />
         </div>
     </div>
 

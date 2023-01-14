@@ -102,15 +102,13 @@
         {
             foreach (Journey journey in Model.GetJourneys())
             {
-                string[] understandableDepartureTime = journey.GetUnderstandableDepartureTime().Split(" ");
-                string[] understandableReturnTime = journey.GetUnderstandableReturnTime().Split(" ");
                 <tr>
-                    <td>@understandableDepartureTime[0]<br />@understandableDepartureTime[1]</td>
-                    <td>@understandableReturnTime[0]<br />@understandableReturnTime[1]</td>
+                    <td>@journey.DepartureTime</td>
+                    <td>@journey.ReturnTime</td>
                     @if (journey.DepartureStationId > 0)
                     {
                         <td>
-                            <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.DepartureStationId">@Html.DisplayFor(modelItem => journey.DepartureStationName)</a>
+                            <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.DepartureStationId&cameFromJourneyList=true">@Html.DisplayFor(modelItem => journey.DepartureStationName)</a>
                         </td>
                     }
                     else
@@ -120,7 +118,7 @@
                     @if (journey.ReturnStationId > 0)
                     {
                         <td>
-                            <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.ReturnStationId">@Html.DisplayFor(modelItem => journey.ReturnStationName)</a>
+                            <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.ReturnStationId&cameFromJourneyList=true">@Html.DisplayFor(modelItem => journey.ReturnStationName)</a>
                         </td>
                     }
                     else

@@ -143,6 +143,11 @@ namespace CityBikeApplication
                     // 6 == coveredDistance in metres
                     // 7 == journey duration is seconds
 
+                    DateTime dt;
+                    if(!DateTime.TryParse(values[0], out dt)) { continue; }
+                    DateTime rt;
+                    if(!DateTime.TryParse(values[1], out rt)) { continue; }
+
                     // parse stationIds
                     int departureStationId;
                     try { departureStationId = int.Parse(values[2]); } catch(Exception e) { continue; }
@@ -168,8 +173,8 @@ namespace CityBikeApplication
                     // create new journey class class and populate it
                     Journey journey = new Journey();
                     journey.Id = Guid.NewGuid().ToString();
-                    journey.DepartureTime = values[0];
-                    journey.ReturnTime = values[1];
+                    journey.DepartureTime = dt;// values[0];
+                    journey.ReturnTime = rt;// values[1];
                     journey.DepartureStationId = departureStationId;
                     journey.DepartureStationName = values[3];
                     journey.ReturnStationId = returnStationId;
@@ -338,6 +343,10 @@ namespace CityBikeApplication
             {
                 // if header is pressed twice sorting inverts
                 _ascendingStationOrder = _currentStationSortOrder.Equals(sortOrder) ? !_ascendingStationOrder : true;
+            }
+            else
+            {
+                _ascendingStationOrder = true;
             }
 
             // store latest sortOrder

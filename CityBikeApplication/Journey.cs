@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,8 +11,14 @@ namespace CityBikeApplication
     public class Journey
     {
         public string Id { get; set; }
-        public string DepartureTime { get; set; }
-        public string ReturnTime { get; set; }
+        
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-ddTHH:mm:ss}")]
+        [BindProperty, DataType(DataType.DateTime)]
+        public DateTime DepartureTime { get; set; }
+
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-ddTHH:mm:ss}")]
+        [BindProperty, DataType(DataType.DateTime)]
+        public DateTime ReturnTime { get; set; }
         public int DepartureStationId { get; set; }
         public string DepartureStationName { get; set; }
         public int ReturnStationId { get; set; }
@@ -18,6 +26,7 @@ namespace CityBikeApplication
         public int CoveredDistance { get; set; } // in kilometres
         public int Duration { get; set; } // in minutes
 
+        /*
         public string GetUnderstandableDepartureTime()
         {
             return GetUnderstandableTime(DepartureTime);
@@ -27,6 +36,7 @@ namespace CityBikeApplication
         {
             return GetUnderstandableTime(ReturnTime);
         }
+        */
 
         private string GetUnderstandableTime(string timeString)
         {
@@ -34,6 +44,7 @@ namespace CityBikeApplication
             // ->
             // 23.57.25 31.05.2021
 
+            /*
             if (timeString == null || timeString == "")
             {
                 DateTime dateTime1 = DateTime.Now;
@@ -45,8 +56,9 @@ namespace CityBikeApplication
             DateTime dateTime = DateTime.ParseExact(timeString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
 
             string readableDateTime = dateTime.ToString("HH.mm.ss dd.MM.yyyy");
+            */
 
-            return readableDateTime;
+            return timeString;
             
         }
 
