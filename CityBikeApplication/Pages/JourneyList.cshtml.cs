@@ -17,11 +17,10 @@ namespace CityBikeApplication.Pages
         public int CurrentPageIndex = 0;
 
         // how many journeys are shown per page
-        public int JourneysPerPage = 20;
+        public int JourneysPerPage { get; set; } = 20;
 
         // user can select how many journeys are shown per page
         public int[] Choices = new int[] { 10, 20, 50, 100 };
-
 
         public void OnGet()
         {
@@ -42,7 +41,7 @@ namespace CityBikeApplication.Pages
         }
 
         public void OnPostChangePage(int index, int perPage)
-        {
+        {    
             CurrentPageIndex = index;
             JourneysPerPage = perPage;
             GetJourneys();
@@ -55,9 +54,13 @@ namespace CityBikeApplication.Pages
         }
 
 
-        public void OnPostDelete(string id, int index)
+        public void OnPostDelete(string id, int index, int perPage)
         {
             DataHandler.Instance.DeleteJourney(id);
+            
+            // remember how many journeys are on page
+            JourneysPerPage = perPage;
+
             // if journeys count is divisible with journeysPerPage last page is blank
             if (DataHandler.Instance.Journeys.Count % JourneysPerPage == 0 && index == GetPagesCount()) 
             {
@@ -74,6 +77,7 @@ namespace CityBikeApplication.Pages
 
             // need to know how many journeys can be shown 
             int leftOver = DataHandler.Instance.Journeys.Count - startIndex + 1;
+
             if(leftOver > JourneysPerPage)
             {
                 return DataHandler.Instance.Journeys.GetRange(startIndex, JourneysPerPage);
@@ -82,7 +86,6 @@ namespace CityBikeApplication.Pages
             {
                 return DataHandler.Instance.Journeys.GetRange(startIndex, leftOver - 1);
             }
-            
         }
 
         private void p(string s)

@@ -23,7 +23,6 @@ namespace CityBikeApplication.Pages
 
         public void OnPost()
         {
-
             // if user is creating new station while creating a new journey
             bool cameFromNewJourney = Request.Query["cameFromNewJourney"].Equals("true");
 
@@ -46,8 +45,6 @@ namespace CityBikeApplication.Pages
             string kapasiteettiString = Sanitize(Request.Form["kapasiteetti"]);
             string xString = Sanitize(Request.Form["x"]);
             string yString = Sanitize(Request.Form["y"]);
-
-            p("idString=" + idString);
 
             if (idString.Length > 0)
             {
@@ -156,14 +153,23 @@ namespace CityBikeApplication.Pages
 
                 if (cameFromEditJourney)
                 {
-                    string queryString = "";
-                    Response.Redirect("EditJourney?" + queryString);
+                    //TODO: id of the journey that user was editing should be added to the query string
+                    //          in the mean while redirect to journeylist
+
+                    //string queryString = "";
+                    //Response.Redirect("EditJourney" + queryString);
+
+                    Response.Redirect("JourneyList");
                 }
                 else if (cameFromNewJourney)
                 {
-                    string queryString = Request.QueryString.ToString();
-                    p("queryString=" + queryString);
-                    Response.Redirect("CreateNewJourney?" + queryString);
+                    //TODO: id and other information of the new journey that user started creating before new station
+                    //          should be attached as query information
+                    
+                    //string queryString = Request.QueryString.ToString();
+                    //Response.Redirect("CreateNewJourney?" + queryString);
+
+                    Response.Redirect("JourneyList");
                 }
                 else
                 {

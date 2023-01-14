@@ -113,7 +113,6 @@ namespace CityBikeApplication
             return Task.Run(() => ImportStationData(path));
         }
 
-
         private List<Journey> ImportJourneyData(string path)
         {
             //  import journey data
@@ -173,8 +172,8 @@ namespace CityBikeApplication
                     // create new journey class class and populate it
                     Journey journey = new Journey();
                     journey.Id = Guid.NewGuid().ToString();
-                    journey.DepartureTime = dt;// values[0];
-                    journey.ReturnTime = rt;// values[1];
+                    journey.DepartureTime = dt;
+                    journey.ReturnTime = rt;
                     journey.DepartureStationId = departureStationId;
                     journey.DepartureStationName = values[3];
                     journey.ReturnStationId = returnStationId;
@@ -324,15 +323,11 @@ namespace CityBikeApplication
             Journeys.Remove(GetJourney(id));
         }
 
-        
-
         public void SortStations(SortOrder sortOrder)
         {
             // use normal inversion rules (pressing twice inverts order)
             SortStations(sortOrder, true);
         }
-
-       
 
         public void SortStations(SortOrder sortOrder, bool useInversion)
         {
@@ -472,8 +467,5 @@ namespace CityBikeApplication
             System.Diagnostics.Debug.WriteLine(s);
         }
 
-
     }
-
-
 }

@@ -44,8 +44,6 @@ namespace CityBikeApplication.Pages
             
             Journey newJourney = new Journey();
 
-            p("dt=" + Request.Form["departureTime"]);
-
             DateTime dt = DateTime.Parse(Request.Form["departureTime"].ToString().Replace(".", ":"));
             newJourney.DepartureTime = dt;
 

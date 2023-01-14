@@ -118,6 +118,7 @@
                             <button class="btn btn-danger btn-sm">Delete</button>
                             <input type="hidden" name="id" value="@station.Id" />
                             <input type="hidden" name="index" value="@Model.CurrentPageIndex" />
+                            <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
                         </form>
                     </td>
                     <td>
@@ -136,7 +137,40 @@
         @if (DataHandler.Instance.Ready)
         {
             int currentIndex = Model.CurrentPageIndex;
-            for (int index = 0; index < Model.GetPagesCount(); index++)
+            int pagesCount = Model.GetPagesCount();
+            int startIndex;
+            int endIndex;
+            if (pagesCount >= 11)
+            {
+                if (currentIndex - 5 < 0)
+                {
+                    startIndex = 0;
+                    endIndex = 11;
+                }
+                else if (currentIndex + 5 > pagesCount - 1)
+                {
+                    startIndex = pagesCount - 12;
+                    endIndex = pagesCount - 1;
+                }
+                else
+                {
+                    startIndex = currentIndex - 5;
+                    endIndex = currentIndex + 5;
+                }
+            }
+            else
+            {
+                startIndex = 0;
+                endIndex = pagesCount - 1;
+            }
+
+            <form asp-page-handler="ChangePage" method="post">
+                <button class="btn btn-danger btn-sm">First</button>
+                <input type="hidden" name="index" value="0" />
+                <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
+            </form>
+
+            @for (int index = startIndex; index <= endIndex; index++)
             {
                 <form asp-page-handler="ChangePage" method="post">
 
@@ -152,6 +186,11 @@
                     <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
                 </form>
             }
+            <form asp-page-handler="ChangePage" method="post">
+                <button class="btn btn-danger btn-sm">Last</button>
+                <input type="hidden" name="index" value="@(pagesCount - 1)" />
+                <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
+            </form>
 
         }
 

@@ -21,11 +21,6 @@ namespace CityBikeApplication.Pages
         // user can select how many journeys are shown per page
         public List<Station> Choices = new List<Station>();
 
-        //[BindProperty, DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm:ss}", ApplyFormatInEditMode = true)]
-        //public DateTime DepartureDateTime { get; set; }
-        //[BindProperty, DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm:ss}", ApplyFormatInEditMode = true)]
-        //public DateTime ReturnDateTime { get; set; }
-
         public void OnGet()
         {
             GetOldJourney();
@@ -149,11 +144,6 @@ namespace CityBikeApplication.Pages
 
             // if there were errors remember what data was given
             OldJourney = newJourney;
-
-            bool newReturnStation = Request.Form["NewReturnStation"].Equals("true");
-            bool newDepartureStation = Request.Form["NewDepartureStation"].Equals("true");
-
-            p("nrs=" + Request.Form["NewReturnStation"] + ", nds=" + Request.Form["NewDepartureStation"]);
 
             if (ErrorMessages.Count == 0)
             {

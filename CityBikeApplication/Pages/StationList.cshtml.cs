@@ -11,10 +11,10 @@ namespace CityBikeApplication.Pages
     {
 
         // index used in paging
-        public int CurrentPageIndex = 0;
+        public int CurrentPageIndex { get; set; } = 0;
 
         // how many stations are shown per page
-        public int StationsPerPage = 20;
+        public int StationsPerPage { get; set; } = 20;
 
         // user can select how many stations are shown per page
         public int[] Choices = new int[] { 10, 20, 50, 100 };
@@ -62,9 +62,13 @@ namespace CityBikeApplication.Pages
 
         }
 
-        public void OnPostDelete(int id, int index)
+        public void OnPostDelete(int id, int index, int perPage)
         {
             DataHandler.Instance.DeleteStation(id);
+
+            // remember how many journeys are on page
+            StationsPerPage = perPage;
+
             // if stations count is divisible with stationsPerPage last page is blank
             if (DataHandler.Instance.Stations.Count % StationsPerPage == 0 && index == GetPagesCount())
             {

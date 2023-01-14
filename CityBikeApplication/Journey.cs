@@ -13,11 +13,11 @@ namespace CityBikeApplication
         public string Id { get; set; }
         
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-ddTHH:mm:ss}")]
-        [BindProperty, DataType(DataType.DateTime)]
+        [DataType(DataType.DateTime)]
         public DateTime DepartureTime { get; set; }
 
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy-MM-ddTHH:mm:ss}")]
-        [BindProperty, DataType(DataType.DateTime)]
+        [DataType(DataType.DateTime)]
         public DateTime ReturnTime { get; set; }
         public int DepartureStationId { get; set; }
         public string DepartureStationName { get; set; }
