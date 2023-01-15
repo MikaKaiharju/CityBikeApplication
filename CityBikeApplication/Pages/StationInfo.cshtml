@@ -1,0 +1,80 @@
+﻿@page
+@model CityBikeApplication.Pages.StationInfoModel
+@{
+    ViewData["Title"] = "Station Info";
+}
+
+<h1>@ViewData["Title"]</h1>
+<p></p>
+
+<form method="POST">
+
+    @{ 
+        Model.GetStation();
+    }
+
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Id</label>
+        <div class="col-sm-4">@Model.Station.Id</div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Nimi</label>
+        <div class="col-sm-4">@Model.Station.Nimi</div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Namn</label>
+        <div class="col-sm-4">@Model.Station.Namn</div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Name</label>
+        <div class="col-sm-4">@Model.Station.Name</div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Osoite</label>
+        <div class="col-sm-4">@Model.Station.Osoite</div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Address</label>
+        <div class="col-sm-4">@Model.Station.Address</div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Kaupunki</label>
+        <div class="col-sm-4">@Model.Station.Kaupunki</div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Stad</label>
+        <div class="col-sm-4">@Model.Station.Stad</div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Operaattori</label>
+        <div class="col-sm-4">@Model.Station.Operaattori</div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Kapasiteetti</label>
+        <div class="col-sm-4">@Model.Station.Kapasiteetti</div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Latitude</label>
+        <div class="col-sm-4">@Model.Station.Y</div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label">Longitude</label>
+        <div class="col-sm-4">@Model.Station.X</div>
+    </div>
+
+
+
+
+    <p></p>
+
+    <div class="row mb-3">
+        <div class="col-sm-2 d-grid">
+            <button type="submit" class="btn btn-primary">Edit Station</button>
+        </div>
+        <div class="col-sm-2 d-grid">
+            <a class="btn btn-outline-primary" href="/JourneyList" role="button">Back</a>
+        </div>
+    </div>
+
+</form>
+

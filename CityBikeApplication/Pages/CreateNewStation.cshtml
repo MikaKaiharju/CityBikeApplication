@@ -107,7 +107,34 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
         <div class="col-sm-2 d-grid">
-            <a class="btn btn-outline-primary" href="/StationList" role="button">Cancel</a>
+            @{
+                bool fromNewJourney = Request.Query["fromNewJourney"].Equals("true");
+                bool fromEditJourney = Request.Query["fromEditJourney"].Equals("true");
+
+                string queryString = "?fromNewStation=true&" +
+                        "ds=" + Request.Query["ds"] + "&" +
+                        "rs=" + Request.Query["rs"] + "&" +
+                        "dt=" + Request.Query["dt"] + "&" +
+                        "rt=" + Request.Query["rt"] + "&" +
+                        "cd=" + Request.Query["cd"] + "&" +
+                        "d=" + Request.Query["d"];
+                if (fromNewJourney)
+                {
+                    string redirection = "/CreateNewJourney" + queryString;
+                    <a class="btn btn-outline-primary" href=@redirection role="button">Cancel</a>
+                }
+                else if (fromEditJourney)
+                {
+                    queryString += "&journeyId=" + Request.Query["journeyId"];
+                    string redirection = "/EditJourney" + queryString;
+                    <a class="btn btn-outline-primary" href=@redirection role="button">Cancel</a>
+                }
+                else
+                {
+                    <a class="btn btn-outline-primary" href="/StationList" role="button">Cancel</a>
+                }
+
+            }
         </div>
     </div>
 

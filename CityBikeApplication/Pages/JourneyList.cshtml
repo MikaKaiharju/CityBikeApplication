@@ -108,7 +108,7 @@
                     @if (journey.DepartureStationId > 0)
                     {
                         <td>
-                            <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.DepartureStationId&cameFromJourneyList=true">@(journey.DepartureStationId + ": " + journey.DepartureStationName)</a>
+                            <a class="btn btn-primary btn-sm" href="StationInfo?id=@journey.DepartureStationId">@(journey.DepartureStationId + ": " + journey.DepartureStationName)</a>
                         </td>
                     }
                     else
@@ -118,7 +118,7 @@
                     @if (journey.ReturnStationId > 0)
                     {
                         <td>
-                            <a class="btn btn-primary btn-sm" href="EditStation?id=@journey.ReturnStationId&cameFromJourneyList=true">@(journey.ReturnStationId + ": " + journey.ReturnStationName)</a>
+                            <a class="btn btn-primary btn-sm" href="StationInfo?id=@journey.ReturnStationId">@(journey.ReturnStationId + ": " + journey.ReturnStationName)</a>
                         </td>
                     }
                     else

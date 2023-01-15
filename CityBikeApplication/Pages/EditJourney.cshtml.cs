@@ -169,8 +169,8 @@ namespace CityBikeApplication.Pages
                     string queryString = "?fromEditJourney=true&" +
                         "departurestation=true&" + 
                         "journeyId=" + newJourney.Id + "&" +
-                        "dt=" + dt.ToString() + "&" +
-                        "rt=" + rt.ToString() + "&" +
+                        "dt=" + dt.ToString("yyyy-MM-ddTHH:mm:ss") + "&" +
+                        "rt=" + rt.ToString("yyyy-MM-ddTHH:mm:ss") + "&" +
                         "ds=" + OldJourney.DepartureStationId + "&" +
                         "rs=" + OldJourney.ReturnStationId + "&" +
                         "cd=" + OldJourney.CoveredDistance + "&" +
@@ -183,8 +183,8 @@ namespace CityBikeApplication.Pages
                     string queryString = "?fromEditJourney=true&" +
                         "returnstation=true&" +
                         "journeyId=" + newJourney.Id + "&" +
-                        "dt=" + dt.ToString() + "&" +
-                        "rt=" + rt.ToString() + "&" +
+                        "dt=" + dt.ToString("yyyy-MM-ddTHH:mm:ss") + "&" +
+                        "rt=" + rt.ToString("yyyy-MM-ddTHH:mm:ss") + "&" +
                         "ds=" + OldJourney.DepartureStationId + "&" +
                         "rs=" + OldJourney.ReturnStationId + "&" +
                         "cd=" + OldJourney.CoveredDistance + "&" +

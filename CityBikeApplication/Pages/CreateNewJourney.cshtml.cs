@@ -161,8 +161,8 @@ namespace CityBikeApplication.Pages
                     // store info from CreateNewJourney-form to querystring
                     string queryString = "?fromNewJourney=true&" +
                         "departurestation=true&" +
-                        "dt=" + dt.ToString() + "&" +
-                        "rt=" + rt.ToString() + "&" +
+                        "dt=" + dt.ToString("yyyy-MM-ddTHH:mm:ss") + "&" +
+                        "rt=" + rt.ToString("yyyy-MM-ddTHH:mm:ss") + "&" +
                         "ds=" + OldJourney.DepartureStationId + "&" +
                         "rs=" + OldJourney.ReturnStationId + "&" +
                         "cd=" + OldJourney.CoveredDistance + "&" +
@@ -174,8 +174,8 @@ namespace CityBikeApplication.Pages
                     // store info from CreateNewJourney-form to querystring
                     string queryString = "?fromNewJourney=true&" +
                         "returnstation=true&" +
-                        "dt=" + dt.ToString() + "&" +
-                        "rt=" + rt.ToString() + "&" +
+                        "dt=" + dt.ToString("yyyy-MM-ddTHH:mm:ss") + "&" +
+                        "rt=" + rt.ToString("yyyy-MM-ddTHH:mm:ss") + "&" +
                         "ds=" + OldJourney.DepartureStationId + "&" +
                         "rs=" + OldJourney.ReturnStationId + "&" +
                         "cd=" + OldJourney.CoveredDistance + "&" +

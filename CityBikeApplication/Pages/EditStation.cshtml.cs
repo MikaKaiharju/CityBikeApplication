@@ -34,9 +34,6 @@ namespace CityBikeApplication.Pages
             int oldStationId = int.Parse(Request.Query["id"]);
             GetOldStation();
 
-            // if user pressed station in the journey list view
-            bool cameFromJourneyList = Request.Query["cameFromJourneyList"].Equals("true");
-
             // remove previous errorMessages
             ErrorMessages.Clear();
 
@@ -157,13 +154,16 @@ namespace CityBikeApplication.Pages
             // if there were errors remember what data was given
             OldStation = newStation;
 
+            // if user pressed edit station in the station info
+            bool cameFromStationInfo = Request.Query["cameFromStationInfo"].Equals("true");
+
             if (ErrorMessages.Count == 0)
             {
                 DataHandler.Instance.ReplaceStation(oldStationId, newStation);
 
-                if (cameFromJourneyList)
+                if (cameFromStationInfo)
                 {
-                    Response.Redirect("JourneyList");
+                    Response.Redirect("StationInfo?id=" + newStation.Id);
                 }
                 else
                 {

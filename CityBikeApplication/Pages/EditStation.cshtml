@@ -24,8 +24,6 @@
 }
 
 <form method="POST">
-
-
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Id</label>
         <div class="col-sm-4">
@@ -109,7 +107,20 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
         <div class="col-sm-2 d-grid">
-            <a class="btn btn-outline-primary" href="/StationList" role="button">Cancel</a>
+            @{
+                bool cameFromStationInfo = Request.Query["cameFromStationInfo"].Equals("true");
+                if (cameFromStationInfo)
+                {
+                    string redirection = "/StationInfo?id=" + Model.OldStation.Id;
+                    <a class="btn btn-outline-primary" href=@redirection role="button">Cancel</a>
+                }
+                else
+                {
+                    <a class="btn btn-outline-primary" href="/StationList" role="button">Cancel</a>
+                }
+
+            }
+
         </div>
     </div>
 
