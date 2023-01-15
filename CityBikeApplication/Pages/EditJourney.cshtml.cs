@@ -36,7 +36,21 @@ namespace CityBikeApplication.Pages
 
         public void GetOldJourney()
         {
-            OldJourney = DataHandler.Instance.GetJourney(Request.Query["id"]);
+            if (Request.Query["fromNewStation"].Equals("true"))
+            {
+                OldJourney = new Journey();
+                OldJourney.Id = Request.Query["journeyId"];
+                OldJourney.DepartureTime = DateTime.Parse(Request.Query["dt"].ToString().Replace(".", ":"));
+                OldJourney.ReturnTime = DateTime.Parse(Request.Query["rt"].ToString().Replace(".", ":"));
+                OldJourney.DepartureStationId = int.Parse(Request.Query["ds"]);
+                OldJourney.ReturnStationId = int.Parse(Request.Query["rs"]);
+                OldJourney.CoveredDistance = int.Parse(Request.Query["cd"]);
+                OldJourney.Duration = int.Parse(Request.Query["d"]);
+            }
+            else
+            {
+                OldJourney = DataHandler.Instance.GetJourney(Request.Query["id"]);
+            }
         }
 
         public void OnPost()
@@ -44,11 +58,10 @@ namespace CityBikeApplication.Pages
             // remove previous errorMessages
             ErrorMessages.Clear();
 
-            string oldJourneyId = Request.Query["id"];
             GetOldJourney();
 
             Journey newJourney = new Journey();
-            newJourney.Id = oldJourneyId;
+            newJourney.Id = OldJourney.Id;
 
             DateTime dt = DateTime.Parse(Request.Form["departureTime"].ToString().Replace(".", ":"));
             newJourney.DepartureTime = dt;
@@ -145,10 +158,44 @@ namespace CityBikeApplication.Pages
             // if there were errors remember what data was given
             OldJourney = newJourney;
 
+            bool newDepartureStation = Request.Form["newdeparturestation"].ToString().Equals("true");
+            bool newReturnStation = Request.Form["newreturnstation"].ToString().Equals("true");
+
             if (ErrorMessages.Count == 0)
             {
-                DataHandler.Instance.ReplaceJourney(oldJourneyId, newJourney);
-                Response.Redirect("JourneyList");
+                if (newDepartureStation)
+                {
+                    // store info from CreateNewJourney-form to querystring
+                    string queryString = "?fromEditJourney=true&" +
+                        "departurestation=true&" + 
+                        "journeyId=" + newJourney.Id + "&" +
+                        "dt=" + dt.ToString() + "&" +
+                        "rt=" + rt.ToString() + "&" +
+                        "ds=" + OldJourney.DepartureStationId + "&" +
+                        "rs=" + OldJourney.ReturnStationId + "&" +
+                        "cd=" + OldJourney.CoveredDistance + "&" +
+                        "d=" + OldJourney.Duration;
+                    Response.Redirect("CreateNewStation" + queryString);
+                }
+                else if (newReturnStation)
+                {
+                    // store info from CreateNewJourney-form to querystring
+                    string queryString = "?fromEditJourney=true&" +
+                        "returnstation=true&" +
+                        "journeyId=" + newJourney.Id + "&" +
+                        "dt=" + dt.ToString() + "&" +
+                        "rt=" + rt.ToString() + "&" +
+                        "ds=" + OldJourney.DepartureStationId + "&" +
+                        "rs=" + OldJourney.ReturnStationId + "&" +
+                        "cd=" + OldJourney.CoveredDistance + "&" +
+                        "d=" + OldJourney.Duration;
+                    Response.Redirect("CreateNewStation" + queryString);
+                }
+                else
+                {
+                    DataHandler.Instance.ReplaceJourney(OldJourney.Id, newJourney);
+                    Response.Redirect("JourneyList");
+                }
             }
         }
 

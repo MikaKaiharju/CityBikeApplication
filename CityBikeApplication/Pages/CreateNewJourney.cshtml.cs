@@ -28,7 +28,20 @@ namespace CityBikeApplication.Pages
 
         public void GetOldJourney()
         {
-            if (OldJourney == null) { OldJourney = new Journey(); }
+            if (Request.Query["fromNewStation"].Equals("true"))
+            {
+                OldJourney = new Journey();
+                OldJourney.DepartureTime = DateTime.Parse(Request.Query["dt"].ToString().Replace(".", ":"));
+                OldJourney.ReturnTime = DateTime.Parse(Request.Query["rt"].ToString().Replace(".", ":"));
+                OldJourney.DepartureStationId = int.Parse(Request.Query["ds"]);
+                OldJourney.ReturnStationId = int.Parse(Request.Query["rs"]);
+                OldJourney.CoveredDistance = int.Parse(Request.Query["cd"]);
+                OldJourney.Duration = int.Parse(Request.Query["d"]);
+            }
+            else
+            {
+                OldJourney = new Journey();
+            }
         }
 
         public List<Station> GetChoices()
@@ -137,13 +150,44 @@ namespace CityBikeApplication.Pages
             // if there were errors remember what data was given
             OldJourney = newJourney;
 
+            bool newDepartureStation = Request.Form["newdeparturestation"].ToString().Equals("true");
+            bool newReturnStation = Request.Form["newreturnstation"].ToString().Equals("true");
+
             // if there wasn't problems with validation
             if (ErrorMessages.Count == 0)
             {
-                newJourney.Id = Guid.NewGuid().ToString();
-                DataHandler.Instance.CreateNewJourney(newJourney);
-
-                Response.Redirect("JourneyList");
+                if (newDepartureStation)
+                {
+                    // store info from CreateNewJourney-form to querystring
+                    string queryString = "?fromNewJourney=true&" +
+                        "departurestation=true&" +
+                        "dt=" + dt.ToString() + "&" +
+                        "rt=" + rt.ToString() + "&" +
+                        "ds=" + OldJourney.DepartureStationId + "&" +
+                        "rs=" + OldJourney.ReturnStationId + "&" +
+                        "cd=" + OldJourney.CoveredDistance + "&" +
+                        "d=" + OldJourney.Duration;
+                    Response.Redirect("CreateNewStation" + queryString);
+                }
+                else if (newReturnStation)
+                {
+                    // store info from CreateNewJourney-form to querystring
+                    string queryString = "?fromNewJourney=true&" +
+                        "returnstation=true&" +
+                        "dt=" + dt.ToString() + "&" +
+                        "rt=" + rt.ToString() + "&" +
+                        "ds=" + OldJourney.DepartureStationId + "&" +
+                        "rs=" + OldJourney.ReturnStationId + "&" +
+                        "cd=" + OldJourney.CoveredDistance + "&" +
+                        "d=" + OldJourney.Duration;
+                    Response.Redirect("CreateNewStation" + queryString);
+                }
+                else
+                {
+                    newJourney.Id = Guid.NewGuid().ToString();
+                    DataHandler.Instance.CreateNewJourney(newJourney);
+                    Response.Redirect("JourneyList");
+                }
             }
         }
 

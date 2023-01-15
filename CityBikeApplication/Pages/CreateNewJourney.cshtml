@@ -17,25 +17,20 @@
     }
 }
 
-@if (Model.OldJourney == null)
-{
-    Model.GetOldJourney();
-}
-
-
 <form method="POST">
     @{
+        Model.GetOldJourney();
         string ddt = Model.OldJourney.DepartureTime.ToString("yyyy-MM-ddTHH:mm:ss").Replace(".", ":");
         string rdt = Model.OldJourney.ReturnTime.ToString("yyyy-MM-ddTHH:mm:ss").Replace(".", ":");
 
-            if (ddt.Equals("0001-01-01T00:00:00"))
-            {
+        if (ddt.Equals("0001-01-01T00:00:00"))
+        {
             ddt = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss").Replace(".", ":");
-            }
-            if (rdt.Equals("0001-01-01T00:00:00"))
-            {
+        }
+        if (rdt.Equals("0001-01-01T00:00:00"))
+        {
             rdt = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss").Replace(".", ":");
-            }
+        }
     }
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Departure Time</label>
@@ -70,7 +65,7 @@
             }
         </select>
         <div class="col-sm-2">
-            <a class="btn btn-primary btn-sm" href="CreateNewStation?cameFromNewJourney=true">Create New Station</a>
+            <button class="btn btn-primary btn-sm" type="submit" name="newdeparturestation" value="true" formnovalidate>Create New Station</button>
         </div>
     </div>
 
@@ -95,7 +90,7 @@
             }
         </select>
         <div class="col-sm-2">
-            <a class="btn btn-primary btn-sm" href="CreateNewStation?cameFromNewJourney=true">Create New Station</a>
+            <button class="btn btn-primary btn-sm" type="submit" name="newreturnstation" value="true" formnovalidate>Create New Station</button>
         </div>
     </div>
     <div class="row mb-3">

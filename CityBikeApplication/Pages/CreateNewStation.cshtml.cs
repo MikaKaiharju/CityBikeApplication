@@ -23,12 +23,6 @@ namespace CityBikeApplication.Pages
 
         public void OnPost()
         {
-            // if user is creating new station while creating a new journey
-            bool cameFromNewJourney = Request.Query["cameFromNewJourney"].Equals("true");
-
-            // if user is creating new station while editing a station
-            bool cameFromEditJourney = Request.Query["cameFromEditJourney"].Equals("true");
-
             // remove previous errorMessages
             ErrorMessages.Clear();
 
@@ -147,29 +141,60 @@ namespace CityBikeApplication.Pages
             // if there were errors remember what data was given
             OldStation = newStation;
 
+            // if user is creating new station while creating a new journey
+            bool cameFromNewJourney = Request.Query["fromNewJourney"].Equals("true");
+
+            // if user is creating new station while editing a station
+            bool cameFromEditJourney = Request.Query["fromEditJourney"].Equals("true");
+
             if (ErrorMessages.Count == 0)
             {
                 DataHandler.Instance.CreateNewStation(newStation);
 
                 if (cameFromEditJourney)
                 {
-                    //TODO: id of the journey that user was editing should be added to the query string
-                    //          in the mean while redirect to journeylist
+                    // store info given on station form and journey form
+                    string queryString = "?fromNewStation=true&journeyId=" + Request.Query["journeyId"] + "&";
+                    bool departureStation = Request.Query["departurestation"].Equals("true");
+                    if (departureStation)
+                    {
+                        queryString += "ds=" + newStation.Id + "&" +
+                            "rs=" + Request.Query["rs"] + "&";
+                    }
+                    else
+                    {
+                        queryString += "ds=" + Request.Query["ds"] + "&" + 
+                            "rs=" + newStation.Id + "&"; 
+                    }
+                    queryString += 
+                        "dt=" + Request.Query["dt"] + "&" +
+                        "rt=" + Request.Query["rt"] + "&" +
+                        "cd=" + Request.Query["cd"] + "&" +
+                        "d=" + Request.Query["d"];
 
-                    //string queryString = "";
-                    //Response.Redirect("EditJourney" + queryString);
-
-                    Response.Redirect("JourneyList");
+                    Response.Redirect("EditJourney" + queryString);
                 }
                 else if (cameFromNewJourney)
                 {
-                    //TODO: id and other information of the new journey that user started creating before new station
-                    //          should be attached as query information
-                    
-                    //string queryString = Request.QueryString.ToString();
-                    //Response.Redirect("CreateNewJourney?" + queryString);
+                    // store info given on station form and journey form
+                    string queryString = "?fromNewStation=true&";
+                    bool departureStation = Request.Query["departurestation"].Equals("true");
+                    if (departureStation)
+                    {
+                        queryString += "ds=" + newStation.Id + "&" +
+                            "rs=" + Request.Query["rs"] + "&";
+                    }
+                    else
+                    {
+                        queryString += "ds=" + Request.Query["ds"] + "&" +
+                            "rs=" + newStation.Id + "&";
+                    }
+                    queryString += "dt=" + Request.Query["dt"] + "&" +
+                        "rt=" + Request.Query["rt"] + "&" +
+                        "cd=" + Request.Query["cd"] + "&" +
+                        "d=" + Request.Query["d"];
 
-                    Response.Redirect("JourneyList");
+                    Response.Redirect("CreateNewJourney" + queryString);
                 }
                 else
                 {
