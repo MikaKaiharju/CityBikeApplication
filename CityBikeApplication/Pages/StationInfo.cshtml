@@ -9,8 +9,9 @@
 
 <form method="POST">
 
-    @{ 
+    @{
         Model.GetStation();
+        Model.GetAdditionalInfo();
     }
 
     <div class="row mb-3">
@@ -18,52 +19,53 @@
         <div class="col-sm-4">@Model.Station.Id</div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Nimi</label>
-        <div class="col-sm-4">@Model.Station.Nimi</div>
-    </div>
-    <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Namn</label>
-        <div class="col-sm-4">@Model.Station.Namn</div>
-    </div>
-    <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Name</label>
         <div class="col-sm-4">@Model.Station.Name</div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Osoite</label>
+        <label class="col-sm-2 col-form-label">Address</label>
         <div class="col-sm-4">@Model.Station.Osoite</div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Address</label>
-        <div class="col-sm-4">@Model.Station.Address</div>
+        <label class="col-sm-2 col-form-label">Total number of journeys starting from this station</label>
+        <div class="col-sm-4">@Model.TotalNumberOfJourneysFrom</div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Kaupunki</label>
-        <div class="col-sm-4">@Model.Station.Kaupunki</div>
+        <label class="col-sm-2 col-form-label">Total number of journeys ending to this station</label>
+        <div class="col-sm-4">@Model.TotalNumberOfJourneysTo</div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Stad</label>
-        <div class="col-sm-4">@Model.Station.Stad</div>
+        <label class="col-sm-2 col-form-label">Average journey distance from this station</label>
+        <div class="col-sm-4">@Math.Round(Model.AverageJourneyDistaceFrom, 2) km</div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Operaattori</label>
-        <div class="col-sm-4">@Model.Station.Operaattori</div>
+        <label class="col-sm-2 col-form-label">Average journey distance to this station</label>
+        <div class="col-sm-4">@Math.Round(Model.AverageJourneyDistanceTo, 2) km</div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Kapasiteetti</label>
-        <div class="col-sm-4">@Model.Station.Kapasiteetti</div>
+        <label class="col-sm-2 col-form-label">The 5 most popular return stations from this station</label>
+        <div class="col-sm-4">
+        @{
+            foreach(Station station in Model.MostPopularReturnStations.Keys)
+            {
+                string info = station.Id + ": " + station.Name + " (" + Model.MostPopularReturnStations[station].ToString() + ")";
+                <p>@info</p>
+            }
+        }
+        </div>
     </div>
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Latitude</label>
-        <div class="col-sm-4">@Model.Station.Y</div>
+        <label class="col-sm-2 col-form-label">The 5 most popular departure station to this station</label>
+        <div class="col-sm-4">
+            @{
+                foreach (Station station in Model.MostPopularDepartureStations.Keys)
+                {
+                    string info = station.Id + ": " + station.Name + " (" + Model.MostPopularDepartureStations[station].ToString() + ")";
+                    <p>@info</p>
+                }
+            }
+        </div>
     </div>
-    <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Longitude</label>
-        <div class="col-sm-4">@Model.Station.X</div>
-    </div>
-
-
-
 
     <p></p>
 

@@ -57,7 +57,7 @@ namespace CityBikeApplication
         }
 
         // for debugging limit amount of lines to be read per data set
-        int _limit = 500;
+        int _limit = 5000;
 
         // imported data
         public List<Journey> Journeys = new List<Journey>();
@@ -429,16 +429,16 @@ namespace CityBikeApplication
                     sortedJourneys = sortedJourneys.OrderByDescending(j => j.ReturnTime);
                     break;
                 case (SortOrder.DepartureStation, true):
-                    sortedJourneys = sortedJourneys.OrderBy(j => j.DepartureStationName);
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.DepartureStationId);
                     break;
                 case (SortOrder.DepartureStation, false):
-                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.DepartureStationName);
+                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.DepartureStationId);
                     break;
                 case (SortOrder.ReturnStation, true):
-                    sortedJourneys = sortedJourneys.OrderBy(j => j.ReturnStationName);
+                    sortedJourneys = sortedJourneys.OrderBy(j => j.ReturnStationId);
                     break;
                 case (SortOrder.ReturnStation, false):
-                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.ReturnStationName);
+                    sortedJourneys = sortedJourneys.OrderByDescending(j => j.ReturnStationId);
                     break;
                 case (SortOrder.CoveredDistance, true):
                     sortedJourneys = sortedJourneys.OrderBy(j => j.CoveredDistance);
