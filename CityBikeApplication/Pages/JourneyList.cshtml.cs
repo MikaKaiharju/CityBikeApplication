@@ -53,7 +53,6 @@ namespace CityBikeApplication.Pages
             JourneysPerPage = selection;
         }
 
-
         public void OnPostDelete(string id, int index, int perPage)
         {
             DataHandler.Instance.DeleteJourney(id);
@@ -87,11 +86,5 @@ namespace CityBikeApplication.Pages
                 return DataHandler.Instance.Journeys.GetRange(startIndex, leftOver - 1);
             }
         }
-
-        private void p(string s)
-        {
-            System.Diagnostics.Debug.WriteLine(s);
-        }
-
     }
 }

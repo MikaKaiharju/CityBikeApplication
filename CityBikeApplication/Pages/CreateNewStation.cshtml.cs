@@ -28,15 +28,11 @@ namespace CityBikeApplication.Pages
 
             Station newStation = new Station();
             string idString = Sanitize(Request.Form["id"]);
-            newStation.Nimi = Sanitize(Request.Form["nimi"]);
-            newStation.Namn = Sanitize(Request.Form["namn"]);
             newStation.Name = Sanitize(Request.Form["name"]);
-            newStation.Osoite = Sanitize(Request.Form["osoite"]);
             newStation.Address = Sanitize(Request.Form["address"]);
-            newStation.Kaupunki = Sanitize(Request.Form["kaupunki"]);
-            newStation.Stad = Sanitize(Request.Form["stad"]);
-            newStation.Operaattori = Sanitize(Request.Form["operaattori"]);
-            string kapasiteettiString = Sanitize(Request.Form["kapasiteetti"]);
+            newStation.City = Sanitize(Request.Form["city"]);
+            newStation.Operator = Sanitize(Request.Form["operator"]);
+            string capacityString = Sanitize(Request.Form["capacity"]);
             string xString = Sanitize(Request.Form["x"]);
             string yString = Sanitize(Request.Form["y"]);
 
@@ -70,28 +66,28 @@ namespace CityBikeApplication.Pages
                 ErrorMessages.Add("Id is required and needs to be integer that is > 0");
             }
 
-            if (kapasiteettiString.Length > 0)
+            if (capacityString.Length > 0)
             {
                 int kapasiteetti;
-                if (int.TryParse(kapasiteettiString, out kapasiteetti))
+                if (int.TryParse(capacityString, out kapasiteetti))
                 {
                     if (kapasiteetti < 0)
                     {
-                        newStation.Kapasiteetti = kapasiteetti;
+                        newStation.Capacity = kapasiteetti;
                         ErrorMessages.Add("Capacity needs to be >= 0");
                     }
 
-                    newStation.Kapasiteetti = kapasiteetti;
+                    newStation.Capacity = kapasiteetti;
                 }
                 else
                 {
                     ErrorMessages.Add("Capacity needs to be integer that is >= 0");
-                    newStation.Kapasiteetti = 0;
+                    newStation.Capacity = 0;
                 }
             }
             else
             {
-                newStation.Kapasiteetti = 0;
+                newStation.Capacity = 0;
             }
 
             // double parse needs number to be in comma form
@@ -211,11 +207,6 @@ namespace CityBikeApplication.Pages
                 return Regex.Replace(str, "[^a-öA-Ö0-9_ .,()]", "", RegexOptions.Compiled);
             }
             else { return ""; }
-        }
-
-        private void p(string s)
-        {
-            System.Diagnostics.Debug.WriteLine(s);
         }
     }
 }

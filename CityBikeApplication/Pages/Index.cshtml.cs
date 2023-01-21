@@ -19,9 +19,5 @@ namespace CityBikeApplication.Pages
             DataHandler dataHandler = DataHandler.Instance;
 
         }
-
-
-
-
     }
 }

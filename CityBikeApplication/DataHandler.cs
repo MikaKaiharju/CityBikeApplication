@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 
 namespace CityBikeApplication
 {
@@ -16,23 +17,24 @@ namespace CityBikeApplication
         public bool Ready = false;
 
         // store sort order to invert order
-        SortOrder _currentJourneySortOrder;
+        public SortOrder CurrentJourneySortOrder;
         // is current sort order ascending
-        bool _ascendingJourneyOrder = true;
+        public bool AscendingJourneyOrder = true;
 
         // store sort order to invert order
-        SortOrder _currentStationSortOrder;
+        public SortOrder CurrentStationSortOrder;
         // is current sort order ascending
-        bool _ascendingStationOrder = true;
+        public bool AscendingStationOrder = true;
 
         public enum SortOrder
         {
+            Null,
             Id,
             Name,
-            Osoite,
-            Kaupunki,
-            Operaattori,
-            Kapasiteetti,
+            Address,
+            City,
+            Operator,
+            Capacity,
             DepartureTime,
             ReturnTime,
             DepartureStation,
@@ -64,20 +66,20 @@ namespace CityBikeApplication
         public List<Station> Stations = new List<Station>();
 
         // journey data urls
-        //string _path1 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv";
-        //string _path2 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv";
-        //string _path3 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv";
+        string _path1 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv";
+        string _path2 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv";
+        string _path3 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv";
 
         // if data is on local hard drive
-        string _path1 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-05.csv";
-        string _path2 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-06.csv";
-        string _path3 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-07.csv";
+        //string _path1 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-05.csv";
+        //string _path2 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-06.csv";
+        //string _path3 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-07.csv";
 
         // station data urls
-        //string _path4 = "https://opendata.arcgis.com/datasets/726277c507ef4914b0aec3cbcfcbfafc_0.csv";
+        string _path4 = "https://opendata.arcgis.com/datasets/726277c507ef4914b0aec3cbcfcbfafc_0.csv";
 
         // if data is on local hard drive
-        string _path4 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\Helsingin_ja_Espoon_kaupunkipyB6rA4asemat_avoin.csv";
+        //string _path4 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\Helsingin_ja_Espoon_kaupunkipyB6rA4asemat_avoin.csv";
 
         private async void ImportDataSets()
         {
@@ -122,11 +124,11 @@ namespace CityBikeApplication
             int currentIteration = 0;
 
             // read data from url
-            //HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
-            //HttpWebResponse httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
+            HttpWebResponse httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
 
-            //using (StreamReader reader = new StreamReader(httpWebResponse.GetResponseStream()))
-            using (StreamReader reader = new StreamReader(path))
+            using (StreamReader reader = new StreamReader(httpWebResponse.GetResponseStream()))
+            //using (StreamReader reader = new StreamReader(path))
             {
                 while (!reader.EndOfStream && currentIteration++ < _limit)
                 {
@@ -149,15 +151,15 @@ namespace CityBikeApplication
 
                     // parse stationIds
                     int departureStationId;
-                    try { departureStationId = int.Parse(values[2]); } catch(Exception e) { continue; }
+                    if (int.TryParse(values[2], out departureStationId)) { } else { continue; }
                     int returnStationId;
-                    try { returnStationId = int.Parse(values[4]); } catch (Exception e) { continue; }
+                    if (int.TryParse(values[4], out returnStationId)) { } else { continue; }
 
                     // parse limiting factor strings to int (skip if can't be read for some reason)
                     int coveredDistanceInMetres;
-                    try { coveredDistanceInMetres = int.Parse(values[6]); } catch (Exception e) { continue; }
+                    if (int.TryParse(values[6], out coveredDistanceInMetres)) { } else { continue; }
                     int journeyDurationInSeconds;
-                    try { journeyDurationInSeconds = int.Parse(values[7]); } catch (Exception e) { continue; }
+                    if (int.TryParse(values[7], out journeyDurationInSeconds)) { } else { continue; }
 
                     // skip if journeys covered distance is less than 10 metres or duration is less than 10 seconds
                     if (coveredDistanceInMetres < 10 || journeyDurationInSeconds < 10) { continue; }
@@ -197,11 +199,11 @@ namespace CityBikeApplication
             int currentIteration = 0;
 
             // read data from url
-            //HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
-            //HttpWebResponse httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
+            HttpWebResponse httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
 
-            //using (StreamReader reader = new StreamReader(httpWebResponse.GetResponseStream()))
-            using (StreamReader reader = new StreamReader(path))
+            using (StreamReader reader = new StreamReader(httpWebResponse.GetResponseStream()))
+            //using (StreamReader reader = new StreamReader(path))
             {
                 while (!reader.EndOfStream && currentIteration++ < _limit)
                 {
@@ -210,45 +212,50 @@ namespace CityBikeApplication
 
                     // 0 == FID
                     // 1 == id
-                    // 2 == nimi
-                    // 3 == namn
-                    // 4 == name
-                    // 5 == osoite
-                    // 6 == address
-                    // 7 == kaupunki
-                    // 8 == stad
-                    // 9 == operaattori
-                    // 10 == kapasiteetti
+                    // 2 == name in Finnish
+                    // 3 == name in Swedish
+                    // 4 == name in English
+                    // 5 == address in Finnish
+                    // 6 == address in Swedish
+                    // 7 == city in Finnish
+                    // 8 == city in Swedish
+                    // 9 == operator
+                    // 10 == capacity
                     // 11 == x
                     // 12 == y
 
                     // parse station id into int
                     int id;
-                    try { id = int.Parse(values[1]); } catch(Exception e) { continue; }
+                    if (int.TryParse(values[1], out id)) { } else { continue; }
 
                     // parse coordinate strings to double (skip if can't be read for some reason)
                     double x;
-                    try { x = double.Parse(values[11], CultureInfo.InvariantCulture); } catch (Exception e) { continue; }
+                    if (double.TryParse(values[11], NumberStyles.Any, CultureInfo.InvariantCulture, out x)) { } else { continue; }
                     double y;
-                    try { y = double.Parse(values[12], CultureInfo.InvariantCulture); } catch (Exception e) { continue; }
+                    if (double.TryParse(values[12], NumberStyles.Any, CultureInfo.InvariantCulture, out y)) { } else { continue; }
 
                     // parse station capacity into int
-                    int kapasiteetti;
-                    try { kapasiteetti = int.Parse(values[10]); } catch(Exception e) { continue; }
+                    int capacity;
+                    if (int.TryParse(values[10], out capacity)) { } else { continue; }
+
+                    // name: primary english, secondary finnish, tertiary swedish
+                    string name = !values[4].Equals("") ? values[4] : !values[2].Equals("") ? values[2] : values[3];
+
+                    // address: primary finnish, secondary swedish
+                    string address = !values[5].Equals("") ? values[5] : values[6];
+
+                    // city: primary finnish, secondary swedish
+                    string city = !values[7].Equals("") ? values[7] : values[8];
 
                     // since we got this far line of data should be validated
                     // create new station class class and populate it
                     Station station = new Station();
                     station.Id = id;
-                    station.Nimi = values[2];
-                    station.Namn = values[3];
-                    station.Name = values[4];
-                    station.Osoite = values[5];
-                    station.Address = values[6];
-                    station.Kaupunki = values[7];
-                    station.Stad = values[8];
-                    station.Operaattori = values[9];
-                    station.Kapasiteetti = kapasiteetti;
+                    station.Name = name;
+                    station.Address = address;
+                    station.City = city;
+                    station.Operator = values[9];
+                    station.Capacity = capacity;
                     station.X = ("" + x).Replace(",", "."); // store in dot form
                     station.Y = ("" + y).Replace(",", ".");
 
@@ -304,13 +311,13 @@ namespace CityBikeApplication
         public void CreateNewJourney(Journey newJourney)
         {
             Journeys.Add(newJourney);
-            SortJourneys(_currentJourneySortOrder, false);
+            SortJourneys(CurrentJourneySortOrder, false);
         }
 
         public void CreateNewStation(Station newStation)
         {
             Stations.Add(newStation);
-            SortStations(_currentStationSortOrder, false);
+            SortStations(CurrentStationSortOrder, false);
         }
 
         public void DeleteStation(int id)
@@ -337,17 +344,17 @@ namespace CityBikeApplication
             if (useInversion)
             {
                 // if header is pressed twice sorting inverts
-                _ascendingStationOrder = _currentStationSortOrder.Equals(sortOrder) ? !_ascendingStationOrder : true;
+                AscendingStationOrder = CurrentStationSortOrder.Equals(sortOrder) ? !AscendingStationOrder : true;
             }
             else
             {
-                _ascendingStationOrder = true;
+                AscendingStationOrder = true;
             }
 
             // store latest sortOrder
-            _currentStationSortOrder = sortOrder;
+            CurrentStationSortOrder = sortOrder;
 
-            switch(sortOrder, _ascendingStationOrder)
+            switch(sortOrder, AscendingStationOrder)
             {
                 case (SortOrder.Id, true):
                     sortedStations = sortedStations.OrderBy(s => s.Id);
@@ -361,29 +368,29 @@ namespace CityBikeApplication
                 case (SortOrder.Name, false):
                     sortedStations = sortedStations.OrderByDescending(s => s.Name);
                     break;
-                case (SortOrder.Osoite, true):
-                    sortedStations = sortedStations.OrderBy(s => s.Osoite);
+                case (SortOrder.Address, true):
+                    sortedStations = sortedStations.OrderBy(s => s.Address);
                     break;
-                case (SortOrder.Osoite, false):
-                    sortedStations = sortedStations.OrderByDescending(s => s.Osoite);
+                case (SortOrder.Address, false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.Address);
                     break;
-                case (SortOrder.Kaupunki, true):
-                    sortedStations = sortedStations.OrderBy(s => s.Kaupunki);
+                case (SortOrder.City, true):
+                    sortedStations = sortedStations.OrderBy(s => s.City);
                     break;
-                case (SortOrder.Kaupunki, false):
-                    sortedStations = sortedStations.OrderByDescending(s => s.Kaupunki);
+                case (SortOrder.City, false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.City);
                     break;
-                case (SortOrder.Operaattori, true):
-                    sortedStations = sortedStations.OrderBy(s => s.Operaattori);
+                case (SortOrder.Operator, true):
+                    sortedStations = sortedStations.OrderBy(s => s.Operator);
                     break;
-                case (SortOrder.Operaattori, false):
-                    sortedStations = sortedStations.OrderByDescending(s => s.Operaattori);
+                case (SortOrder.Operator, false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.Operator);
                     break;
-                case (SortOrder.Kapasiteetti, true):
-                    sortedStations = sortedStations.OrderBy(s => s.Kapasiteetti);
+                case (SortOrder.Capacity, true):
+                    sortedStations = sortedStations.OrderBy(s => s.Capacity);
                     break;
-                case (SortOrder.Kapasiteetti, false):
-                    sortedStations = sortedStations.OrderByDescending(s => s.Kapasiteetti);
+                case (SortOrder.Capacity, false):
+                    sortedStations = sortedStations.OrderByDescending(s => s.Capacity);
                     break;
                 default:
                     sortedStations = sortedStations.OrderBy(s => s.Id);
@@ -408,13 +415,13 @@ namespace CityBikeApplication
             if (useInversion)
             {
                 // if header is pressed twice sorting inverts
-                _ascendingJourneyOrder = _currentJourneySortOrder.Equals(sortOrder) ? !_ascendingJourneyOrder : true;
+                AscendingJourneyOrder = CurrentJourneySortOrder.Equals(sortOrder) ? !AscendingJourneyOrder : true;
             }
 
             // store latest sortOrder
-            _currentJourneySortOrder = sortOrder;
+            CurrentJourneySortOrder = sortOrder;
 
-            switch (sortOrder, _ascendingJourneyOrder)
+            switch (sortOrder, AscendingJourneyOrder)
             {
                 case (SortOrder.DepartureTime, true):
                     sortedJourneys = sortedJourneys.OrderBy(j => j.DepartureTime);
@@ -461,11 +468,5 @@ namespace CityBikeApplication
             // convert IQueryable back to list
             Journeys = sortedJourneys.ToList<Journey>();
         }
-
-        private void p(string s)
-        {
-            System.Diagnostics.Debug.WriteLine(s);
-        }
-
     }
 }

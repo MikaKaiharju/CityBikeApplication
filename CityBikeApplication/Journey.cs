@@ -26,47 +26,6 @@ namespace CityBikeApplication
         public int CoveredDistance { get; set; } // in kilometres
         public int Duration { get; set; } // in minutes
 
-        /*
-        public string GetUnderstandableDepartureTime()
-        {
-            return GetUnderstandableTime(DepartureTime);
-        }
-
-        public string GetUnderstandableReturnTime()
-        {
-            return GetUnderstandableTime(ReturnTime);
-        }
-        */
-
-        private string GetUnderstandableTime(string timeString)
-        {
-            // 2021-05-31T23:57:25
-            // ->
-            // 23.57.25 31.05.2021
-
-            /*
-            if (timeString == null || timeString == "")
-            {
-                DateTime dateTime1 = DateTime.Now;
-                return dateTime1.ToString("HH.mm.ss dd.MM.yyyy");
-            }
-
-            timeString = timeString.Replace("T", " ").Replace(".",":");
-
-            DateTime dateTime = DateTime.ParseExact(timeString, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-
-            string readableDateTime = dateTime.ToString("HH.mm.ss dd.MM.yyyy");
-            */
-
-            return timeString;
-            
-        }
-
-        private void p(string s)
-        {
-            System.Diagnostics.Debug.WriteLine(s);
-        }
-
     }
    
 }

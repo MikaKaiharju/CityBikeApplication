@@ -200,11 +200,5 @@ namespace CityBikeApplication.Pages
             }
             else { return ""; }
         }
-
-        private void p(string s)
-        {
-            System.Diagnostics.Debug.WriteLine(s);
-        }
-
     }
 }

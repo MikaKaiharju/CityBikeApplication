@@ -59,7 +59,6 @@ namespace CityBikeApplication.Pages
             {
                 return DataHandler.Instance.Stations.GetRange(startIndex, leftOver - 1);
             }
-
         }
 
         public void OnPostDelete(int id, int index, int perPage)

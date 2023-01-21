@@ -88,12 +88,10 @@ namespace CityBikeApplication.Pages
 
             foreach(var item in sortedReturnStations.Take(5))
             {
-                p("itemKey=" + item.Key + ", itemValue=" + item.Value);
                 MostPopularReturnStations.Add(DataHandler.Instance.GetStation(item.Key), item.Value);
             }
             foreach (var item in sortedDepartureStations.Take(5))
             {
-                p("itemKey=" + item.Key + ", itemValue=" + item.Value);
                 MostPopularDepartureStations.Add(DataHandler.Instance.GetStation(item.Key), item.Value);
             }
         }
@@ -101,12 +99,12 @@ namespace CityBikeApplication.Pages
         public void OnPost()
         {
             GetStation();
-            Response.Redirect("EditStation?id=" + Station.Id + "&cameFromStationInfo=true");
-        }
-
-        private void p(string s)
-        {
-            System.Diagnostics.Debug.WriteLine(s);
+            string location = "EditStation?id=" + Station.Id + "&cameFromStationInfo=true";
+            if (Request.Query["cameFromStationList"].Equals("true"))
+            {
+                location += "&cameFromStationList=true";
+            }
+            Response.Redirect(location);
         }
 
     }
