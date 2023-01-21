@@ -13,59 +13,70 @@
         Model.GetStation();
         Model.GetAdditionalInfo();
     }
-
+    <hr />
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Id</label>
-        <div class="col-sm-4">@Model.Station.Id</div>
+        <div class="col-sm-4 col-form-label">@Model.Station.Id</div>
     </div>
+    <hr />
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Name</label>
-        <div class="col-sm-4">@Model.Station.Name</div>
+        <div class="col-sm-4 col-form-label">@Model.Station.Name</div>
     </div>
+    <hr />
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Address</label>
-        <div class="col-sm-4">@Model.Station.Osoite</div>
+        <div class="col-sm-4 col-form-label">@Model.Station.Osoite</div>
     </div>
+    <hr />
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Total number of journeys starting from this station</label>
-        <div class="col-sm-4">@Model.TotalNumberOfJourneysFrom</div>
+        <div class="col-sm-4 col-form-label">@Model.TotalNumberOfJourneysFrom</div>
     </div>
+    <hr />
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Total number of journeys ending to this station</label>
-        <div class="col-sm-4">@Model.TotalNumberOfJourneysTo</div>
+        <div class="col-sm-4 col-form-label">@Model.TotalNumberOfJourneysTo</div>
     </div>
+    <hr />
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Average journey distance from this station</label>
-        <div class="col-sm-4">@Math.Round(Model.AverageJourneyDistaceFrom, 2) km</div>
+        <div class="col-sm-4 col-form-label">@Math.Round(Model.AverageJourneyDistaceFrom, 2) km</div>
     </div>
+    <hr />
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Average journey distance to this station</label>
-        <div class="col-sm-4">@Math.Round(Model.AverageJourneyDistanceTo, 2) km</div>
+        <div class="col-sm-4 col-form-label">@Math.Round(Model.AverageJourneyDistanceTo, 2) km</div>
     </div>
+    <hr />
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">The 5 most popular return stations from this station</label>
-        <div class="col-sm-4">
-        @{
-            foreach(Station station in Model.MostPopularReturnStations.Keys)
-            {
-                string info = station.Id + ": " + station.Name + " (" + Model.MostPopularReturnStations[station].ToString() + ")";
-                <p>@info</p>
+        <div class="col-sm-4 col-form-label">
+            @{
+                foreach (Station station in Model.MostPopularReturnStations.Keys)
+                {
+                    string info = station.Id + ": " + station.Name + " (" + Model.MostPopularReturnStations[station].ToString() + ")";
+                    <p>@info</p>
+                }
             }
-        }
         </div>
     </div>
+    <hr />
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">The 5 most popular departure station to this station</label>
-        <div class="col-sm-4">
+        <label class="col-sm-2 col-form-label">The 5 most popular departure stations to this station</label>
+        <div class="col-sm-4 col-form-label">
             @{
                 foreach (Station station in Model.MostPopularDepartureStations.Keys)
                 {
                     string info = station.Id + ": " + station.Name + " (" + Model.MostPopularDepartureStations[station].ToString() + ")";
                     <p>@info</p>
                 }
-            }
+
+
+}
         </div>
     </div>
+    <hr />
 
     <p></p>
 
@@ -74,7 +85,18 @@
             <button type="submit" class="btn btn-primary">Edit Station</button>
         </div>
         <div class="col-sm-2 d-grid">
-            <a class="btn btn-outline-primary" href="/JourneyList" role="button">Back</a>
+            @{
+                if (Request.Query["cameFromStationList"].Equals("true"))
+                {
+                    <a class="btn btn-outline-primary" href="/StationList" role="button">Back</a>
+                }
+                else
+                {
+                    <a class="btn btn-outline-primary" href="/JourneyList" role="button">Back</a>
+                }
+            }
+
+
         </div>
     </div>
 

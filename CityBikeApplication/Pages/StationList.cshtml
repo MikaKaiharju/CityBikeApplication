@@ -43,7 +43,7 @@
 
     td, th {
         border: 1px solid #dddddd;
-        text-align: left;
+        text-align: center;
         padding: 8px;
     }
 </style>
@@ -94,6 +94,7 @@
                     <input type="hidden" name="selection" value="@Model.StationsPerPage" />
                 </form>
             </th>
+            <th>Info</th>
             <th>Edit</th>
             <th>Delete</th>
             <th>Show on Map</th>
@@ -103,28 +104,31 @@
         {
             foreach (Station station in Model.GetStations())
             {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => station.Id)</td>
-                    <td>@Html.DisplayFor(modelItem => station.Name)</td>
-                    <td>@Html.DisplayFor(modelItem => station.Osoite)</td>
-                    <td>@Html.DisplayFor(modelItem => station.Kaupunki)</td>
-                    <td>@Html.DisplayFor(modelItem => station.Operaattori)</td>
-                    <td>@Html.DisplayFor(modelItem => station.Kapasiteetti)</td>
-                    <td>
-                        <a class="btn btn-primary btn-sm" href="EditStation?id=@station.Id">Edit</a>
-                    </td>
-                    <td>
-                        <form asp-page-handler="delete" method="post">
-                            <button class="btn btn-danger btn-sm">Delete</button>
-                            <input type="hidden" name="id" value="@station.Id" />
-                            <input type="hidden" name="index" value="@Model.CurrentPageIndex" />
-                            <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
-                        </form>
-                    </td>
-                    <td>
-                        <a class="btn btn-info btn-sm" href=@station.GetLocation()>Map</a>
-                    </td>
-                </tr>
+    <tr>
+        <td>@Html.DisplayFor(modelItem => station.Id)</td>
+        <td>@Html.DisplayFor(modelItem => station.Name)</td>
+        <td>@Html.DisplayFor(modelItem => station.Osoite)</td>
+        <td>@Html.DisplayFor(modelItem => station.Kaupunki)</td>
+        <td>@Html.DisplayFor(modelItem => station.Operaattori)</td>
+        <td>@Html.DisplayFor(modelItem => station.Kapasiteetti)</td>
+        <td>
+            <a class="btn btn-primary btn-sm" href="StationInfo?id=@station.Id&cameFromStationList=true">Info</a>
+        </td>
+        <td>
+            <a class="btn btn-primary btn-sm" href="EditStation?id=@station.Id">Edit</a>
+        </td>
+        <td>
+            <form asp-page-handler="delete" method="post">
+                <button class="btn btn-danger btn-sm">Delete</button>
+                <input type="hidden" name="id" value="@station.Id" />
+                <input type="hidden" name="index" value="@Model.CurrentPageIndex" />
+                <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
+            </form>
+        </td>
+        <td>
+            <a class="btn btn-info btn-sm" href=@station.GetLocation()>Map</a>
+        </td>
+    </tr>
             }
         }
 
