@@ -15,42 +15,42 @@
     }
     <hr />
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Id</label>
+        <label class="col-sm-4 col-form-label">Id</label>
         <div class="col-sm-4 col-form-label">@Model.Station.Id</div>
     </div>
     <hr />
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Name</label>
+        <label class="col-sm-4 col-form-label">Name</label>
         <div class="col-sm-4 col-form-label">@Model.Station.Name</div>
     </div>
     <hr />
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Address</label>
+        <label class="col-sm-4 col-form-label">Address</label>
         <div class="col-sm-4 col-form-label">@Model.Station.Address</div>
     </div>
     <hr />
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Total number of journeys starting from this station</label>
+        <label class="col-sm-4 col-form-label">Total number of journeys starting from this station</label>
         <div class="col-sm-4 col-form-label">@Model.TotalNumberOfJourneysFrom</div>
     </div>
     <hr />
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Total number of journeys ending to this station</label>
+        <label class="col-sm-4 col-form-label">Total number of journeys ending to this station</label>
         <div class="col-sm-4 col-form-label">@Model.TotalNumberOfJourneysTo</div>
     </div>
     <hr />
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Average journey distance from this station</label>
+        <label class="col-sm-4 col-form-label">Average journey distance from this station</label>
         <div class="col-sm-4 col-form-label">@Math.Round(Model.AverageJourneyDistaceFrom, 2) km</div>
     </div>
     <hr />
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">Average journey distance to this station</label>
+        <label class="col-sm-4 col-form-label">Average journey distance to this station</label>
         <div class="col-sm-4 col-form-label">@Math.Round(Model.AverageJourneyDistanceTo, 2) km</div>
     </div>
     <hr />
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">The 5 most popular return stations from this station</label>
+        <label class="col-sm-4 col-form-label">The 5 most popular return stations from this station</label>
         <div class="col-sm-4 col-form-label">
             @{
                 foreach (Station station in Model.MostPopularReturnStations.Keys)
@@ -63,7 +63,7 @@
     </div>
     <hr />
     <div class="row mb-3">
-        <label class="col-sm-2 col-form-label">The 5 most popular departure stations to this station</label>
+        <label class="col-sm-4 col-form-label">The 5 most popular departure stations to this station</label>
         <div class="col-sm-4 col-form-label">
             @{
                 foreach (Station station in Model.MostPopularDepartureStations.Keys)
@@ -71,9 +71,7 @@
                     string info = station.Id + ": " + station.Name + " (" + Model.MostPopularDepartureStations[station].ToString() + ")";
                     <p>@info</p>
                 }
-
-
-}
+            }
         </div>
     </div>
     <hr />

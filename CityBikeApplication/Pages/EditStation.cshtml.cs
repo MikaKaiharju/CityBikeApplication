@@ -6,17 +6,18 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace CityBikeApplication.Pages
 {
     public class EditStationModel : PageModel
     {
 
-        public List<string> ErrorMessages = new List<string>();
+        public List<string> ErrorMessages { get; set; } = new List<string>();
 
         // station that user is editing
         // if there were errors, information given by the user is stored in oldStation
-        public Station OldStation;
+        public Station OldStation { get; set; }
 
         public void OnGet()
         {
@@ -49,8 +50,7 @@ namespace CityBikeApplication.Pages
 
             if(idString.Length > 0)
             {
-                int id;
-                if(int.TryParse(idString, out id))
+                if(int.TryParse(idString, out int id))
                 {
                     if (id < 0)
                     {
@@ -64,9 +64,9 @@ namespace CityBikeApplication.Pages
                         {
                             ErrorMessages.Add("There is already a station with this id: id=" + station.Id + " name=" + station.Name);
                         }
-
-                        newStation.Id = id;
                     }
+
+                    newStation.Id = id;
                 }
                 else
                 {
@@ -81,16 +81,14 @@ namespace CityBikeApplication.Pages
 
             if(capacityString.Length > 0)
             {
-                int kapasiteetti;
-                if(int.TryParse(capacityString, out kapasiteetti))
+                if(int.TryParse(capacityString, out int capacity))
                 {
-                    if (kapasiteetti < 0)
+                    if (capacity < 0)
                     {
-                        newStation.Capacity = kapasiteetti;
                         ErrorMessages.Add("Capacity needs to be >= 0");
                     }
                     
-                    newStation.Capacity = kapasiteetti;
+                    newStation.Capacity = capacity;
                 }
                 else
                 {
@@ -109,8 +107,7 @@ namespace CityBikeApplication.Pages
 
             if (xString.Length > 0)
             {
-                double x;
-                if(double.TryParse(xString, out x))
+                if(double.TryParse(xString, out double x))
                 {
                     // store in dot form
                     newStation.X = ("" + x).Replace(",", "."); // longitude
@@ -129,8 +126,7 @@ namespace CityBikeApplication.Pages
 
             if(yString.Length > 0)
             {
-                double y;
-                if(double.TryParse(yString, out y))
+                if(double.TryParse(yString, out double y))
                 {
                     // store in dot form
                     newStation.Y = ("" + y).Replace(",", "."); // latitude
@@ -162,11 +158,11 @@ namespace CityBikeApplication.Pages
                 {
                     if (cameFromStationList)
                     {
-                        Response.Redirect("StationInfo?id=" + newStation.Id + "&cameFromStationList=true");
+                        Response.Redirect(QueryHelpers.AddQueryString("StationInfo", new Dictionary<string, string>() { { "id", "" + newStation.Id }, { "cameFromStationList", "true" } }));
                     }
                     else
                     {
-                        Response.Redirect("StationInfo?id=" + newStation.Id);
+                        Response.Redirect(QueryHelpers.AddQueryString("StationInfo", new Dictionary<string, string>() { { "id", "" + newStation.Id } }));
                     }
                 }
                 else

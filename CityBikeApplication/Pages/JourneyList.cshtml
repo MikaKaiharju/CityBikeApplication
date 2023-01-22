@@ -33,302 +33,282 @@
 
 <p></p>
 
-<style>
+<table border="1">
+    <tr>
+        <th>
+            <form asp-page-handler="sortJourneys" method="post">
+                <button class="btn btn-info">
+                    Departure Time
+                    @{
+                        if (DataHandler.Instance.CurrentJourneySortOrder == DataHandler.SortOrder.DepartureTime)
+                        {
+                            if (DataHandler.Instance.AscendingJourneyOrder)
+                            {
+                                <i class="fa-solid fa-sort-down"></i>
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-sort-up"></i>
+                            }
+                        }
+                        else
+                        {
+                            <i class="fa-solid fa-sort"></i>
+                        }
+                    }
+                </button>
+                <input type="hidden" name="sortJourneyString" value="departureTime" />
+                <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
+            </form>
+        </th>
+        <th>
+            <form asp-page-handler="sortJourneys" method="post">
+                <button class="btn btn-info">
+                    Return Time
+                    @{
+                        if (DataHandler.Instance.CurrentJourneySortOrder == DataHandler.SortOrder.ReturnTime)
+                        {
+                            if (DataHandler.Instance.AscendingJourneyOrder)
+                            {
+                                <i class="fa-solid fa-sort-down"></i>
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-sort-up"></i>
+                            }
+                        }
+                        else
+                        {
+                            <i class="fa-solid fa-sort"></i>
+                        }
+                    }
+                </button>
+                <input type="hidden" name="sortJourneyString" value="returnTime" />
+                <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
+            </form>
+        </th>
+        <th>
+            <form asp-page-handler="sortJourneys" method="post">
+                <button class="btn btn-info">
+                    Departure Station
+                    @{
+                        if (DataHandler.Instance.CurrentJourneySortOrder == DataHandler.SortOrder.DepartureStation)
+                        {
+                            if (DataHandler.Instance.AscendingJourneyOrder)
+                            {
+                                <i class="fa-solid fa-sort-down"></i>
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-sort-up"></i>
+                            }
+                        }
+                        else
+                        {
+                            <i class="fa-solid fa-sort"></i>
+                        }
+                    }
+                </button>
+                <input type="hidden" name="sortJourneyString" value="departureStation" />
+                <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
+            </form>
+        </th>
+        <th>
+            <form asp-page-handler="sortJourneys" method="post">
+                <button class="btn btn-info">
+                    Return Station
+                    @{
+                        if (DataHandler.Instance.CurrentJourneySortOrder == DataHandler.SortOrder.ReturnStation)
+                        {
+                            if (DataHandler.Instance.AscendingJourneyOrder)
+                            {
+                                <i class="fa-solid fa-sort-down"></i>
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-sort-up"></i>
+                            }
+                        }
+                        else
+                        {
+                            <i class="fa-solid fa-sort"></i>
+                        }
+                    }
+                </button>
+                <input type="hidden" name="sortJourneyString" value="returnStation" />
+                <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
+            </form>
+        </th>
+        <th>
+            <form asp-page-handler="sortJourneys" method="post">
+                <button class="btn btn-info">
+                    Distance (km)
+                    @{
+                        if (DataHandler.Instance.CurrentJourneySortOrder == DataHandler.SortOrder.CoveredDistance)
+                        {
+                            if (DataHandler.Instance.AscendingJourneyOrder)
+                            {
+                                <i class="fa-solid fa-sort-down"></i>
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-sort-up"></i>
+                            }
+                        }
+                        else
+                        {
+                            <i class="fa-solid fa-sort"></i>
+                        }
+                    }
+                </button>
+                <input type="hidden" name="sortJourneyString" value="coveredDistance" />
+                <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
+            </form>
+        </th>
+        <th>
+            <form asp-page-handler="sortJourneys" method="post">
+                <button class="btn btn-info">
+                    Duration (min)
+                    @{
+                        if (DataHandler.Instance.CurrentJourneySortOrder == DataHandler.SortOrder.Duration)
+                        {
+                            if (DataHandler.Instance.AscendingJourneyOrder)
+                            {
+                                <i class="fa-solid fa-sort-down"></i>
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-sort-up"></i>
+                            }
+                        }
+                        else
+                        {
+                            <i class="fa-solid fa-sort"></i>
+                        }
+                    }
+                </button>
+                <input type="hidden" name="sortJourneyString" value="duration" />
+                <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
+            </form>
+        </th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr>
 
-    table {
-        font-family: Arial, sans-serif;
-        border-collapse: collapse;
-        width: 100%;
-    }
-
-    td, th {
-        border: 1px solid #dddddd;
-        text-align: center;
-        padding: 8px;
-    }
-</style>
-
-<div>
-
-    <table border="1">
-        <tr>
-            <th>
-                <form asp-page-handler="sortJourneys" method="post">
-                    <button class="btn btn-info">
-                        Departure Time
-                        @{
-                            if (DataHandler.Instance.CurrentJourneySortOrder == DataHandler.SortOrder.DepartureTime)
-                            {
-                                if (DataHandler.Instance.AscendingJourneyOrder)
-                                {
-                                    <i class="fa-solid fa-sort-down"></i>
-                                }
-                                else
-                                {
-                                    <i class="fa-solid fa-sort-up"></i>
-                                }
-                            }
-                            else
-                            {
-                                <i class="fa-solid fa-sort"></i>
-                            }
-                        }
-                    </button>
-                    <input type="hidden" name="sortJourneyString" value="departureTime" />
-                    <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
-                </form>
-            </th>
-            <th>
-                <form asp-page-handler="sortJourneys" method="post">
-                    <button class="btn btn-info">
-                        Return Time
-                        @{
-                            if (DataHandler.Instance.CurrentJourneySortOrder == DataHandler.SortOrder.ReturnTime)
-                            {
-                                if (DataHandler.Instance.AscendingJourneyOrder)
-                                {
-                                    <i class="fa-solid fa-sort-down"></i>
-                                }
-                                else
-                                {
-                                    <i class="fa-solid fa-sort-up"></i>
-                                }
-                            }
-                            else
-                            {
-                                <i class="fa-solid fa-sort"></i>
-                            }
-                        }
-                    </button>
-                    <input type="hidden" name="sortJourneyString" value="returnTime" />
-                    <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
-                </form>
-            </th>
-            <th>
-                <form asp-page-handler="sortJourneys" method="post">
-                    <button class="btn btn-info">
-                        Departure Station
-                        @{
-                            if (DataHandler.Instance.CurrentJourneySortOrder == DataHandler.SortOrder.DepartureStation)
-                            {
-                                if (DataHandler.Instance.AscendingJourneyOrder)
-                                {
-                                    <i class="fa-solid fa-sort-down"></i>
-                                }
-                                else
-                                {
-                                    <i class="fa-solid fa-sort-up"></i>
-                                }
-                            }
-                            else
-                            {
-                                <i class="fa-solid fa-sort"></i>
-                            }
-                        }
-                    </button>
-                    <input type="hidden" name="sortJourneyString" value="departureStation" />
-                    <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
-                </form>
-            </th>
-            <th>
-                <form asp-page-handler="sortJourneys" method="post">
-                    <button class="btn btn-info">
-                        Return Station
-                        @{
-                            if (DataHandler.Instance.CurrentJourneySortOrder == DataHandler.SortOrder.ReturnStation)
-                            {
-                                if (DataHandler.Instance.AscendingJourneyOrder)
-                                {
-                                    <i class="fa-solid fa-sort-down"></i>
-                                }
-                                else
-                                {
-                                    <i class="fa-solid fa-sort-up"></i>
-                                }
-                            }
-                            else
-                            {
-                                <i class="fa-solid fa-sort"></i>
-                            }
-                        }
-                    </button>
-                    <input type="hidden" name="sortJourneyString" value="returnStation" />
-                    <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
-                </form>
-            </th>
-            <th>
-                <form asp-page-handler="sortJourneys" method="post">
-                    <button class="btn btn-info">
-                        Distance (km)
-                        @{
-                            if (DataHandler.Instance.CurrentJourneySortOrder == DataHandler.SortOrder.CoveredDistance)
-                            {
-                                if (DataHandler.Instance.AscendingJourneyOrder)
-                                {
-                                    <i class="fa-solid fa-sort-down"></i>
-                                }
-                                else
-                                {
-                                    <i class="fa-solid fa-sort-up"></i>
-                                }
-                            }
-                            else
-                            {
-                                <i class="fa-solid fa-sort"></i>
-                            }
-                        }
-                    </button>
-                    <input type="hidden" name="sortJourneyString" value="coveredDistance" />
-                    <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
-                </form>
-            </th>
-            <th>
-                <form asp-page-handler="sortJourneys" method="post">
-                    <button class="btn btn-info">
-                        Duration (min)
-                        @{
-                            if (DataHandler.Instance.CurrentJourneySortOrder == DataHandler.SortOrder.Duration)
-                            {
-                                if (DataHandler.Instance.AscendingJourneyOrder)
-                                {
-                                    <i class="fa-solid fa-sort-down"></i>
-                                }
-                                else
-                                {
-                                    <i class="fa-solid fa-sort-up"></i>
-                                }
-                            }
-                            else
-                            {
-                                <i class="fa-solid fa-sort"></i>
-                            }
-                        }
-                    </button>
-                    <input type="hidden" name="sortJourneyString" value="duration" />
-                    <input type="hidden" name="selection" value="@Model.JourneysPerPage" />
-                </form>
-            </th>
-            <th>Edit</th>
-            <th>Delete</th>
-        </tr>
-
-        @if (DataHandler.Instance.Ready)
+    @if (DataHandler.Instance.Ready)
+    {
+        foreach (Journey journey in Model.GetJourneys())
         {
-            foreach (Journey journey in Model.GetJourneys())
-            {
-                <tr>
-                    <td>@journey.DepartureTime.ToString("dd.MM.yyyy") <br /> @journey.DepartureTime.ToString("HH.mm.ss")</td>
-                    <td>@journey.ReturnTime.ToString("dd.MM.yyyy") <br /> @journey.ReturnTime.ToString("HH.mm.ss")</td>
-                    @if (journey.DepartureStationId > 0)
-                    {
-                        <td>
-                            <a class="btn btn-link" href="StationInfo?id=@journey.DepartureStationId">@(journey.DepartureStationId + ": " + journey.DepartureStationName)</a>
-                        </td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
-                    @if (journey.ReturnStationId > 0)
-                    {
-                        <td>
-                            <a class="btn btn-link" href="StationInfo?id=@journey.ReturnStationId">@(journey.ReturnStationId + ": " + journey.ReturnStationName)</a>
-                        </td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
-                    <td>@Html.DisplayFor(modelItem => journey.CoveredDistance)</td>
-                    <td>@Html.DisplayFor(modelItem => journey.Duration)</td>
-                    <td>
-                        <a class="btn btn-link" href="EditJourney?id=@journey.Id">
-                            <i class="fa-solid fa-pen"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <form asp-page-handler="delete" method="post">
-
-
-                            <button class="btn btn-link">
-                                <i class="fa-solid fa-trash"></i>
-                            </button>
-
-                            <input type="hidden" name="id" value="@journey.Id" />
-                            <input type="hidden" name="index" value="@Model.CurrentPageIndex" />
-                            <input type="hidden" name="perPage" value="@Model.JourneysPerPage" />
-                        </form>
-                    </td>
-                </tr>
-            }
-        }
-
-
-
-    </table>
-
-    <p></p>
-
-    <div class="row mb-3">
-
-        @if (DataHandler.Instance.Ready)
-        {
-            int currentIndex = Model.CurrentPageIndex;
-            int pagesCount = Model.GetPagesCount();
-            int startIndex;
-            int endIndex;
-            if (pagesCount >= 11)
-            {
-                if (currentIndex - 5 < 0)
+            <tr>
+                <td>@journey.DepartureTime.ToString("dd.MM.yyyy") <br /> @journey.DepartureTime.ToString("HH.mm.ss")</td>
+                <td>@journey.ReturnTime.ToString("dd.MM.yyyy") <br /> @journey.ReturnTime.ToString("HH.mm.ss")</td>
+                @if (journey.DepartureStationId > 0)
                 {
-                    startIndex = 0;
-                    endIndex = 11;
-                }
-                else if (currentIndex + 5 > pagesCount - 1)
-                {
-                    startIndex = pagesCount - 12;
-                    endIndex = pagesCount - 1;
+                    <td>
+                        <a class="btn btn-link" href="StationInfo?id=@journey.DepartureStationId">@(journey.DepartureStationId + ": " + journey.DepartureStationName)</a>
+                    </td>
                 }
                 else
                 {
-                    startIndex = currentIndex - 5;
-                    endIndex = currentIndex + 5;
+                    <td></td>
                 }
+                @if (journey.ReturnStationId > 0)
+                {
+                    <td>
+                        <a class="btn btn-link" href="StationInfo?id=@journey.ReturnStationId">@(journey.ReturnStationId + ": " + journey.ReturnStationName)</a>
+                    </td>
+                }
+                else
+                {
+                    <td></td>
+                }
+                <td>@Html.DisplayFor(modelItem => journey.CoveredDistance)</td>
+                <td>@Html.DisplayFor(modelItem => journey.Duration)</td>
+                <td>
+                    <a class="btn btn-link" href="EditJourney?id=@journey.Id">
+                        <i class="fa-solid fa-pen"></i>
+                    </a>
+                </td>
+                <td>
+                    <form asp-page-handler="delete" method="post">
+
+
+                        <button class="btn btn-link">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+
+                        <input type="hidden" name="id" value="@journey.Id" />
+                        <input type="hidden" name="index" value="@Model.CurrentPageIndex" />
+                        <input type="hidden" name="perPage" value="@Model.JourneysPerPage" />
+                    </form>
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+<p></p>
+
+<div class="row">
+
+    @if (DataHandler.Instance.Ready)
+    {
+        int currentIndex = Model.CurrentPageIndex;
+        int pagesCount = Model.GetPagesCount();
+        int startIndex;
+        int endIndex;
+        if (pagesCount >= 11)
+        {
+            if (currentIndex - 5 < 0)
+            {
+                startIndex = 0;
+                endIndex = 11;
+            }
+            else if (currentIndex + 5 > pagesCount - 1)
+            {
+                startIndex = pagesCount - 12;
+                endIndex = pagesCount - 1;
             }
             else
             {
-                startIndex = 0;
-                endIndex = pagesCount - 1;
+                startIndex = currentIndex - 5;
+                endIndex = currentIndex + 5;
             }
-
-            <form asp-page-handler="ChangePage" method="post">
-                <button class="btn btn-outline-primary btn-sm">First</button>
-                <input type="hidden" name="index" value="0" />
-                <input type="hidden" name="perPage" value="@Model.JourneysPerPage" />
-            </form>
-            @for (int index = startIndex; index <= endIndex; index++)
-            {
-                <form asp-page-handler="ChangePage" method="post">
-                    @if (index == currentIndex)
-                    {
-                        <button class="btn btn-primary btn-sm">@index</button>
-                    }
-                    else
-                    {
-                        <button class="btn btn-outline-primary btn-sm">@index</button>
-                    }
-                    <input type="hidden" name="index" value="@index" />
-                    <input type="hidden" name="perPage" value="@Model.JourneysPerPage" />
-                </form>
-            }
-            <form asp-page-handler="ChangePage" method="post">
-                <button class="btn btn-outline-primary btn-sm">Last</button>
-                <input type="hidden" name="index" value="@(pagesCount - 1)" />
-                <input type="hidden" name="perPage" value="@Model.JourneysPerPage" />
-            </form>
-
+        }
+        else
+        {
+            startIndex = 0;
+            endIndex = pagesCount - 1;
         }
 
-    </div>
+        <form asp-page-handler="ChangePage" method="post">
+            <button class="btn btn-outline-primary btn-sm">First</button>
+            <input type="hidden" name="index" value="0" />
+            <input type="hidden" name="perPage" value="@Model.JourneysPerPage" />
+        </form>
+        @for (int index = startIndex; index <= endIndex; index++)
+        {
+            <form asp-page-handler="ChangePage" method="post">
+                @if (index == currentIndex)
+                {
+                    <button class="btn btn-primary btn-sm">@index</button>
+                }
+                else
+                {
+                    <button class="btn btn-outline-primary btn-sm">@index</button>
+                }
+                <input type="hidden" name="index" value="@index" />
+                <input type="hidden" name="perPage" value="@Model.JourneysPerPage" />
+            </form>
+        }
+        <form asp-page-handler="ChangePage" method="post">
+            <button class="btn btn-outline-primary btn-sm">Last</button>
+            <input type="hidden" name="index" value="@(pagesCount - 1)" />
+            <input type="hidden" name="perPage" value="@Model.JourneysPerPage" />
+        </form>
+
+    }
+
 </div>
+
 

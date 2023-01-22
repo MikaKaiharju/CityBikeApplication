@@ -5,16 +5,17 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace CityBikeApplication.Pages
 {
     public class CreateNewStationModel : PageModel
     {
-        public List<string> ErrorMessages = new List<string>();
+        public List<string> ErrorMessages { get; private set; } = new List<string>();
 
         // station that user is editing
         // if there were errors, information given by the user is stored in oldStation
-        public Station OldStation;
+        public Station OldStation { get; set; }
 
         public void OnGet()
         {
@@ -38,8 +39,7 @@ namespace CityBikeApplication.Pages
 
             if (idString.Length > 0)
             {
-                int id;
-                if (int.TryParse(idString, out id))
+                if (int.TryParse(idString, out int id))
                 {
                     if (id <= 0)
                     {
@@ -68,16 +68,15 @@ namespace CityBikeApplication.Pages
 
             if (capacityString.Length > 0)
             {
-                int kapasiteetti;
-                if (int.TryParse(capacityString, out kapasiteetti))
+                if (int.TryParse(capacityString, out int capacity))
                 {
-                    if (kapasiteetti < 0)
+                    if (capacity < 0)
                     {
-                        newStation.Capacity = kapasiteetti;
+                        newStation.Capacity = capacity;
                         ErrorMessages.Add("Capacity needs to be >= 0");
                     }
 
-                    newStation.Capacity = kapasiteetti;
+                    newStation.Capacity = capacity;
                 }
                 else
                 {
@@ -96,8 +95,7 @@ namespace CityBikeApplication.Pages
 
             if (xString.Length > 0)
             {
-                double x;
-                if(double.TryParse(xString, out x))
+                if(double.TryParse(xString, out double x))
                 {
                     // store in dot form
                     newStation.X = ("" + double.Parse(xString)).Replace(",", "."); // longitude
@@ -116,8 +114,7 @@ namespace CityBikeApplication.Pages
 
             if (yString.Length > 0)
             {
-                double y;
-                if(double.TryParse(yString, out y))
+                if(double.TryParse(yString, out double y))
                 {
                     // store in dot form
                     newStation.Y = ("" + y).Replace(",", "."); // latitude
@@ -137,65 +134,47 @@ namespace CityBikeApplication.Pages
             // if there were errors remember what data was given
             OldStation = newStation;
 
-            // if user is creating new station while creating a new journey
-            bool cameFromNewJourney = Request.Query["fromNewJourney"].Equals("true");
-
-            // if user is creating new station while editing a station
-            bool cameFromEditJourney = Request.Query["fromEditJourney"].Equals("true");
-
             if (ErrorMessages.Count == 0)
             {
                 DataHandler.Instance.CreateNewStation(newStation);
 
-                if (cameFromEditJourney)
+                // store info given on station form and journey form
+                var queryParams = new Dictionary<string, string>()
                 {
-                    // store info given on station form and journey form
-                    string queryString = "?fromNewStation=true&journeyId=" + Request.Query["journeyId"] + "&";
-                    bool departureStation = Request.Query["departurestation"].Equals("true");
-                    if (departureStation)
-                    {
-                        queryString += "ds=" + newStation.Id + "&" +
-                            "rs=" + Request.Query["rs"] + "&";
-                    }
-                    else
-                    {
-                        queryString += "ds=" + Request.Query["ds"] + "&" + 
-                            "rs=" + newStation.Id + "&"; 
-                    }
-                    queryString += 
-                        "dt=" + Request.Query["dt"] + "&" +
-                        "rt=" + Request.Query["rt"] + "&" +
-                        "cd=" + Request.Query["cd"] + "&" +
-                        "d=" + Request.Query["d"];
+                    { "fromNewStation", "true" },
+                    { "dt", Request.Query["dt"] },
+                    { "rt", Request.Query["rt"] },
+                    { "cd", Request.Query["cd"] },
+                    { "d", Request.Query["d"] }
+                };
 
-                    Response.Redirect("EditJourney" + queryString);
+                if (Request.Query["departurestation"].Equals("true"))
+                {
+                    queryParams.Add("ds", "" + newStation.Id);
+                    queryParams.Add("rs", Request.Query["rs"]);
                 }
-                else if (cameFromNewJourney)
+                else
                 {
-                    // store info given on station form and journey form
-                    string queryString = "?fromNewStation=true&";
-                    bool departureStation = Request.Query["departurestation"].Equals("true");
-                    if (departureStation)
-                    {
-                        queryString += "ds=" + newStation.Id + "&" +
-                            "rs=" + Request.Query["rs"] + "&";
-                    }
-                    else
-                    {
-                        queryString += "ds=" + Request.Query["ds"] + "&" +
-                            "rs=" + newStation.Id + "&";
-                    }
-                    queryString += "dt=" + Request.Query["dt"] + "&" +
-                        "rt=" + Request.Query["rt"] + "&" +
-                        "cd=" + Request.Query["cd"] + "&" +
-                        "d=" + Request.Query["d"];
+                    queryParams.Add("ds", Request.Query["ds"]);
+                    queryParams.Add("rs", "" + newStation.Id);
+                }
 
-                    Response.Redirect("CreateNewJourney" + queryString);
+                // if user is creating new station while editing a station
+                if (Request.Query["fromEditJourney"].Equals("true"))
+                {
+                    queryParams.Add("journeyId", Request.Query["journeyId"]);
+                    Response.Redirect(QueryHelpers.AddQueryString("EditJourney", queryParams));
+                }
+                // if user is creating new station while creating a new journey
+                else if (Request.Query["fromNewJourney"].Equals("true"))
+                {
+                    Response.Redirect(QueryHelpers.AddQueryString("CreateNewJourney", queryParams));
                 }
                 else
                 {
                     Response.Redirect("StationList");
                 }
+
             }
         }
 

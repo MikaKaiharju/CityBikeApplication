@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace CityBikeApplication.Pages
 {
@@ -13,13 +14,13 @@ namespace CityBikeApplication.Pages
     {
         
         // if data couldn't be validated show user what went wrong
-        public List<string> ErrorMessages = new List<string>();
+        public List<string> ErrorMessages { get; private set; } = new List<string>();
 
         // store what data user gave
-        public Journey OldJourney;
+        public Journey OldJourney { get; private set; }
 
         // user can select how many journeys are shown per page
-        public List<Station> Choices = new List<Station>();
+        public List<Station> Choices { get; private set; } = new List<Station>();
 
         public void OnGet()
         {
@@ -57,24 +58,24 @@ namespace CityBikeApplication.Pages
             
             Journey newJourney = new Journey();
 
-            DateTime dt = DateTime.Parse(Request.Form["departureTime"].ToString().Replace(".", ":"));
-            newJourney.DepartureTime = dt;
+            DateTime departureTime = DateTime.Parse(Request.Form["departureTime"].ToString().Replace(".", ":"));
+            newJourney.DepartureTime = departureTime;
 
-            if (DateTime.Compare(DateTime.Now, dt) < 0)
+            if (DateTime.Compare(DateTime.Now, departureTime) < 0)
             {
                 ErrorMessages.Add("Given departure time is in the future");
             }
 
-            DateTime rt = DateTime.Parse(Request.Form["returnTime"].ToString().Replace(".", ":"));
-            newJourney.ReturnTime = rt;
+            DateTime returnTime = DateTime.Parse(Request.Form["returnTime"].ToString().Replace(".", ":"));
+            newJourney.ReturnTime = returnTime;
 
-            if (DateTime.Compare(DateTime.Now, rt) < 0)
+            if (DateTime.Compare(DateTime.Now, returnTime) < 0)
             {
                 ErrorMessages.Add("Given return time is in the future");
             }
 
             // check if return time is earlier than departure time
-            if (DateTime.Compare(rt, dt) < 0)
+            if (DateTime.Compare(returnTime, departureTime) < 0)
             {
                 ErrorMessages.Add("Return time is earlier than departure time");
             }
@@ -103,8 +104,7 @@ namespace CityBikeApplication.Pages
 
             if (coveredDistanceString.Length > 0)
             {
-                int coveredDistance;
-                if (int.TryParse(coveredDistanceString, out coveredDistance))
+                if (int.TryParse(coveredDistanceString, out int coveredDistance))
                 {
                     if (coveredDistance < 0)
                     {
@@ -126,8 +126,7 @@ namespace CityBikeApplication.Pages
 
             if (durationString.Length > 0)
             {
-                int duration;
-                if (int.TryParse(durationString, out duration))
+                if (int.TryParse(durationString, out int duration))
                 {
                     if (duration < 0)
                     {
@@ -150,37 +149,30 @@ namespace CityBikeApplication.Pages
             // if there were errors remember what data was given
             OldJourney = newJourney;
 
-            bool newDepartureStation = Request.Form["newdeparturestation"].ToString().Equals("true");
-            bool newReturnStation = Request.Form["newreturnstation"].ToString().Equals("true");
-
             // if there wasn't problems with validation
             if (ErrorMessages.Count == 0)
             {
-                if (newDepartureStation)
+                // store info from CreateNewJourney-form to query
+                var queryParams = new Dictionary<string, string>()
                 {
-                    // store info from CreateNewJourney-form to querystring
-                    string queryString = "?fromNewJourney=true&" +
-                        "departurestation=true&" +
-                        "dt=" + dt.ToString("yyyy-MM-ddTHH:mm:ss") + "&" +
-                        "rt=" + rt.ToString("yyyy-MM-ddTHH:mm:ss") + "&" +
-                        "ds=" + OldJourney.DepartureStationId + "&" +
-                        "rs=" + OldJourney.ReturnStationId + "&" +
-                        "cd=" + OldJourney.CoveredDistance + "&" +
-                        "d=" + OldJourney.Duration;
-                    Response.Redirect("CreateNewStation" + queryString);
+                    { "fromNewJourney", "true" },
+                    { "dt", departureTime.ToString("yyyy-MM-ddTHH:mm:ss") },
+                    { "rt", returnTime.ToString("yyyy-MM-ddTHH:mm:ss") },
+                    { "ds", "" + OldJourney.DepartureStationId },
+                    { "rs", "" + OldJourney.ReturnStationId },
+                    { "cd", "" + OldJourney.CoveredDistance },
+                    { "d", "" + OldJourney.Duration }
+                };
+
+                if (Request.Form["newdeparturestation"].ToString().Equals("true"))
+                {
+                    queryParams.Add("departurestation", "true");
+                    Response.Redirect(QueryHelpers.AddQueryString("CreateNewStation", queryParams));
                 }
-                else if (newReturnStation)
+                else if (Request.Form["newreturnstation"].ToString().Equals("true"))
                 {
-                    // store info from CreateNewJourney-form to querystring
-                    string queryString = "?fromNewJourney=true&" +
-                        "returnstation=true&" +
-                        "dt=" + dt.ToString("yyyy-MM-ddTHH:mm:ss") + "&" +
-                        "rt=" + rt.ToString("yyyy-MM-ddTHH:mm:ss") + "&" +
-                        "ds=" + OldJourney.DepartureStationId + "&" +
-                        "rs=" + OldJourney.ReturnStationId + "&" +
-                        "cd=" + OldJourney.CoveredDistance + "&" +
-                        "d=" + OldJourney.Duration;
-                    Response.Redirect("CreateNewStation" + queryString);
+                    queryParams.Add("returnstation", "true");
+                    Response.Redirect(QueryHelpers.AddQueryString("CreateNewStation", queryParams));
                 }
                 else
                 {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace CityBikeApplication.Pages
 {
@@ -99,12 +100,17 @@ namespace CityBikeApplication.Pages
         public void OnPost()
         {
             GetStation();
-            string location = "EditStation?id=" + Station.Id + "&cameFromStationInfo=true";
+
+            var queryParams = new Dictionary<string, string>()
+            {
+                {"id", "" + Station.Id },
+                {"cameFromStationInfo", "true" }
+            };
             if (Request.Query["cameFromStationList"].Equals("true"))
             {
-                location += "&cameFromStationList=true";
+                queryParams.Add("cameFromStationList", "true");
             }
-            Response.Redirect(location);
+            Response.Redirect(QueryHelpers.AddQueryString("EditStation", queryParams));
         }
 
     }

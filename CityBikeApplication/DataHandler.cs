@@ -14,17 +14,17 @@ namespace CityBikeApplication
         private static DataHandler _instance;
 
         // see if datahandler has completed all tasks
-        public bool Ready = false;
+        public bool Ready { get; private set; } = false;
 
         // store sort order to invert order
-        public SortOrder CurrentJourneySortOrder;
+        public SortOrder CurrentJourneySortOrder { get; private set; }
         // is current sort order ascending
-        public bool AscendingJourneyOrder = true;
+        public bool AscendingJourneyOrder { get; private set; } = true;
 
         // store sort order to invert order
-        public SortOrder CurrentStationSortOrder;
+        public SortOrder CurrentStationSortOrder { get; private set; }
         // is current sort order ascending
-        public bool AscendingStationOrder = true;
+        public bool AscendingStationOrder { get; private set; } = true;
 
         public enum SortOrder
         {
@@ -62,8 +62,8 @@ namespace CityBikeApplication
         int _limit = 5000;
 
         // imported data
-        public List<Journey> Journeys = new List<Journey>();
-        public List<Station> Stations = new List<Station>();
+        public List<Journey> Journeys { get; set; } = new List<Journey>();
+        public List<Station> Stations { get; set; } = new List<Station>();
 
         // journey data urls
         //string _path1 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv";
@@ -144,22 +144,17 @@ namespace CityBikeApplication
                     // 6 == coveredDistance in metres
                     // 7 == journey duration is seconds
 
-                    DateTime dt;
-                    if(!DateTime.TryParse(values[0], out dt)) { continue; }
-                    DateTime rt;
-                    if(!DateTime.TryParse(values[1], out rt)) { continue; }
+                    // parse dateTimes
+                    if(!DateTime.TryParse(values[0], out DateTime departureTime)) { continue; }
+                    if(!DateTime.TryParse(values[1], out DateTime returnTime)) { continue; }
 
                     // parse stationIds
-                    int departureStationId;
-                    if (int.TryParse(values[2], out departureStationId)) { } else { continue; }
-                    int returnStationId;
-                    if (int.TryParse(values[4], out returnStationId)) { } else { continue; }
+                    if (int.TryParse(values[2], out int departureStationId)) { } else { continue; }
+                    if (int.TryParse(values[4], out int returnStationId)) { } else { continue; }
 
                     // parse limiting factor strings to int (skip if can't be read for some reason)
-                    int coveredDistanceInMetres;
-                    if (int.TryParse(values[6], out coveredDistanceInMetres)) { } else { continue; }
-                    int journeyDurationInSeconds;
-                    if (int.TryParse(values[7], out journeyDurationInSeconds)) { } else { continue; }
+                    if (int.TryParse(values[6], out int coveredDistanceInMetres)) { } else { continue; }
+                    if (int.TryParse(values[7], out int journeyDurationInSeconds)) { } else { continue; }
 
                     // skip if journeys covered distance is less than 10 metres or duration is less than 10 seconds
                     if (coveredDistanceInMetres < 10 || journeyDurationInSeconds < 10) { continue; }
@@ -174,8 +169,8 @@ namespace CityBikeApplication
                     // create new journey class class and populate it
                     Journey journey = new Journey();
                     journey.Id = Guid.NewGuid().ToString();
-                    journey.DepartureTime = dt;
-                    journey.ReturnTime = rt;
+                    journey.DepartureTime = departureTime;
+                    journey.ReturnTime = returnTime;
                     journey.DepartureStationId = departureStationId;
                     journey.DepartureStationName = values[3];
                     journey.ReturnStationId = returnStationId;
@@ -225,18 +220,14 @@ namespace CityBikeApplication
                     // 12 == y
 
                     // parse station id into int
-                    int id;
-                    if (int.TryParse(values[1], out id)) { } else { continue; }
+                    if (int.TryParse(values[1], out int id)) { } else { continue; }
 
                     // parse coordinate strings to double (skip if can't be read for some reason)
-                    double x;
-                    if (double.TryParse(values[11], NumberStyles.Any, CultureInfo.InvariantCulture, out x)) { } else { continue; }
-                    double y;
-                    if (double.TryParse(values[12], NumberStyles.Any, CultureInfo.InvariantCulture, out y)) { } else { continue; }
+                    if (double.TryParse(values[11], NumberStyles.Any, CultureInfo.InvariantCulture, out double x)) { } else { continue; }
+                    if (double.TryParse(values[12], NumberStyles.Any, CultureInfo.InvariantCulture, out double y)) { } else { continue; }
 
                     // parse station capacity into int
-                    int capacity;
-                    if (int.TryParse(values[10], out capacity)) { } else { continue; }
+                    if (int.TryParse(values[10], out int capacity)) { } else { continue; }
 
                     // name: primary english, secondary finnish, tertiary swedish
                     string name = !values[4].Equals("") ? values[4] : !values[2].Equals("") ? values[2] : values[3];
@@ -270,26 +261,12 @@ namespace CityBikeApplication
 
         public Station GetStation(int id)
         {
-            foreach(Station station in Stations)
-            {
-                if (station.Id == id)
-                {
-                    return station;
-                }
-            }
-            return null;
+            return Stations.FirstOrDefault(s => s.Id == id);
         }
 
         public Journey GetJourney(string id)
         {
-            foreach(Journey journey in Journeys)
-            {
-                if (journey.Id.Equals(id))
-                {
-                    return journey;
-                }
-            }
-            return null;
+            return Journeys.FirstOrDefault(j => j.Id.Equals(id));
         }
 
         public void ReplaceStation(int oldStationId, Station newStation)
