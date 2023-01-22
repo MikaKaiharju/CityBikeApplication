@@ -66,20 +66,20 @@ namespace CityBikeApplication
         public List<Station> Stations = new List<Station>();
 
         // journey data urls
-        string _path1 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv";
-        string _path2 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv";
-        string _path3 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv";
+        //string _path1 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv";
+        //string _path2 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv";
+        //string _path3 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv";
 
         // if data is on local hard drive
-        //string _path1 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-05.csv";
-        //string _path2 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-06.csv";
-        //string _path3 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-07.csv";
+        string _path1 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-05.csv";
+        string _path2 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-06.csv";
+        string _path3 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-07.csv";
 
         // station data urls
-        string _path4 = "https://opendata.arcgis.com/datasets/726277c507ef4914b0aec3cbcfcbfafc_0.csv";
+        //string _path4 = "https://opendata.arcgis.com/datasets/726277c507ef4914b0aec3cbcfcbfafc_0.csv";
 
         // if data is on local hard drive
-        //string _path4 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\Helsingin_ja_Espoon_kaupunkipyB6rA4asemat_avoin.csv";
+        string _path4 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\Helsingin_ja_Espoon_kaupunkipyB6rA4asemat_avoin.csv";
 
         private async void ImportDataSets()
         {
@@ -124,11 +124,11 @@ namespace CityBikeApplication
             int currentIteration = 0;
 
             // read data from url
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
-            HttpWebResponse httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+            //HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
+            //HttpWebResponse httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
 
-            using (StreamReader reader = new StreamReader(httpWebResponse.GetResponseStream()))
-            //using (StreamReader reader = new StreamReader(path))
+            //using (StreamReader reader = new StreamReader(httpWebResponse.GetResponseStream()))
+            using (StreamReader reader = new StreamReader(path))
             {
                 while (!reader.EndOfStream && currentIteration++ < _limit)
                 {
@@ -199,11 +199,11 @@ namespace CityBikeApplication
             int currentIteration = 0;
 
             // read data from url
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
-            HttpWebResponse httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+            //HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
+            //HttpWebResponse httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
 
-            using (StreamReader reader = new StreamReader(httpWebResponse.GetResponseStream()))
-            //using (StreamReader reader = new StreamReader(path))
+            //using (StreamReader reader = new StreamReader(httpWebResponse.GetResponseStream()))
+            using (StreamReader reader = new StreamReader(path))
             {
                 while (!reader.EndOfStream && currentIteration++ < _limit)
                 {

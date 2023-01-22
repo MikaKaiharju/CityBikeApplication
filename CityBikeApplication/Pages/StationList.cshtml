@@ -4,331 +4,324 @@
     ViewData["Title"] = "Station List";
 }
 
-<html>
-<head>
-    <script src="https://kit.fontawesome.com/0cc04cf013.js" crossorigin="anonymous"></script>
-</head>
-<body>
 
-    <h1>@ViewData["Title"]</h1>
-    <p></p>
+<h1>@ViewData["Title"]</h1>
+<p></p>
 
-    <div class="row">
-        <div class="col-sm-3">
-            <a class="btn btn-primary btn-sm" href="/CreateNewStation">Create New Station</a>
-        </div>
-        <form method="post" asp-page-handler="ChangeStationsPerPage">
-            Count of elements per page
-            <select name="selection">
-                @foreach (int Value in Model.Choices)
-                {
-                    if (Value == Model.StationsPerPage)
-                    {
-                        <option value="@Value" selected="selected">@Value</option>
-                    }
-                    else
-                    {
-                        <option value="@Value">@Value</option>
-                    }
-
-                }
-            </select>
-            <input type="submit" value="Change" />
-        </form>
+<div class="row">
+    <div class="col-sm-3">
+        <a class="btn btn-primary btn-sm" href="/CreateNewStation">Create New Station</a>
     </div>
-
-    <p></p>
-
-    <style>
-
-        table {
-            font-family: Arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        td, th {
-            border: 1px solid #dddddd;
-            text-align: center;
-            padding: 8px;
-        }
-    </style>
-
-    <div>
-
-        <table border="1" id="sortTable">
-            <tr>
-                <th>
-                    <form asp-page-handler="sortStations" method="post">
-                        <button class="btn btn-info">
-                            Id
-                            @{
-                                if (DataHandler.Instance.CurrentStationSortOrder == DataHandler.SortOrder.Id)
-                                {
-                                    if (DataHandler.Instance.AscendingStationOrder)
-                                    {
-                                        <i class="fa-solid fa-sort-down"></i>
-                                    }
-                                    else
-                                    {
-                                        <i class="fa-solid fa-sort-up"></i>
-                                    }
-                                }
-                                else
-                                {
-                                    <i class="fa-solid fa-sort"></i>
-                                }
-                            }
-                        </button>
-                        <input type="hidden" name="sortStationString" value="id" />
-                        <input type="hidden" name="selection" value="@Model.StationsPerPage" />
-                    </form>
-                </th>
-                <th>
-                    <form asp-page-handler="sortStations" method="post">
-                        <button class="btn btn-info">
-                            Name
-                            @{
-                                if (DataHandler.Instance.CurrentStationSortOrder == DataHandler.SortOrder.Name)
-                                {
-                                    if (DataHandler.Instance.AscendingStationOrder)
-                                    {
-                                        <i class="fa-solid fa-sort-down"></i>
-                                    }
-                                    else
-                                    {
-                                        <i class="fa-solid fa-sort-up"></i>
-                                    }
-                                }
-                                else
-                                {
-                                    <i class="fa-solid fa-sort"></i>
-                                }
-                            }
-                        </button>
-                        <input type="hidden" name="sortStationString" value="name" />
-                        <input type="hidden" name="selection" value="@Model.StationsPerPage" />
-                    </form>
-                </th>
-                <th>
-                    <form asp-page-handler="sortStations" method="post">
-                        <button class="btn btn-info">
-                            Address
-                            @{
-                                if (DataHandler.Instance.CurrentStationSortOrder == DataHandler.SortOrder.Address)
-                                {
-                                    if (DataHandler.Instance.AscendingStationOrder)
-                                    {
-                                        <i class="fa-solid fa-sort-down"></i>
-                                    }
-                                    else
-                                    {
-                                        <i class="fa-solid fa-sort-up"></i>
-                                    }
-                                }
-                                else
-                                {
-                                    <i class="fa-solid fa-sort"></i>
-                                }
-                            }
-                        </button>
-                        <input type="hidden" name="sortStationString" value="address" />
-                        <input type="hidden" name="selection" value="@Model.StationsPerPage" />
-                    </form>
-                </th>
-                <th>
-                    <form asp-page-handler="sortStations" method="post">
-                        <button class="btn btn-info">
-                            City
-                            @{
-                                if (DataHandler.Instance.CurrentStationSortOrder == DataHandler.SortOrder.City)
-                                {
-                                    if (DataHandler.Instance.AscendingStationOrder)
-                                    {
-                                        <i class="fa-solid fa-sort-down"></i>
-                                    }
-                                    else
-                                    {
-                                        <i class="fa-solid fa-sort-up"></i>
-                                    }
-                                }
-                                else
-                                {
-                                    <i class="fa-solid fa-sort"></i>
-                                }
-                            }
-                        </button>
-                        <input type="hidden" name="sortStationString" value="city" />
-                        <input type="hidden" name="selection" value="@Model.StationsPerPage" />
-                    </form>
-                </th>
-                <th>
-                    <form asp-page-handler="sortStations" method="post">
-                        <button class="btn btn-info">
-                            Operator
-                            @{
-                                if (DataHandler.Instance.CurrentStationSortOrder == DataHandler.SortOrder.Operator)
-                                {
-                                    if (DataHandler.Instance.AscendingStationOrder)
-                                    {
-                                        <i class="fa-solid fa-sort-down"></i>
-                                    }
-                                    else
-                                    {
-                                        <i class="fa-solid fa-sort-up"></i>
-                                    }
-                                }
-                                else
-                                {
-                                    <i class="fa-solid fa-sort"></i>
-                                }
-                            }
-                        </button>
-                        <input type="hidden" name="sortStationString" value="operator" />
-                        <input type="hidden" name="selection" value="@Model.StationsPerPage" />
-                    </form>
-                </th>
-                <th>
-                    <form asp-page-handler="sortStations" method="post">
-                        <button class="btn btn-info">
-                            Capacity
-                            @{
-                                if (DataHandler.Instance.CurrentStationSortOrder == DataHandler.SortOrder.Capacity)
-                                {
-                                    if (DataHandler.Instance.AscendingStationOrder)
-                                    {
-                                        <i class="fa-solid fa-sort-down"></i>
-                                    }
-                                    else
-                                    {
-                                        <i class="fa-solid fa-sort-up"></i>
-                                    }
-                                }
-                                else
-                                {
-                                    <i class="fa-solid fa-sort"></i>
-                                }
-                            }
-                        </button>
-                        <input type="hidden" name="sortStationString" value="capacity" />
-                        <input type="hidden" name="selection" value="@Model.StationsPerPage" />
-                    </form>
-                </th>
-                <th>Info</th>
-                <th>Edit</th>
-                <th>Delete</th>
-                <th>Map</th>
-            </tr>
-
-            @if (DataHandler.Instance.Ready)
+    <form method="post" asp-page-handler="ChangeStationsPerPage">
+        Count of elements per page
+        <select name="selection">
+            @foreach (int Value in Model.Choices)
             {
-                foreach (Station station in Model.GetStations())
+                if (Value == Model.StationsPerPage)
                 {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => station.Id)</td>
-                        <td>@Html.DisplayFor(modelItem => station.Name)</td>
-                        <td>@Html.DisplayFor(modelItem => station.Address)</td>
-                        <td>@Html.DisplayFor(modelItem => station.City)</td>
-                        <td>@Html.DisplayFor(modelItem => station.Operator)</td>
-                        <td>@Html.DisplayFor(modelItem => station.Capacity)</td>
-                        <td>
-                            <a class="btn btn-link" href="StationInfo?id=@station.Id&cameFromStationList=true">
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <a class="btn btn-link" href="EditStation?id=@station.Id">
-                                <i class="fa-solid fa-pen"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <form asp-page-handler="delete" method="post">
-                                <button class="btn btn-link">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-
-                                <input type="hidden" name="id" value="@station.Id" />
-                                <input type="hidden" name="index" value="@Model.CurrentPageIndex" />
-                                <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
-                            </form>
-                        </td>
-                        <td>
-                            <a class="btn btn-link" href="@station.GetLocation()" target="_blank">
-                                <i class="fa-solid fa-location-dot"></i>
-                            </a>
-                        </td>
-                    </tr>
-                }
-            }
-
-        </table>
-
-        <p></p>
-
-        <div class="row mb-3">
-
-            @if (DataHandler.Instance.Ready)
-            {
-                int currentIndex = Model.CurrentPageIndex;
-                int pagesCount = Model.GetPagesCount();
-                int startIndex;
-                int endIndex;
-                if (pagesCount >= 11)
-                {
-                    if (currentIndex - 5 < 0)
-                    {
-                        startIndex = 0;
-                        endIndex = 11;
-                    }
-                    else if (currentIndex + 5 > pagesCount - 1)
-                    {
-                        startIndex = pagesCount - 12;
-                        endIndex = pagesCount - 1;
-                    }
-                    else
-                    {
-                        startIndex = currentIndex - 5;
-                        endIndex = currentIndex + 5;
-                    }
+                    <option value="@Value" selected="selected">@Value</option>
                 }
                 else
                 {
-                    startIndex = 0;
-                    endIndex = pagesCount - 1;
+                    <option value="@Value">@Value</option>
                 }
-
-                <form asp-page-handler="ChangePage" method="post">
-                    <button class="btn btn-outline-primary btn-sm">First</button>
-                    <input type="hidden" name="index" value="0" />
-                    <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
-                </form>
-
-                @for (int index = startIndex; index <= endIndex; index++)
-                {
-                    <form asp-page-handler="ChangePage" method="post">
-
-                        @if (index == currentIndex)
-                        {
-                            <button class="btn btn-primary btn-sm">@index</button>
-                        }
-                        else
-                        {
-                            <button class="btn btn-outline-primary btn-sm">@index</button>
-                        }
-                        <input type="hidden" name="index" value="@index" />
-                        <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
-                    </form>
-                }
-                <form asp-page-handler="ChangePage" method="post">
-                    <button class="btn btn-outline-primary btn-sm">Last</button>
-                    <input type="hidden" name="index" value="@(pagesCount - 1)" />
-                    <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
-                </form>
 
             }
+        </select>
+        <input type="submit" value="Change" />
+    </form>
+</div>
 
-        </div>
+<p></p>
+
+<style>
+
+    table {
+        font-family: Arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 8px;
+    }
+</style>
+
+<div>
+
+    <table border="1" id="sortTable">
+        <tr>
+            <th>
+                <form asp-page-handler="sortStations" method="post">
+                    <button class="btn btn-info">
+                        Id
+                        @{
+                            if (DataHandler.Instance.CurrentStationSortOrder == DataHandler.SortOrder.Id)
+                            {
+                                if (DataHandler.Instance.AscendingStationOrder)
+                                {
+                                    <i class="fa-solid fa-sort-down"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa-solid fa-sort-up"></i>
+                                }
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-sort"></i>
+                            }
+                        }
+                    </button>
+                    <input type="hidden" name="sortStationString" value="id" />
+                    <input type="hidden" name="selection" value="@Model.StationsPerPage" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortStations" method="post">
+                    <button class="btn btn-info">
+                        Name
+                        @{
+                            if (DataHandler.Instance.CurrentStationSortOrder == DataHandler.SortOrder.Name)
+                            {
+                                if (DataHandler.Instance.AscendingStationOrder)
+                                {
+                                    <i class="fa-solid fa-sort-down"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa-solid fa-sort-up"></i>
+                                }
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-sort"></i>
+                            }
+                        }
+                    </button>
+                    <input type="hidden" name="sortStationString" value="name" />
+                    <input type="hidden" name="selection" value="@Model.StationsPerPage" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortStations" method="post">
+                    <button class="btn btn-info">
+                        Address
+                        @{
+                            if (DataHandler.Instance.CurrentStationSortOrder == DataHandler.SortOrder.Address)
+                            {
+                                if (DataHandler.Instance.AscendingStationOrder)
+                                {
+                                    <i class="fa-solid fa-sort-down"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa-solid fa-sort-up"></i>
+                                }
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-sort"></i>
+                            }
+                        }
+                    </button>
+                    <input type="hidden" name="sortStationString" value="address" />
+                    <input type="hidden" name="selection" value="@Model.StationsPerPage" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortStations" method="post">
+                    <button class="btn btn-info">
+                        City
+                        @{
+                            if (DataHandler.Instance.CurrentStationSortOrder == DataHandler.SortOrder.City)
+                            {
+                                if (DataHandler.Instance.AscendingStationOrder)
+                                {
+                                    <i class="fa-solid fa-sort-down"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa-solid fa-sort-up"></i>
+                                }
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-sort"></i>
+                            }
+                        }
+                    </button>
+                    <input type="hidden" name="sortStationString" value="city" />
+                    <input type="hidden" name="selection" value="@Model.StationsPerPage" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortStations" method="post">
+                    <button class="btn btn-info">
+                        Operator
+                        @{
+                            if (DataHandler.Instance.CurrentStationSortOrder == DataHandler.SortOrder.Operator)
+                            {
+                                if (DataHandler.Instance.AscendingStationOrder)
+                                {
+                                    <i class="fa-solid fa-sort-down"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa-solid fa-sort-up"></i>
+                                }
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-sort"></i>
+                            }
+                        }
+                    </button>
+                    <input type="hidden" name="sortStationString" value="operator" />
+                    <input type="hidden" name="selection" value="@Model.StationsPerPage" />
+                </form>
+            </th>
+            <th>
+                <form asp-page-handler="sortStations" method="post">
+                    <button class="btn btn-info">
+                        Capacity
+                        @{
+                            if (DataHandler.Instance.CurrentStationSortOrder == DataHandler.SortOrder.Capacity)
+                            {
+                                if (DataHandler.Instance.AscendingStationOrder)
+                                {
+                                    <i class="fa-solid fa-sort-down"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa-solid fa-sort-up"></i>
+                                }
+                            }
+                            else
+                            {
+                                <i class="fa-solid fa-sort"></i>
+                            }
+                        }
+                    </button>
+                    <input type="hidden" name="sortStationString" value="capacity" />
+                    <input type="hidden" name="selection" value="@Model.StationsPerPage" />
+                </form>
+            </th>
+            <th>Info</th>
+            <th>Edit</th>
+            <th>Delete</th>
+            <th>Map</th>
+        </tr>
+
+        @if (DataHandler.Instance.Ready)
+        {
+            foreach (Station station in Model.GetStations())
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => station.Id)</td>
+                    <td>@Html.DisplayFor(modelItem => station.Name)</td>
+                    <td>@Html.DisplayFor(modelItem => station.Address)</td>
+                    <td>@Html.DisplayFor(modelItem => station.City)</td>
+                    <td>@Html.DisplayFor(modelItem => station.Operator)</td>
+                    <td>@Html.DisplayFor(modelItem => station.Capacity)</td>
+                    <td>
+                        <a class="btn btn-link" href="StationInfo?id=@station.Id&cameFromStationList=true">
+                            <i class="fa-solid fa-circle-exclamation"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="btn btn-link" href="EditStation?id=@station.Id">
+                            <i class="fa-solid fa-pen"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <form asp-page-handler="delete" method="post">
+                            <button class="btn btn-link">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+
+                            <input type="hidden" name="id" value="@station.Id" />
+                            <input type="hidden" name="index" value="@Model.CurrentPageIndex" />
+                            <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
+                        </form>
+                    </td>
+                    <td>
+                        <a class="btn btn-link" href="@station.GetLocation()" target="_blank">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+
+    <p></p>
+
+    <div class="row mb-3">
+
+        @if (DataHandler.Instance.Ready)
+        {
+            int currentIndex = Model.CurrentPageIndex;
+            int pagesCount = Model.GetPagesCount();
+            int startIndex;
+            int endIndex;
+            if (pagesCount >= 11)
+            {
+                if (currentIndex - 5 < 0)
+                {
+                    startIndex = 0;
+                    endIndex = 11;
+                }
+                else if (currentIndex + 5 > pagesCount - 1)
+                {
+                    startIndex = pagesCount - 12;
+                    endIndex = pagesCount - 1;
+                }
+                else
+                {
+                    startIndex = currentIndex - 5;
+                    endIndex = currentIndex + 5;
+                }
+            }
+            else
+            {
+                startIndex = 0;
+                endIndex = pagesCount - 1;
+            }
+
+            <form asp-page-handler="ChangePage" method="post">
+                <button class="btn btn-outline-primary btn-sm">First</button>
+                <input type="hidden" name="index" value="0" />
+                <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
+            </form>
+
+            @for (int index = startIndex; index <= endIndex; index++)
+            {
+                <form asp-page-handler="ChangePage" method="post">
+
+                    @if (index == currentIndex)
+                    {
+                        <button class="btn btn-primary btn-sm">@index</button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-outline-primary btn-sm">@index</button>
+                    }
+                    <input type="hidden" name="index" value="@index" />
+                    <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
+                </form>
+            }
+            <form asp-page-handler="ChangePage" method="post">
+                <button class="btn btn-outline-primary btn-sm">Last</button>
+                <input type="hidden" name="index" value="@(pagesCount - 1)" />
+                <input type="hidden" name="perPage" value="@Model.StationsPerPage" />
+            </form>
+
+        }
 
     </div>
-</body>
-</html>
+
+</div>
