@@ -5,8 +5,8 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-<p></p>
 
+<p></p>
 
 @if (Model.ErrorMessages.Count > 0)
 {
@@ -18,12 +18,11 @@
     }
 }
 
-@if (Model.OldStation == null)
-{
-    Model.OldStation = new Station();
-}
-
 <form method="POST">
+    @if (Model.OldStation == null)
+    {
+        Model.OldStation = new Station();
+    }
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Id</label>
         <div class="col-sm-4">
@@ -73,9 +72,6 @@
         </div>
     </div>
 
-
-
-
     <p></p>
 
     <div class="row mb-3">
@@ -84,9 +80,6 @@
         </div>
         <div class="col-sm-2 d-grid">
             @{
-                bool fromNewJourney = Request.Query["fromNewJourney"].Equals("true");
-                bool fromEditJourney = Request.Query["fromEditJourney"].Equals("true");
-
                 string queryString = "?fromNewStation=true&" +
                         "ds=" + Request.Query["ds"] + "&" +
                         "rs=" + Request.Query["rs"] + "&" +
@@ -94,12 +87,13 @@
                         "rt=" + Request.Query["rt"] + "&" +
                         "cd=" + Request.Query["cd"] + "&" +
                         "d=" + Request.Query["d"];
-                if (fromNewJourney)
+
+                if (Request.Query["fromNewJourney"].Equals("true"))
                 {
                     string redirection = "/CreateNewJourney" + queryString;
                     <a class="btn btn-outline-primary" href=@redirection role="button">Cancel</a>
                 }
-                else if (fromEditJourney)
+                else if (Request.Query["fromEditJourney"].Equals("true"))
                 {
                     queryString += "&journeyId=" + Request.Query["journeyId"];
                     string redirection = "/EditJourney" + queryString;
@@ -109,9 +103,7 @@
                 {
                     <a class="btn btn-outline-primary" href="/StationList" role="button">Cancel</a>
                 }
-
             }
         </div>
     </div>
-
 </form>

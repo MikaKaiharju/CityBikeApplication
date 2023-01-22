@@ -115,7 +115,7 @@ namespace CityBikeApplication
             return Task.Run(() => ImportStationData(path));
         }
 
-        private List<Journey> ImportJourneyData(string path)
+        public List<Journey> ImportJourneyData(string path)
         {
             //  import journey data
             List<Journey> importedJourneys = new List<Journey>();
@@ -123,12 +123,23 @@ namespace CityBikeApplication
             // for debugging how many lines have been read
             int currentIteration = 0;
 
-            // read data from url
-            //HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
-            //HttpWebResponse httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+            StreamReader reader;
 
-            //using (StreamReader reader = new StreamReader(httpWebResponse.GetResponseStream()))
-            using (StreamReader reader = new StreamReader(path))
+            // check if path is local or internet
+            if (new Uri(path).IsFile)
+            {
+                // read data from local file
+                reader = new StreamReader(path);
+            }
+            else
+            {
+                // read data from url
+                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
+                HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                reader = new StreamReader(httpWebResponse.GetResponseStream());
+            }
+
+            using (reader)
             {
                 while (!reader.EndOfStream && currentIteration++ < _limit)
                 {
@@ -144,9 +155,12 @@ namespace CityBikeApplication
                     // 6 == coveredDistance in metres
                     // 7 == journey duration is seconds
 
+                    // skip if there is not sufficient amount of values
+                    if (values.Length != 8) { continue; }
+
                     // parse dateTimes
-                    if(!DateTime.TryParse(values[0], out DateTime departureTime)) { continue; }
-                    if(!DateTime.TryParse(values[1], out DateTime returnTime)) { continue; }
+                    if (!DateTime.TryParse(values[0], out DateTime departureTime)) { continue; }
+                    if (!DateTime.TryParse(values[1], out DateTime returnTime)) { continue; }
 
                     // parse stationIds
                     if (int.TryParse(values[2], out int departureStationId)) { } else { continue; }
@@ -186,19 +200,30 @@ namespace CityBikeApplication
             return importedJourneys;
         }
 
-        private List<Station> ImportStationData(string path)
+        public List<Station> ImportStationData(string path)
         {
             List<Station> importedStations = new List<Station>();
 
             // for debugging how many lines have been read
             int currentIteration = 0;
 
-            // read data from url
-            //HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
-            //HttpWebResponse httpWebResponse = (HttpWebResponse) httpWebRequest.GetResponse();
+            StreamReader reader;
 
-            //using (StreamReader reader = new StreamReader(httpWebResponse.GetResponseStream()))
-            using (StreamReader reader = new StreamReader(path))
+            // check if path is local or internet
+            if (new Uri(path).IsFile)
+            {
+                // read data from local file
+                reader = new StreamReader(path);
+            }
+            else
+            {
+                // read data from url
+                HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(path);
+                HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                reader = new StreamReader(httpWebResponse.GetResponseStream());
+            }
+
+            using (reader)
             {
                 while (!reader.EndOfStream && currentIteration++ < _limit)
                 {
@@ -218,6 +243,9 @@ namespace CityBikeApplication
                     // 10 == capacity
                     // 11 == x
                     // 12 == y
+
+                    // skip if there is not sufficient amount of values
+                    if (values.Length != 13) { continue; }
 
                     // parse station id into int
                     if (int.TryParse(values[1], out int id)) { } else { continue; }

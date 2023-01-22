@@ -1,0 +1,8 @@
+Departure,Return,Departure station id,Departure station name,Return station id, Return station name,Covered distance (m),Duration (sec.)
+2021-07-31T23:59:59,2021-08-01T00:09:15,113,Pasilan asema,078,Messeniuksenkatu,1602,553
+wrongDate,2000-01-01T00:00:00,1,a,2,b,1,1
+2000-01-01T00:00:00,wrongDate,1,a,2,b,1,1
+2000-01-01T00:00:00,2000-01-01T00:00:01,wrongId,a,2,b,1,1
+2000-01-01T00:00:00,2000-01-01T00:00:01,1,a,b,wrongId,1,1
+2000-01-01T00:00:00,2000-01-01T00:00:01,1,a,2,b,wrongDistance,1
+2000-01-01T00:00:00,2000-01-01T00:00:01,1,a,2,b,1,wrongDuration

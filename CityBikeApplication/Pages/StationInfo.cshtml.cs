@@ -50,8 +50,7 @@ namespace CityBikeApplication.Pages
                     journeyDistanceFrom += journey.CoveredDistance;
                     if (returnStations.ContainsKey(journey.ReturnStationId))
                     {
-                        int value;
-                        returnStations.TryGetValue(journey.ReturnStationId, out value);
+                        returnStations.TryGetValue(journey.ReturnStationId, out int value);
                         value++;
                         returnStations.Remove(journey.ReturnStationId);
                         returnStations.Add(journey.ReturnStationId, value);
@@ -68,8 +67,7 @@ namespace CityBikeApplication.Pages
                     journeyDistanceTo += journey.CoveredDistance;
                     if (departureStations.ContainsKey(journey.DepartureStationId))
                     {
-                        int value;
-                        departureStations.TryGetValue(journey.DepartureStationId, out value);
+                        departureStations.TryGetValue(journey.DepartureStationId, out int value);
                         value++;
                         departureStations.Remove(journey.DepartureStationId);
                         departureStations.Add(journey.DepartureStationId, value);
@@ -84,7 +82,7 @@ namespace CityBikeApplication.Pages
             AverageJourneyDistaceFrom = (double)journeyDistanceFrom / (double)TotalNumberOfJourneysFrom;
             AverageJourneyDistanceTo = (double)journeyDistanceTo / (double)TotalNumberOfJourneysTo;
 
-            var sortedReturnStations = (from entry in returnStations orderby entry.Value descending select entry) ;
+            var sortedReturnStations = from entry in returnStations orderby entry.Value descending select entry;
             var sortedDepartureStations = from entry in departureStations orderby entry.Value descending select entry;
 
             foreach(var item in sortedReturnStations.Take(5))

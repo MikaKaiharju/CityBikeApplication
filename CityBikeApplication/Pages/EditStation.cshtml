@@ -5,8 +5,8 @@
 }
 
 <h1>@ViewData["Title"]</h1>
-<p></p>
 
+<p></p>
 
 @if (Model.ErrorMessages.Count > 0)
 {
@@ -18,12 +18,11 @@
     }
 }
 
-@if (Model.OldStation == null)
-{
-    Model.GetOldStation();
-}
-
 <form method="POST">
+    @if (Model.OldStation == null)
+    {
+        Model.GetOldStation();
+    }
     <div class="row mb-3">
         <label class="col-sm-2 col-form-label">Id</label>
         <div class="col-sm-4">
@@ -73,9 +72,6 @@
         </div>
     </div>
 
-
-
-
     <p></p>
 
     <div class="row mb-3">
@@ -101,10 +97,7 @@
                 {
                     <a class="btn btn-outline-primary" href="/StationList" role="button">Cancel</a>
                 }
-
             }
-
         </div>
     </div>
-
 </form>

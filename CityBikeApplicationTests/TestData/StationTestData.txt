@@ -1,0 +1,6 @@
+FID,ID,Nimi,Namn,Name,Osoite,Adress,Kaupunki,Stad,Operaattor,Kapasiteet,x,y
+1,501,Hanasaari,Hanaholmen,Hanasaari,Hanasaarenranta 1,Hanaholmsstranden 1,Espoo,Esbo,CityBike Finland,10,24.840319,60.16582
+2,wrongId,a,b,c,d,e,f,g,h,1,12.34,23.45
+2,1,a,b,c,d,e,f,g,h,wrongCapacity,12.34,23.45
+2,1,a,b,c,d,e,f,g,h,1,wrongCoordinate,23.45
+2,1,a,b,c,d,e,f,g,h,1,12.34,wrongCoordinate
