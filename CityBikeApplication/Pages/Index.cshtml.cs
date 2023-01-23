@@ -17,7 +17,6 @@ namespace CityBikeApplication.Pages
         public void OnGet()
         {
             DataHandler dataHandler = DataHandler.Instance;
-
         }
     }
 }

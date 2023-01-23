@@ -6,6 +6,8 @@ using System.IO;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 
 namespace CityBikeApplication
 {
@@ -58,31 +60,32 @@ namespace CityBikeApplication
             }
         }
 
+        public bool UntilFinished()
+        {
+            while (!Ready)
+            {
+                Thread.Sleep(100);
+            }
+            return true;
+        }
+
         // for debugging limit amount of lines to be read per data set
-        int _limit = 5000;
+        int _limit = int.MaxValue;
 
         // imported data
         public List<Journey> Journeys { get; set; } = new List<Journey>();
         public List<Station> Stations { get; set; } = new List<Station>();
 
         // journey data urls
-        //string _path1 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv";
-        //string _path2 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv";
-        //string _path3 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv";
-
-        // if data is on local hard drive
-        string _path1 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-05.csv";
-        string _path2 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-06.csv";
-        string _path3 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\2021-07.csv";
+        string _path1 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-05.csv";
+        string _path2 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-06.csv";
+        string _path3 = "https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv";
 
         // station data urls
-        //string _path4 = "https://opendata.arcgis.com/datasets/726277c507ef4914b0aec3cbcfcbfafc_0.csv";
-
-        // if data is on local hard drive
-        string _path4 = "C:\\Users\\Kaihiz\\Desktop\\DevAcademy\\Helsingin_ja_Espoon_kaupunkipyB6rA4asemat_avoin.csv";
+        string _path4 = "https://opendata.arcgis.com/datasets/726277c507ef4914b0aec3cbcfcbfafc_0.csv";
 
         private async void ImportDataSets()
-        {
+        {         
             // create async tasks for reading data
             List<Task> tasks = new List<Task>();
             tasks.Add(GetJourneyListAsync(_path1));
